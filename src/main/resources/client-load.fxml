@@ -57,7 +57,7 @@
                         <Insets right="5.0" />
                     </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#saveProduct" text="Producto" />
+                <Button mnemonicParsing="false" onAction="#sendEmail" text="E-Mail" />
             </children>
         </HBox>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
