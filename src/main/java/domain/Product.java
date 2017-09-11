@@ -1,8 +1,19 @@
 package domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Set;
 
 /**
@@ -10,10 +21,28 @@ import java.util.Set;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column
     private String description;
+
+    @Column
     private double price;
+
+    @Column
+    private double cost;
+
+    @OneToMany(cascade = CascadeType.PERSIST)
     private Set<Category> categories;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Material> materials;
 }

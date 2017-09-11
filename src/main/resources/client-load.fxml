@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<GridPane alignment="center"
+          hgap="10"
+          prefHeight="226.0"
+          prefWidth="345.0"
+          stylesheets="/style.css"
+          vgap="10"
+          xmlns:fx="http://javafx.com/fxml/1"
+          xmlns="http://javafx.com/javafx/8"
+          fx:controller="gui.controller.ClientLoadController">
+    <children>
+        <Button fx:id="btnSave"
+                onAction="#saveClient"
+                text="Guardar"
+                GridPane.columnIndex="1"
+                GridPane.rowIndex="1" />
+        <Button fx:id="btnClose"
+                mnemonicParsing="false"
+                onAction="#closeForm"
+                text="Close" />
+    </children>
+    <columnConstraints>
+        <ColumnConstraints />
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+    </rowConstraints>
+</GridPane>
+-->
+
+<VBox alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ClientLoadController">
+    <children>
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
+            <children>
+                <Button mnemonicParsing="false" onAction="#saveClient" text="Cliente">
+                    <HBox.margin>
+                        <Insets right="5.0" />
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#saveProduct" text="Producto" />
+            </children>
+        </HBox>
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#saveMaterial" text="Material">
+                <HBox.margin>
+                    <Insets right="5.0" />
+                </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#saveCategory" text="Categoría" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css">
+         <children>
+            <Button mnemonicParsing="false" onAction="#saveClient" text="Ubicación">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" text="Compra" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css">
+         <children>
+            <Button mnemonicParsing="false" onAction="#saveClient" text="Detalle">
+               <HBox.margin>
+                  <Insets right="5.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" text="Proveedor" />
+         </children>
+      </HBox>
+    </children>
+</VBox>
