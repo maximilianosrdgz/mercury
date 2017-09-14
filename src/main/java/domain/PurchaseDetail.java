@@ -33,7 +33,7 @@ public class PurchaseDetail {
     @Column
     private int purchaseId;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.MERGE)
     private Product product;
 
     @Column

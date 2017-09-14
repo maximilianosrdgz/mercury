@@ -40,9 +40,9 @@ public class Product {
     @Column
     private double cost;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.MERGE)
     private Set<Category> categories;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE)
     private Set<Material> materials;
 }

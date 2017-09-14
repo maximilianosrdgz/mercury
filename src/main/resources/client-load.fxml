@@ -62,12 +62,12 @@
         </HBox>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
          <children>
-            <Button mnemonicParsing="false" onAction="#saveMaterial" text="Material">
+            <Button mnemonicParsing="false" text="Material">
                 <HBox.margin>
                     <Insets right="5.0" />
                 </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#saveCategory" text="Categoría" />
+            <Button mnemonicParsing="false" text="Categoría" />
          </children>
       </HBox>
       <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css">

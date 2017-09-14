@@ -7,6 +7,7 @@ import domain.Material;
 import domain.Product;
 import domain.Purchase;
 import domain.PurchaseDetail;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,12 +21,17 @@ import java.util.Set;
 /**
  * Created by MaxPower on 09/09/2017.
  */
+@Component
 public class EntityManagerUtils {
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU");
-    EntityManager em = emf.createEntityManager();
     Client client = null;
 
+    public EntityManager getEntityManager() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU");
+        EntityManager em = emf.createEntityManager();
+        return em;
+    }
+    /*
     public void saveClient() {
         try {
             em.getTransaction().begin();
@@ -159,9 +165,9 @@ public class EntityManagerUtils {
         if(client != null) {
             System.out.println(client);
         }
-    }
+    }*/
 
-    private Client buildClient() {/*
+    public Client buildClient() {/*
         Location location = buildLocation();
 
         Category category = buildCategory();
@@ -197,14 +203,14 @@ public class EntityManagerUtils {
                 .build();
     }
 
-    private Category buildCategory() {
+    public Category buildCategory() {
         return Category.builder()
                 .description("Category 1")
                 .product(false)
                 .build();
     }
 
-    private Location buildLocation() {
+    public Location buildLocation() {
         return Location.builder()
                 .city("Cordoba Capital")
                 .province("Cordoba")
@@ -212,7 +218,7 @@ public class EntityManagerUtils {
                 .build();
     }
 
-    private Material buildMaterial() {
+    public Material buildMaterial() {
         Set<Category> categories = new HashSet();
         categories.add(buildCategory());
 
@@ -222,7 +228,7 @@ public class EntityManagerUtils {
                 .build();
     }
 
-    private Product buildProduct() {
+    public Product buildProduct() {
         Set<Category> categories = new HashSet();
         categories.add(buildCategory());
 
@@ -237,7 +243,7 @@ public class EntityManagerUtils {
                 .build();
     }
 
-    private PurchaseDetail buildPurchaseDetail() {
+    public PurchaseDetail buildPurchaseDetail() {
         return PurchaseDetail.builder()
                 .purchaseId(0)
                 .product(buildProduct())
@@ -246,7 +252,7 @@ public class EntityManagerUtils {
                 .build();
     }
 
-    private Purchase buildPurchase() {
+    public Purchase buildPurchase() {
         List<PurchaseDetail> details = new ArrayList();
         details.add(buildPurchaseDetail());
 

@@ -36,6 +36,6 @@ public class Material {
     @Column
     private double cost;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.MERGE)
     private Set<Category> categories;
 }

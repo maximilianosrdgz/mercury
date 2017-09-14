@@ -1,12 +1,16 @@
 package gui.controller;
 
 import controller.EntityManagerUtils;
+import dao.ClientDAO;
 import domain.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -17,7 +21,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
@@ -27,26 +30,35 @@ import java.util.ResourceBundle;
 /**
  * Created by MaxPower on 10/09/2017.
  */
+@NoArgsConstructor
+@Component
 public class ClientLoadController implements Initializable {
     public Button btnSave;
     public Button btnClose;
     private EntityManagerUtils emu;
+    @Autowired
+    private ClientDAO clientDAO;
 
+    /*
+    @Autowired
+    public ClientLoadController(EntityManagerUtils emu, ClientDAO clientDAO) {
+        this.emu = emu;
+        this.clientDAO = clientDAO;
+    }*/
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
 
     public void saveClient(ActionEvent actionEvent) {
-        emu = new EntityManagerUtils();
-        emu.saveClient();
-        buildAlert("Client Saved", emu.findClient(1).getName()).showAndWait();
+        clientDAO.create(emu.buildClient());
+        buildAlert("Client Saved", clientDAO.find(1).getName()).showAndWait();
     }
 
     public void closeForm(ActionEvent actionEvent) {
         Stage stage = (Stage) btnClose.getScene().getWindow();
         stage.close();
     }
-
+    /*
     public void saveCategory(ActionEvent actionEvent) {
         emu = new EntityManagerUtils();
         emu.saveCategory();
@@ -60,7 +72,7 @@ public class ClientLoadController implements Initializable {
     public void saveProduct(ActionEvent actionEvent) {
         emu = new EntityManagerUtils();
         emu.saveProduct();
-    }
+    }*/
 
     private Alert buildAlert(String header, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
