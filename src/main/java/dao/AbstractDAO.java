@@ -4,6 +4,8 @@ import controller.EntityManagerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+
 /**
  * Created by MaxPower on 12/09/2017.
  */
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public abstract class AbstractDAO<T> {
 
     private Class<T> entityClass;
-    @Autowired
+    //@Autowired
     private EntityManagerUtils emu;
 
     public AbstractDAO(Class<T> entityClass) {
@@ -19,12 +21,17 @@ public abstract class AbstractDAO<T> {
     }
 
     public void create(T entity) {
+        emu = new EntityManagerUtils();
+        EntityManager em = emu.getEntityManager();
         try {
-            emu.getEntityManager().getTransaction().begin();
-            emu.getEntityManager().persist(entity);
-            emu.getEntityManager().getTransaction().commit();
+            em.getTransaction().begin();
+            em.merge(entity);
+            em.getTransaction().commit();
         } catch (Exception e) {
-            emu.getEntityManager().getTransaction().rollback();
+            em.getTransaction().rollback();
+        }
+        finally {
+            em.close();
         }
 
         if(entity != null) {
@@ -33,13 +40,15 @@ public abstract class AbstractDAO<T> {
     }
 
     public T find(int id) {
+        emu = new EntityManagerUtils();
+        EntityManager em = emu.getEntityManager();
         T entity = null;
         try {
-            emu.getEntityManager().getTransaction().begin();
-            entity = emu.getEntityManager().find(entityClass, id);
-            emu.getEntityManager().getTransaction().commit();
+            em.getTransaction().begin();
+            entity = em.find(entityClass, id);
+            em.getTransaction().commit();
         } catch (Exception e) {
-            emu.getEntityManager().getTransaction().rollback();
+            em.getTransaction().rollback();
         }
         return entity;
     }

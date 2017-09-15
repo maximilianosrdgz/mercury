@@ -38,6 +38,6 @@ public class Purchase {
     @Temporal(value = TemporalType.DATE)
     private Date date;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany//(cascade = CascadeType.PERSIST)
     private List<PurchaseDetail> purchaseDetails;
 }

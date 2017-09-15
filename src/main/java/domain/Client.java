@@ -37,7 +37,7 @@ public class Client {
     @Column
     private String email;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne//(cascade = CascadeType.PERSIST)
     private Location location;
 
     @Column
@@ -49,6 +49,6 @@ public class Client {
     @Column
     private boolean consultant;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany//(cascade = CascadeType.PERSIST)
     private List<Purchase> purchases;
 }

@@ -36,7 +36,7 @@ public class ClientLoadController implements Initializable {
     public Button btnSave;
     public Button btnClose;
     private EntityManagerUtils emu;
-    @Autowired
+    //@Autowired
     private ClientDAO clientDAO;
 
     /*
@@ -50,6 +50,8 @@ public class ClientLoadController implements Initializable {
     }
 
     public void saveClient(ActionEvent actionEvent) {
+        emu = new EntityManagerUtils();
+        clientDAO = new ClientDAO();
         clientDAO.create(emu.buildClient());
         buildAlert("Client Saved", clientDAO.find(1).getName()).showAndWait();
     }

@@ -11,7 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Set;
 
@@ -36,6 +37,7 @@ public class Material {
     @Column
     private double cost;
 
-    @OneToMany(cascade = CascadeType.MERGE)
+    @ManyToMany//(cascade = CascadeType.MERGE)
+    @JoinTable(name = "material_category")
     private Set<Category> categories;
 }

@@ -11,7 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.Set;
@@ -34,9 +35,10 @@ public class Supplier {
     @Column
     private String name;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne//(cascade = CascadeType.PERSIST)
     private Location location;
 
-    @OneToMany(cascade = CascadeType.MERGE)
+    @ManyToMany//(cascade = CascadeType.MERGE)
+    @JoinTable(name = "supplier_category")
     private Set<Category> categories;
 }

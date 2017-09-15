@@ -28,8 +28,7 @@ public class EntityManagerUtils {
 
     public EntityManager getEntityManager() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU");
-        EntityManager em = emf.createEntityManager();
-        return em;
+        return emf.createEntityManager();
     }
     /*
     public void saveClient() {
@@ -188,9 +187,9 @@ public class EntityManagerUtils {
         details.add(detail);
 
         Purchase purchase = buildPurchase();
-
+        */
         List<Purchase> purchases = new ArrayList();
-        purchases.add(purchase);*/
+        purchases.add(buildPurchase());
 
         return Client.builder()
                 .name("Clientín")
@@ -199,7 +198,7 @@ public class EntityManagerUtils {
                 .birthYear(1991)
                 .buyer(true)
                 .consultant(true)
-                //.purchases(purchases)
+                .purchases(purchases)
                 .build();
     }
 
