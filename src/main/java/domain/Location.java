@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -28,11 +29,12 @@ public class Location {
     private int id;
 
     @Column
+    private String address;
+
+    @Column
     private String city;
 
     @Column
-    private String province;
-
-    @Column
-    private String address;
+    //@ManyToOne
+    private int provinceId;
 }

@@ -11,6 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -37,8 +40,8 @@ public class Client {
     @Column
     private String email;
 
-    @OneToOne//(cascade = CascadeType.PERSIST)
-    private Location location;
+    @ManyToOne//(cascade = CascadeType.PERSIST)
+    private int provinceId;
 
     @Column
     private int birthYear;
@@ -49,6 +52,9 @@ public class Client {
     @Column
     private boolean consultant;
 
-    @OneToMany//(cascade = CascadeType.PERSIST)
+    @OneToMany
     private List<Purchase> purchases;
+
+    @Column
+    private boolean blackListed;
 }

@@ -1,8 +1,11 @@
 package gui.controller;
 
 import controller.EntityManagerUtils;
+import dao.CategoryDAO;
 import dao.ClientDAO;
+import dao.ProvinceDAO;
 import domain.Client;
+import domain.Province;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -10,7 +13,9 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -31,50 +36,22 @@ import java.util.ResourceBundle;
  * Created by MaxPower on 10/09/2017.
  */
 @NoArgsConstructor
-@Component
-public class ClientLoadController implements Initializable {
-    public Button btnSave;
-    public Button btnClose;
+@Controller
+public class ClientLoadController {
+
     private EntityManagerUtils emu;
-    //@Autowired
     private ClientDAO clientDAO;
 
-    /*
     @Autowired
     public ClientLoadController(EntityManagerUtils emu, ClientDAO clientDAO) {
         this.emu = emu;
         this.clientDAO = clientDAO;
-    }*/
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
     }
 
     public void saveClient(ActionEvent actionEvent) {
-        emu = new EntityManagerUtils();
-        clientDAO = new ClientDAO();
         clientDAO.create(emu.buildClient());
         buildAlert("Client Saved", clientDAO.find(1).getName()).showAndWait();
     }
-
-    public void closeForm(ActionEvent actionEvent) {
-        Stage stage = (Stage) btnClose.getScene().getWindow();
-        stage.close();
-    }
-    /*
-    public void saveCategory(ActionEvent actionEvent) {
-        emu = new EntityManagerUtils();
-        emu.saveCategory();
-    }
-
-    public void saveMaterial(ActionEvent actionEvent) {
-        emu = new EntityManagerUtils();
-        emu.saveMaterial();
-    }
-
-    public void saveProduct(ActionEvent actionEvent) {
-        emu = new EntityManagerUtils();
-        emu.saveProduct();
-    }*/
 
     private Alert buildAlert(String header, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

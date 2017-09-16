@@ -194,16 +194,24 @@ public class EntityManagerUtils {
         return Client.builder()
                 .name("Clientín")
                 .email("email@domain.com")
-                .location(buildLocation())
+                .provinceId(1)
                 .birthYear(1991)
                 .buyer(true)
                 .consultant(true)
-                .purchases(purchases)
+                //.purchases(purchases)
+                .build();
+    }
+
+    public Category buildBaseCategory() {
+        return Category.builder()
+                .description("Category 1")
+                .product(false)
                 .build();
     }
 
     public Category buildCategory() {
         return Category.builder()
+                .id(1)
                 .description("Category 1")
                 .product(false)
                 .build();
@@ -212,7 +220,7 @@ public class EntityManagerUtils {
     public Location buildLocation() {
         return Location.builder()
                 .city("Cordoba Capital")
-                .province("Cordoba")
+                .provinceId(1)
                 .address("Fake Street 123")
                 .build();
     }

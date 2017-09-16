@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * Created by MaxPower on 03/09/2017.
+ * Created by MaxPower on 16/09/2017.
  */
 @Data
 @Builder
@@ -21,21 +21,12 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @Table
-public class Category {
+public class Province {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column
-    private String description;
-
-    @Column
-    private boolean product;
-
-    @Column
-    private boolean material;
-
-    @Column
-    private boolean supplier;
+    private String name;
 }

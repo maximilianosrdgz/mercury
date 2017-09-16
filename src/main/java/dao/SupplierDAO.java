@@ -1,14 +1,15 @@
 package dao;
 
-import controller.EntityManagerUtils;
 import domain.Supplier;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by MaxPower on 12/09/2017.
  */
+@Component
 public class SupplierDAO extends AbstractDAO<Supplier> {
 
-    public SupplierDAO(EntityManagerUtils emu) {
+    public SupplierDAO() {
         super(Supplier.class);
     }
 

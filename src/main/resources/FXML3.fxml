@@ -82,12 +82,12 @@
       </HBox>
       <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css">
          <children>
-            <Button mnemonicParsing="false" onAction="#saveClient" text="Detalle">
+            <Button mnemonicParsing="false" onAction="#saveClient" text="Provincia">
                <HBox.margin>
                   <Insets right="5.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" text="Proveedor" />
+            <Button mnemonicParsing="false" text="Detalle" />
          </children>
       </HBox>
     </children>

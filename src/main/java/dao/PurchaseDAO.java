@@ -1,14 +1,15 @@
 package dao;
 
-import controller.EntityManagerUtils;
 import domain.Purchase;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by MaxPower on 12/09/2017.
  */
+@Component
 public class PurchaseDAO extends AbstractDAO<Purchase> {
 
-    public PurchaseDAO(EntityManagerUtils emu) {
+    public PurchaseDAO() {
         super(Purchase.class);
     }
 

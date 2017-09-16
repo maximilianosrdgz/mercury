@@ -22,11 +22,11 @@
             styleClass="HBox"
             VBox.vgrow="NEVER">
          <children>
-            <Button fx:id="btnMenuBar"
+            <Button fx:id="btnClose"
                     alignment="CENTER"
                     mnemonicParsing="false"
-                    onAction="#loadPane"
-                    text="Show Form 1"
+                    onAction="#closeForm"
+                    text="Salir"
                     textAlignment="RIGHT"
                     HBox.hgrow="NEVER">
                <HBox.margin>
@@ -56,18 +56,17 @@
                              AnchorPane.rightAnchor="5.0"
                              AnchorPane.topAnchor="5.0">
                      <panes>
-                        <TitledPane animated="false"
-                                    text="untitled 1">
+                        <TitledPane text="Clientes">
                            <content>
                               <AnchorPane minHeight="0.0"
                                           minWidth="0.0"
                                           prefHeight="180.0"
                                           prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="openFrm2"
+                                    <Button fx:id="btnOpenFormClientLoad"
                                             mnemonicParsing="false"
-                                            onAction="#loadPane2"
-                                            text="open form 2"
+                                            onAction="#loadNewClientPane"
+                                            text="Nuevo Cliente"
                                             AnchorPane.leftAnchor="0.0"
                                             AnchorPane.rightAnchor="0.0"
                                             AnchorPane.topAnchor="0.0" />
@@ -83,8 +82,7 @@
                                  </children></AnchorPane>
                            </content>
                         </TitledPane>
-                        <TitledPane animated="false"
-                                    text="untitled 2">
+                        <TitledPane text="untitled 2">
                            <content>
                               <AnchorPane minHeight="0.0"
                                           minWidth="0.0"
@@ -92,8 +90,7 @@
                                           prefWidth="200.0" />
                            </content>
                         </TitledPane>
-                        <TitledPane animated="false"
-                                    text="untitled 3">
+                        <TitledPane text="untitled 3">
                            <content>
                               <AnchorPane minHeight="0.0"
                                           minWidth="0.0"
@@ -121,46 +118,3 @@
       </SplitPane>
    </children>
 </VBox>
-
-        <!--
-        <?xml version="1.0" encoding="UTF-8"?>
-
-        <?import java.lang.*?>
-        <?import javafx.scene.control.*?>
-        <?import javafx.scene.layout.*?>
-        <?import javafx.geometry.Insets?>
-        <?import javafx.scene.layout.GridPane?>
-        <?import javafx.scene.control.Button?>
-        <?import javafx.scene.control.Label?>
-
-        <GridPane alignment="center"
-                  hgap="10"
-                  prefHeight="226.0"
-                  prefWidth="345.0"
-                  stylesheets="/style.css"
-                  vgap="10"
-                  xmlns:fx="http://javafx.com/fxml/1"
-                  xmlns="http://javafx.com/javafx/8"
-                  fx:controller="gui.controller.MenuController">
-           <children>
-               <Button onAction="#sayHelloWorld" text="Say Hello World!" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-               <Label fx:id="helloWorld" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-              <Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeForm" text="Close" />
-              <Button fx:id="btnLoadClient"
-                      mnemonicParsing="false"
-                      onAction="#openLoadClient"
-                      text="Cargar Cliente"
-                      GridPane.columnIndex="3"
-                      GridPane.rowIndex="3" />
-           </children>
-           <columnConstraints>
-              <ColumnConstraints />
-              <ColumnConstraints />
-           </columnConstraints>
-           <rowConstraints>
-              <RowConstraints />
-              <RowConstraints />
-              <RowConstraints />
-           </rowConstraints>
-        </GridPane>
-        -->

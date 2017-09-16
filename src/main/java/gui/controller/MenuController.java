@@ -1,51 +1,26 @@
 package gui.controller;
 
+import gui.form.SpringFxmlLoader;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 
+@Controller
 public class MenuController {
 
     @FXML
-    private Label helloWorld;
-    @FXML
     private Button btnClose;
-    @FXML
-    private Button btnLoadClient;
-
-    public void sayHelloWorld(ActionEvent actionEvent) {
-        helloWorld.setText("Hello World!");
-    }
-
-    public void closeForm(ActionEvent actionEvent) {
-        Stage stage = (Stage) btnClose.getScene().getWindow();
-        stage.close();
-    }
-
-    public void openLoadClient(ActionEvent actionEvent) throws IOException {
-        Stage loadClient = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/client-load.fxml"));
-        loadClient.setTitle("Cargar Cliente");
-        loadClient.setScene(new Scene(root, 300, 275));
-        loadClient.show();
-    }
 
     @FXML
-    private Button btnMenuBar;
-
-    @FXML
-    private Button openFrm2;
+    private Button btnOpenFormClientLoad;
 
     @FXML
     private Button openFrm3;
@@ -59,8 +34,8 @@ public class MenuController {
     }
 
     public VBox fadeAnimate(String url) throws IOException {
-        VBox v = (VBox) FXMLLoader.load(getClass().getResource(url));
-        FadeTransition ft = new FadeTransition(Duration.millis(1500));
+        VBox v = (VBox) SpringFxmlLoader.load(url);
+        FadeTransition ft = new FadeTransition(Duration.millis(500));
         ft.setNode(v);
         ft.setFromValue(0.1);
         ft.setToValue(1);
@@ -70,15 +45,20 @@ public class MenuController {
         return v;
     }
 
-    public void loadPane(ActionEvent event) throws IOException {
-        setDataPane(fadeAnimate("/client-load.fxml"));
+    public void closeForm(ActionEvent event) {
+        Stage stage = (Stage) btnClose.getScene().getWindow();
+        stage.close();
     }
 
-    public void loadPane2(ActionEvent event) throws IOException {
-        setDataPane(fadeAnimate("/samplefx/view/FXML2.fxml"));
+    public void loadPane(ActionEvent event) throws IOException {
+        setDataPane(fadeAnimate("/new-client.fxml"));
+    }
+
+    public void loadNewClientPane(ActionEvent event) throws IOException {
+        setDataPane(fadeAnimate("/new-client.fxml"));
     }
 
     public void loadPane3(ActionEvent event) throws IOException {
-        setDataPane(fadeAnimate("/samplefx/view/FXML3.fxml"));
+        setDataPane(fadeAnimate("/FXML3.fxml"));
     }
 }

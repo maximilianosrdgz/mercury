@@ -1,14 +1,15 @@
 package dao;
 
-import controller.EntityManagerUtils;
 import domain.Material;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by MaxPower on 12/09/2017.
  */
+@Component
 public class MaterialDAO extends AbstractDAO<Material> {
 
-    public MaterialDAO(EntityManagerUtils emu) {
+    public MaterialDAO() {
         super(Material.class);
     }
 

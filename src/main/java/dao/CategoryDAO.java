@@ -1,12 +1,12 @@
 package dao;
 
 import domain.Category;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by MaxPower on 12/09/2017.
  */
-@Repository
+@Component
 public class CategoryDAO extends AbstractDAO<Category> {
 
     public CategoryDAO() {

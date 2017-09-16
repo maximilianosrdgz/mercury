@@ -1,12 +1,12 @@
 package dao;
 
 import domain.Client;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by MaxPower on 12/09/2017.
  */
-@Repository
+@Component
 public class ClientDAO extends AbstractDAO<Client> {
 
     public ClientDAO() {

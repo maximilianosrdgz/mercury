@@ -1,14 +1,15 @@
 package dao;
 
-import controller.EntityManagerUtils;
 import domain.Product;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by MaxPower on 12/09/2017.
  */
+@Component
 public class ProductDAO extends AbstractDAO<Product> {
 
-    public ProductDAO(EntityManagerUtils emu) {
+    public ProductDAO() {
         super(Product.class);
     }
 

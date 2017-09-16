@@ -1,14 +1,15 @@
 package dao;
 
-import controller.EntityManagerUtils;
 import domain.Location;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by MaxPower on 12/09/2017.
  */
+@Component
 public class LocationDAO extends AbstractDAO<Location> {
 
-    public LocationDAO(EntityManagerUtils emu) {
+    public LocationDAO() {
         super(Location.class);
     }
 

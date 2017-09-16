@@ -37,9 +37,6 @@ public class Product {
     @Column
     private double price;
 
-    @Column
-    private double cost;
-
     @ManyToMany//(cascade = CascadeType.MERGE)
     @JoinTable(name = "product_category")
     private Set<Category> categories;
