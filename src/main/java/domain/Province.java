@@ -29,4 +29,9 @@ public class Province {
 
     @Column
     private String name;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

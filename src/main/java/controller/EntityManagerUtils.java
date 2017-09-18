@@ -5,6 +5,7 @@ import domain.Client;
 import domain.Location;
 import domain.Material;
 import domain.Product;
+import domain.Province;
 import domain.Purchase;
 import domain.PurchaseDetail;
 import org.springframework.stereotype.Component;
@@ -24,147 +25,15 @@ import java.util.Set;
 @Component
 public class EntityManagerUtils {
 
-    Client client = null;
+    private EntityManager em;
 
     public EntityManager getEntityManager() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU");
-        return emf.createEntityManager();
+        if(em == null) {
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU");
+            em = emf.createEntityManager();
+        }
+        return em;
     }
-    /*
-    public void saveClient() {
-        try {
-            em.getTransaction().begin();
-            em.persist(buildClient());
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-
-        if(client != null) {
-            System.out.println(client);
-        }
-    }
-
-    public Client findClient(int clientId) {
-        Client client = null;
-        try {
-            em.getTransaction().begin();
-            client = em.find(Client.class, clientId);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-        return client;
-    }
-
-    public void deleteClient(int clientId) {
-        try {
-            em.getTransaction().begin();
-            Client client = em.find(Client.class, clientId);
-            em.remove(client);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-    }
-
-    public void saveCategory() {
-        try {
-            em.getTransaction().begin();
-            em.persist(buildCategory());
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-
-        if(client != null) {
-            System.out.println(client);
-        }
-    }
-
-    public void saveLocation() {
-        try {
-            em.getTransaction().begin();
-            em.persist(buildLocation());
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-
-        if(client != null) {
-            System.out.println(client);
-        }
-    }
-
-    public void saveMaterial() {
-        try {
-            em.getTransaction().begin();
-            em.persist(buildMaterial());
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-
-        if(client != null) {
-            System.out.println(client);
-        }
-    }
-
-    public void saveProduct() {
-        try {
-            em.getTransaction().begin();
-            em.persist(buildProduct());
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-
-        if(client != null) {
-            System.out.println(client);
-        }
-    }
-
-    public void savePurchase() {
-        try {
-            em.getTransaction().begin();
-            em.persist(buildPurchase());
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-
-        if(client != null) {
-            System.out.println(client);
-        }
-    }
-
-    public void savePurchaseDetail() {
-        try {
-            em.getTransaction().begin();
-            em.persist(buildPurchaseDetail());
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-
-        if(client != null) {
-            System.out.println(client);
-        }
-    }
-
-    public void saveSupplier() {
-        try {
-            em.getTransaction().begin();
-            em.persist(buildClient());
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-
-        if(client != null) {
-            System.out.println(client);
-        }
-    }*/
 
     public Client buildClient() {/*
         Location location = buildLocation();
@@ -194,11 +63,18 @@ public class EntityManagerUtils {
         return Client.builder()
                 .name("Clientín")
                 .email("email@domain.com")
-                .provinceId(1)
+                .province(buildProvince())
                 .birthYear(1991)
                 .buyer(true)
                 .consultant(true)
                 //.purchases(purchases)
+                .build();
+    }
+
+    public Province buildProvince() {
+        return Province.builder()
+                .id(1)
+                .name("Buenos Aires")
                 .build();
     }
 

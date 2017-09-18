@@ -41,7 +41,7 @@ public class Client {
     private String email;
 
     @ManyToOne//(cascade = CascadeType.PERSIST)
-    private int provinceId;
+    private Province province;
 
     @Column
     private int birthYear;

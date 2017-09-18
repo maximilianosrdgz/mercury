@@ -18,15 +18,14 @@ public class MenuController {
 
     @FXML
     private Button btnClose;
-
-    @FXML
-    private Button btnOpenFormClientLoad;
-
     @FXML
     private Button openFrm3;
-
     @FXML
     private VBox dataPane;
+    @FXML
+    private Button btnOpenFormClientLoad;
+    @FXML
+    private Button btnClientList;
 
     public void setDataPane(Node node) {
         // update VBox with new form(FXML) depends on which button is clicked
@@ -60,5 +59,9 @@ public class MenuController {
 
     public void loadPane3(ActionEvent event) throws IOException {
         setDataPane(fadeAnimate("/FXML3.fxml"));
+    }
+
+    public void loadClientListPane(ActionEvent actionEvent) throws IOException {
+        setDataPane(fadeAnimate("/client-list.fxml"));
     }
 }

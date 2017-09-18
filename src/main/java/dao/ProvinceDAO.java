@@ -3,6 +3,8 @@ package dao;
 import domain.Province;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Created by MaxPower on 16/09/2017.
  */
@@ -19,5 +21,9 @@ public class ProvinceDAO extends AbstractDAO<Province> {
 
     public Province find(int id) {
         return super.find(id);
+    }
+
+    public List<Province> findAll() {
+        return super.findAll();
     }
 }

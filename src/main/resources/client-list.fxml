@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ClientListController">
+    <children>
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
+            <children>
+                <Label text="Clientes Registrados">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+      <TableView>
+        <columns>
+          <TableColumn minWidth="50.0" prefWidth="-1.0" text="ID" />
+          <TableColumn minWidth="100.0" prefWidth="-1.0" text="Nombre" />
+            <TableColumn minWidth="75.0" prefWidth="-1.0" text="E-mail" />
+            <TableColumn minWidth="100.0" prefWidth="-1.0" text="Provincia" />
+            <TableColumn minWidth="100.0" prefWidth="-1.0" text="Edad" />
+            <TableColumn minWidth="100.0" prefWidth="-1.0" text="Compró" />
+            <TableColumn minWidth="100.0" prefWidth="-1.0" text="Consultó" />
+            <TableColumn minWidth="100.0" prefWidth="-1.0" text="Blacklist" />
+        </columns>
+      </TableView>
+    </children>
+</VBox>

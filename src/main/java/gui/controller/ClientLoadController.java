@@ -1,20 +1,22 @@
 package gui.controller;
 
 import controller.EntityManagerUtils;
-import dao.CategoryDAO;
 import dao.ClientDAO;
 import dao.ProvinceDAO;
 import domain.Client;
 import domain.Province;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import javax.mail.Authenticator;
@@ -29,6 +31,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -37,19 +43,44 @@ import java.util.ResourceBundle;
  */
 @NoArgsConstructor
 @Controller
-public class ClientLoadController {
+public class ClientLoadController implements Initializable {
 
     private EntityManagerUtils emu;
     private ClientDAO clientDAO;
+    private ProvinceDAO provinceDAO;
+
+    @FXML
+    private ComboBox<Province> cmbProvinces;
+    @FXML
+    private ComboBox cmbBirthYears;
+    @FXML
+    private Button btnSaveClient;
+    @FXML
+    private TextField txtName;
+    @FXML
+    private TextField txtEmail;
+    @FXML
+    private CheckBox chkBlacklisted;
+    @FXML
+    private CheckBox chkBuyer;
+    @FXML
+    private CheckBox chkConsultant;
 
     @Autowired
-    public ClientLoadController(EntityManagerUtils emu, ClientDAO clientDAO) {
+    public ClientLoadController(EntityManagerUtils emu, ClientDAO clientDAO, ProvinceDAO provinceDAO) {
         this.emu = emu;
         this.clientDAO = clientDAO;
+        this.provinceDAO = provinceDAO;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        initProvinceCombo();
+        initBirthYearsCombo();
     }
 
     public void saveClient(ActionEvent actionEvent) {
-        clientDAO.create(emu.buildClient());
+        clientDAO.create(buildClient());
         buildAlert("Client Saved", clientDAO.find(1).getName()).showAndWait();
     }
 
@@ -116,5 +147,34 @@ public class ClientLoadController {
         }
 
         return content.toString();
+    }
+
+    private Client buildClient() {
+        return Client.builder()
+                .name(txtName.getText())
+                .email(txtEmail.getText())
+                .province(cmbProvinces.getSelectionModel().getSelectedItem())
+                .birthYear((Integer) cmbBirthYears.getSelectionModel().getSelectedItem())
+                .buyer(chkBuyer.isSelected())
+                .consultant(chkConsultant.isSelected())
+                .blackListed(chkBlacklisted.isSelected())
+                .build();
+    }
+
+    private void initProvinceCombo() {
+        ObservableList<Province> provinceList = FXCollections.observableArrayList();
+        provinceList.addAll(provinceDAO.findAll());
+        cmbProvinces.setItems(provinceList);
+        cmbProvinces.getSelectionModel().selectFirst();
+    }
+
+    private void initBirthYearsCombo() {
+        ObservableList<Integer> years = FXCollections.observableArrayList();
+        int thisYear = Calendar.getInstance().get(Calendar.YEAR);
+        for (int i = thisYear; i >= 1940; i--) {
+            years.add(i);
+        }
+        cmbBirthYears.setItems(years);
+        cmbBirthYears.getSelectionModel().selectFirst();
     }
 }

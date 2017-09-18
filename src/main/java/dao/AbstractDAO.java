@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 /**
  * Created by MaxPower on 12/09/2017.
@@ -21,29 +23,33 @@ public abstract class AbstractDAO<T> {
     }
 
     public void create(T entity) {
-        EntityManager em = emu.getEntityManager();
+        //EntityManager em = emu.getEntityManager();
         try {
-            em.getTransaction().begin();
-            em.persist(entity);
-            em.getTransaction().commit();
+            emu.getEntityManager().getTransaction().begin();
+            emu.getEntityManager().persist(entity);
+            emu.getEntityManager().getTransaction().commit();
         } catch (Exception e) {
-            em.getTransaction().rollback();
-        }
-        finally {
-            em.close();
+            emu.getEntityManager().getTransaction().rollback();
         }
     }
 
     public T find(int id) {
-        EntityManager em = emu.getEntityManager();
+        //EntityManager em = emu.getEntityManager();
         T entity = null;
         try {
-            em.getTransaction().begin();
-            entity = em.find(entityClass, id);
-            em.getTransaction().commit();
+            emu.getEntityManager().getTransaction().begin();
+            entity = emu.getEntityManager().find(entityClass, id);
+            emu.getEntityManager().getTransaction().commit();
         } catch (Exception e) {
-            em.getTransaction().rollback();
+            emu.getEntityManager().getTransaction().rollback();
         }
         return entity;
+    }
+
+    public List<T> findAll() {
+        //EntityManager em = emu.getEntityManager();
+        CriteriaQuery<T> cq = emu.getEntityManager().getCriteriaBuilder().createQuery(entityClass);
+        cq.select(cq.from(entityClass));
+        return emu.getEntityManager().createQuery(cq).getResultList();
     }
 }
