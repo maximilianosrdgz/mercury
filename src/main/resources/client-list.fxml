@@ -18,7 +18,7 @@
                 </Label>
             </children>
         </HBox>
-      <TableView>
+      <TableView fx:id="tblClients">
         <columns>
           <TableColumn minWidth="50.0" prefWidth="-1.0" text="ID" />
           <TableColumn minWidth="100.0" prefWidth="-1.0" text="Nombre" />
