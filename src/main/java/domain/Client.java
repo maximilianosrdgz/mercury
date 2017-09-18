@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -57,4 +58,35 @@ public class Client {
 
     @Column
     private boolean blackListed;
+
+    public int getAge() {
+        return Calendar.getInstance().get(Calendar.YEAR) - birthYear;
+    }
+
+    public String isBuyer() {
+        if(buyer) {
+            return "Sí";
+        }
+        else {
+            return "No";
+        }
+    }
+
+    public String isConsultant() {
+        if(consultant) {
+            return "Sí";
+        }
+        else {
+            return "No";
+        }
+    }
+
+    public String isBlacklist() {
+        if(blackListed) {
+            return "Sí";
+        }
+        else {
+            return "No";
+        }
+    }
 }

@@ -20,14 +20,14 @@
         </HBox>
       <TableView fx:id="tblClients">
         <columns>
-          <TableColumn minWidth="50.0" prefWidth="-1.0" text="ID" />
-          <TableColumn minWidth="100.0" prefWidth="-1.0" text="Nombre" />
-            <TableColumn minWidth="75.0" prefWidth="-1.0" text="E-mail" />
-            <TableColumn minWidth="100.0" prefWidth="-1.0" text="Provincia" />
-            <TableColumn minWidth="100.0" prefWidth="-1.0" text="Edad" />
-            <TableColumn minWidth="100.0" prefWidth="-1.0" text="Compró" />
-            <TableColumn minWidth="100.0" prefWidth="-1.0" text="Consultó" />
-            <TableColumn minWidth="100.0" prefWidth="-1.0" text="Blacklist" />
+          <TableColumn fx:id="colId" minWidth="50.0" prefWidth="-1.0" text="ID" />
+          <TableColumn fx:id="colName" minWidth="150.0" prefWidth="-1.0" text="Nombre" />
+            <TableColumn fx:id="colEmail" minWidth="200.0" prefWidth="-1.0" text="E-mail" />
+            <TableColumn fx:id="colProvince" minWidth="100.0" prefWidth="-1.0" text="Provincia" />
+            <TableColumn fx:id="colAge" minWidth="100.0" prefWidth="-1.0" text="Edad" />
+            <TableColumn fx:id="colBuyer" minWidth="100.0" prefWidth="-1.0" text="Compró" />
+            <TableColumn fx:id="colConsultant" minWidth="100.0" prefWidth="-1.0" text="Consultó" />
+            <TableColumn fx:id="colBlacklist" minWidth="100.0" prefWidth="-1.0" text="Blacklist" />
         </columns>
       </TableView>
     </children>

@@ -80,8 +80,9 @@ public class ClientLoadController implements Initializable {
     }
 
     public void saveClient(ActionEvent actionEvent) {
-        clientDAO.create(buildClient());
-        buildAlert("Client Saved", clientDAO.find(1).getName()).showAndWait();
+        Client client = buildClient();
+        clientDAO.create(client);
+        buildAlert("Cliente Guardado", "Nuevo Cliente: " + clientDAO.find(client.getId()).getName()).showAndWait();
     }
 
     private Alert buildAlert(String header, String content) {
