@@ -20,4 +20,8 @@ public class ClientDAO extends AbstractDAO<Client> {
     public Client find(int id) {
         return super.find(id);
     }
+
+    public void update(Client client) {
+        super.update(client);
+    }
 }

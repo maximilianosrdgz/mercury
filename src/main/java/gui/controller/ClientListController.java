@@ -1,15 +1,21 @@
 package gui.controller;
 
-import controller.EntityManagerUtils;
 import dao.ClientDAO;
 import domain.Client;
+import gui.form.SpringFxmlLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +30,11 @@ import java.util.ResourceBundle;
 @Controller
 public class ClientListController implements Initializable {
 
+
     private ClientDAO clientDAO;
+
+    @FXML
+    private VBox clientListForm;
     @FXML
     private TableView<Client> tblClients;
     @FXML
@@ -44,6 +54,9 @@ public class ClientListController implements Initializable {
     @FXML
     private TableColumn colBlacklist;
 
+    @FXML
+    private Button btnUpdateClient;
+
     @Autowired
     public ClientListController(ClientDAO clientDAO) {
         this.clientDAO = clientDAO;
@@ -54,7 +67,7 @@ public class ClientListController implements Initializable {
         initClientsTable();
     }
 
-    private void initClientsTable() {
+    public void initClientsTable() {
         colId.setCellValueFactory(new PropertyValueFactory<Client, String>("id"));
         colName.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
         colEmail.setCellValueFactory(new PropertyValueFactory<Client, String>("email"));
@@ -66,5 +79,18 @@ public class ClientListController implements Initializable {
         ObservableList<Client> clients = FXCollections.observableArrayList();
         clients.addAll(clientDAO.findAll());
         tblClients.setItems(clients);
+        tblClients.getSelectionModel().selectFirst();
+    }
+
+    public void updateClient(ActionEvent actionEvent) {
+        Scene scene = new Scene((Parent)SpringFxmlLoader.load("/update-client.fxml"), 600, 400);
+        Stage stage = new Stage();
+        stage.setTitle("Modificar Cliente");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public Client getSelectedClient(){
+        return tblClients.getSelectionModel().getSelectedItem();
     }
 }

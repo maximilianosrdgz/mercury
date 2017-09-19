@@ -1,6 +1,7 @@
 package gui.controller;
 
-import controller.EntityManagerUtils;
+import gui.util.AlertBuilder;
+import persistence.EntityManagerUtils;
 import dao.ClientDAO;
 import dao.ProvinceDAO;
 import domain.Client;
@@ -31,10 +32,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -48,6 +46,7 @@ public class ClientLoadController implements Initializable {
     private EntityManagerUtils emu;
     private ClientDAO clientDAO;
     private ProvinceDAO provinceDAO;
+    private AlertBuilder alertBuilder;
 
     @FXML
     private ComboBox<Province> cmbProvinces;
@@ -67,10 +66,12 @@ public class ClientLoadController implements Initializable {
     private CheckBox chkConsultant;
 
     @Autowired
-    public ClientLoadController(EntityManagerUtils emu, ClientDAO clientDAO, ProvinceDAO provinceDAO) {
+    public ClientLoadController(EntityManagerUtils emu, ClientDAO clientDAO,
+                                ProvinceDAO provinceDAO, AlertBuilder alertBuilder) {
         this.emu = emu;
         this.clientDAO = clientDAO;
         this.provinceDAO = provinceDAO;
+        this.alertBuilder = alertBuilder;
     }
 
     @Override
@@ -82,16 +83,24 @@ public class ClientLoadController implements Initializable {
     public void saveClient(ActionEvent actionEvent) {
         Client client = buildClient();
         clientDAO.create(client);
-        buildAlert("Cliente Guardado", "Nuevo Cliente: " + clientDAO.find(client.getId()).getName()).showAndWait();
+        alertBuilder.builder()
+                .type(Alert.AlertType.INFORMATION)
+                .title("Guardar Cliente")
+                .headerText("Cliente guardado exitosamente")
+                .contentText("Nuevo Cliente: " + clientDAO.find(client.getId()).getName())
+                .build()
+                .showAndWait();
+        clearForm();
     }
 
-    private Alert buildAlert(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-
-        return alert;
+    private void clearForm() {
+        this.txtName.setText("");
+        this.txtEmail.setText("");
+        this.cmbProvinces.getSelectionModel().selectFirst();
+        this.cmbBirthYears.getSelectionModel().selectFirst();
+        this.chkConsultant.setSelected(false);
+        this.chkBuyer.setSelected(false);
+        this.chkBlacklisted.setSelected(false);
     }
 
     public void sendEmail() {
@@ -127,7 +136,7 @@ public class ClientLoadController implements Initializable {
 
             Transport.send(message);
 
-            buildAlert("E-Mail Enviado", "E-Mail enviado exitosamente!").showAndWait();
+            //buildAlert("E-Mail Enviado", "E-Mail enviado exitosamente!").showAndWait();
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -177,5 +186,9 @@ public class ClientLoadController implements Initializable {
         }
         cmbBirthYears.setItems(years);
         cmbBirthYears.getSelectionModel().selectFirst();
+    }
+
+    public void checkConsultant(ActionEvent actionEvent) {
+        chkConsultant.setSelected(true);
     }
 }

@@ -1,10 +1,9 @@
 package dao;
 
-import controller.EntityManagerUtils;
+import persistence.EntityManagerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
@@ -51,5 +50,15 @@ public abstract class AbstractDAO<T> {
         CriteriaQuery<T> cq = emu.getEntityManager().getCriteriaBuilder().createQuery(entityClass);
         cq.select(cq.from(entityClass));
         return emu.getEntityManager().createQuery(cq).getResultList();
+    }
+
+    public void update(T entity) {
+        try {
+            emu.getEntityManager().getTransaction().begin();
+            emu.getEntityManager().merge(entity);
+            emu.getEntityManager().getTransaction().commit();
+        } catch (Exception e) {
+            emu.getEntityManager().getTransaction().rollback();
+        }
     }
 }

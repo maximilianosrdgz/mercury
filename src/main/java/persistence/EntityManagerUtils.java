@@ -1,4 +1,4 @@
-package controller;
+package persistence;
 
 import domain.Category;
 import domain.Client;

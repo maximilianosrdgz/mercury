@@ -63,6 +63,18 @@ public class Client {
         return Calendar.getInstance().get(Calendar.YEAR) - birthYear;
     }
 
+    public boolean getBooleanBuyer() {
+        return buyer;
+    }
+
+    public boolean getBooleanConsultant() {
+        return consultant;
+    }
+
+    public boolean getBooleanBlacklisted() {
+        return blackListed;
+    }
+
     public String isBuyer() {
         if(buyer) {
             return "Sí";

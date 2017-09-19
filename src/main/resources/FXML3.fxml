@@ -24,7 +24,7 @@
           vgap="10"
           xmlns:fx="http://javafx.com/fxml/1"
           xmlns="http://javafx.com/javafx/8"
-          fx:controller="gui.controller.ClientLoadController">
+          fx:persistence="gui.persistence.ClientLoadController">
     <children>
         <Button fx:id="btnSave"
                 onAction="#saveClient"
