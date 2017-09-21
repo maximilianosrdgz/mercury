@@ -4,8 +4,8 @@ import dao.ClientDAO;
 import dao.ProvinceDAO;
 import domain.Client;
 import domain.Province;
-import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
+import gui.util.ComboBoxLoader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,15 +21,16 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.Calendar;
 import java.util.ResourceBundle;
 
 @NoArgsConstructor
 @Controller
-public class ClientUpdateController implements Initializable {
+public class UpdateClientController implements Initializable {
 
-    private ClientListController listController;
+    private ListClientController listController;
+    private MenuController menuController;
     private ProvinceDAO provinceDAO;
     private ClientDAO clientDAO;
     private AlertBuilder alertBuilder;
@@ -54,9 +55,11 @@ public class ClientUpdateController implements Initializable {
     private CheckBox chkConsultant;
 
     @Autowired
-    public ClientUpdateController(ClientListController listController, ProvinceDAO provinceDAO,
+    public UpdateClientController(ListClientController listController,
+                                  MenuController menuController, ProvinceDAO provinceDAO,
                                   ClientDAO clientDAO, AlertBuilder alertBuilder) {
         this.listController = listController;
+        this.menuController = menuController;
         this.provinceDAO = provinceDAO;
         this.clientDAO = clientDAO;
         this.alertBuilder = alertBuilder;
@@ -65,7 +68,7 @@ public class ClientUpdateController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initProvinceCombo();
-        initBirthYearsCombo();
+        ComboBoxLoader.initBirthYearsCombo(cmbBirthYears);
 
         Client client = listController.getSelectedClient();
 
@@ -86,27 +89,17 @@ public class ClientUpdateController implements Initializable {
         cmbProvinces.getSelectionModel().selectFirst();
     }
 
-    private void initBirthYearsCombo() {
-        ObservableList<Integer> years = FXCollections.observableArrayList();
-        int thisYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = thisYear; i >= 1940; i--) {
-            years.add(i);
-        }
-        cmbBirthYears.setItems(years);
-        cmbBirthYears.getSelectionModel().selectFirst();
-    }
-
-    public void updateClient(ActionEvent actionEvent) {
+    public void updateClient(ActionEvent actionEvent) throws IOException {
         Client client = buildClient();
         clientDAO.update(client);
-        listController.initClientsTable();
         alertBuilder.builder()
                 .type(Alert.AlertType.INFORMATION)
                 .title("Modificar Cliente")
                 .headerText("Cliente modificado exitosamente")
-                .contentText("Cliente modificado: " + client.getName())
+                .contentText("Cliente modificado: " + client)
                 .build()
                 .showAndWait();
+        menuController.loadListClientPane(actionEvent);
         Stage stage = (Stage) btnUpdateClient.getScene().getWindow();
         stage.close();
     }

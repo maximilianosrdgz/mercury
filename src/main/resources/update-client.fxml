@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ClientUpdateController">
+<VBox alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.UpdateClientController">
     <children>
         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
             <children>
@@ -38,24 +38,27 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <Label text="Nro. Cliente" GridPane.rowIndex="0" />
                 <Label text="Nombre" GridPane.rowIndex="1" />
                 <Label text="E-mail" GridPane.rowIndex="2" />
-                <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Button fx:id="btnUpdateClient" mnemonicParsing="false" onAction="#updateClient" prefHeight="26.0" prefWidth="90.0" text="Modificar" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+                <TextField fx:id="txtId" editable="false" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="0" />
+                <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+                <Button fx:id="btnUpdateClient" mnemonicParsing="false" onAction="#updateClient" prefHeight="26.0" prefWidth="90.0" text="Modificar" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="8" />
                 <Label layoutX="10.0" layoutY="47.0" text="Provincia" GridPane.rowIndex="3" />
                 <Label layoutX="10.0" layoutY="77.0" text="Año de Nacimiento" GridPane.rowIndex="4" />
-                <Label layoutX="10.0" layoutY="77.0" text="Agregar a Blacklist" GridPane.rowIndex="6" />
-                <ComboBox fx:id="cmbProvinces" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <ComboBox fx:id="cmbBirthYears" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                <CheckBox fx:id="chkBlacklisted" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                <CheckBox fx:id="chkBuyer" layoutX="289.0" layoutY="167.0" mnemonicParsing="false" text="Compró" GridPane.rowIndex="5">
+                <Label layoutX="10.0" layoutY="77.0" text="Agregar a Blacklist" GridPane.rowIndex="7" />
+                <ComboBox fx:id="cmbProvinces" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+                <ComboBox fx:id="cmbBirthYears" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+                <CheckBox fx:id="chkBlacklisted" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="7" />
+                <CheckBox fx:id="chkBuyer" layoutX="289.0" layoutY="167.0" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5">
                 </CheckBox>
-                <CheckBox fx:id="chkConsultant" layoutX="10.0" layoutY="17.0" mnemonicParsing="false" text="Consultó" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <CheckBox fx:id="chkConsultant" layoutX="10.0" layoutY="17.0" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
+            <Label layoutX="10.0" layoutY="137.0" text="Compró" GridPane.rowIndex="5" />
+            <Label layoutX="10.0" layoutY="167.0" text="Consultó" GridPane.rowIndex="6" />
             </children>
         </GridPane>
     </children>

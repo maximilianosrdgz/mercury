@@ -4,7 +4,15 @@ import persistence.EntityManagerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.SingularAttribute;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,7 +30,6 @@ public abstract class AbstractDAO<T> {
     }
 
     public void create(T entity) {
-        //EntityManager em = emu.getEntityManager();
         try {
             emu.getEntityManager().getTransaction().begin();
             emu.getEntityManager().persist(entity);
@@ -33,7 +40,6 @@ public abstract class AbstractDAO<T> {
     }
 
     public T find(int id) {
-        //EntityManager em = emu.getEntityManager();
         T entity = null;
         try {
             emu.getEntityManager().getTransaction().begin();
@@ -45,8 +51,18 @@ public abstract class AbstractDAO<T> {
         return entity;
     }
 
+    public List<T> findByQuery(String statement) {
+        List<T> results = new ArrayList<>();
+        try {
+            Query query = emu.getEntityManager().createQuery(statement);
+            results = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
     public List<T> findAll() {
-        //EntityManager em = emu.getEntityManager();
         CriteriaQuery<T> cq = emu.getEntityManager().getCriteriaBuilder().createQuery(entityClass);
         cq.select(cq.from(entityClass));
         return emu.getEntityManager().createQuery(cq).getResultList();

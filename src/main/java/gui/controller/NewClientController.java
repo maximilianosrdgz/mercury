@@ -1,6 +1,7 @@
 package gui.controller;
 
 import gui.util.AlertBuilder;
+import gui.util.ComboBoxLoader;
 import persistence.EntityManagerUtils;
 import dao.ClientDAO;
 import dao.ProvinceDAO;
@@ -41,7 +42,7 @@ import java.util.ResourceBundle;
  */
 @NoArgsConstructor
 @Controller
-public class ClientLoadController implements Initializable {
+public class NewClientController implements Initializable {
 
     private EntityManagerUtils emu;
     private ClientDAO clientDAO;
@@ -66,8 +67,8 @@ public class ClientLoadController implements Initializable {
     private CheckBox chkConsultant;
 
     @Autowired
-    public ClientLoadController(EntityManagerUtils emu, ClientDAO clientDAO,
-                                ProvinceDAO provinceDAO, AlertBuilder alertBuilder) {
+    public NewClientController(EntityManagerUtils emu, ClientDAO clientDAO,
+                               ProvinceDAO provinceDAO, AlertBuilder alertBuilder) {
         this.emu = emu;
         this.clientDAO = clientDAO;
         this.provinceDAO = provinceDAO;
@@ -77,7 +78,7 @@ public class ClientLoadController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initProvinceCombo();
-        initBirthYearsCombo();
+        ComboBoxLoader.initBirthYearsCombo(cmbBirthYears);
     }
 
     public void saveClient(ActionEvent actionEvent) {
@@ -176,16 +177,6 @@ public class ClientLoadController implements Initializable {
         provinceList.addAll(provinceDAO.findAll());
         cmbProvinces.setItems(provinceList);
         cmbProvinces.getSelectionModel().selectFirst();
-    }
-
-    private void initBirthYearsCombo() {
-        ObservableList<Integer> years = FXCollections.observableArrayList();
-        int thisYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = thisYear; i >= 1940; i--) {
-            years.add(i);
-        }
-        cmbBirthYears.setItems(years);
-        cmbBirthYears.getSelectionModel().selectFirst();
     }
 
     public void checkConsultant(ActionEvent actionEvent) {

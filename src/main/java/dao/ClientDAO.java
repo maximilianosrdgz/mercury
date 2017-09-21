@@ -3,6 +3,9 @@ package dao;
 import domain.Client;
 import org.springframework.stereotype.Component;
 
+import javax.management.Query;
+import java.util.List;
+
 /**
  * Created by MaxPower on 12/09/2017.
  */
@@ -23,5 +26,11 @@ public class ClientDAO extends AbstractDAO<Client> {
 
     public void update(Client client) {
         super.update(client);
+    }
+
+    public List<Client> findByName(String name) {
+        List<Client> results = null;
+        String statement = String.format("SELECT client FROM Client client WHERE client.name = '%s'", name);
+        return super.findByQuery(statement);
     }
 }

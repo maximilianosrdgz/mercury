@@ -61,7 +61,7 @@ public class MenuController {
         setDataPane(fadeAnimate("/FXML3.fxml"));
     }
 
-    public void loadClientListPane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/client-list.fxml"));
+    public void loadListClientPane(ActionEvent actionEvent) throws IOException {
+        setDataPane(fadeAnimate("/list-client.fxml"));
     }
 }

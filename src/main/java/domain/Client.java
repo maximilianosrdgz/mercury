@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -77,7 +78,7 @@ public class Client {
 
     public String isBuyer() {
         if(buyer) {
-            return "Sí";
+            return "Si";
         }
         else {
             return "No";
@@ -86,7 +87,7 @@ public class Client {
 
     public String isConsultant() {
         if(consultant) {
-            return "Sí";
+            return "Si";
         }
         else {
             return "No";
@@ -95,7 +96,7 @@ public class Client {
 
     public String isBlacklist() {
         if(blackListed) {
-            return "Sí";
+            return "Si";
         }
         else {
             return "No";
