@@ -2,6 +2,7 @@ package gui.controller;
 
 import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;
+import gui.util.TextFieldUtils;
 import persistence.EntityManagerUtils;
 import dao.ClientDAO;
 import dao.ProvinceDAO;
@@ -82,16 +83,28 @@ public class NewClientController implements Initializable {
     }
 
     public void saveClient(ActionEvent actionEvent) {
-        Client client = buildClient();
-        clientDAO.create(client);
-        alertBuilder.builder()
-                .type(Alert.AlertType.INFORMATION)
-                .title("Guardar Cliente")
-                .headerText("Cliente guardado exitosamente")
-                .contentText("Nuevo Cliente: " + clientDAO.find(client.getId()).getName())
-                .build()
-                .showAndWait();
-        clearForm();
+        if(TextFieldUtils.fieldsFilled(txtName, txtEmail)) {
+            Client client = buildClient();
+            clientDAO.create(client);
+            alertBuilder.builder()
+                    .type(Alert.AlertType.INFORMATION)
+                    .title("Guardar Cliente")
+                    .headerText("Cliente guardado exitosamente")
+                    .contentText("Nuevo Cliente: " + clientDAO.find(client.getId()).getName())
+                    .build()
+                    .showAndWait();
+            clearForm();
+        }
+        else {
+            alertBuilder.builder()
+                    .type(Alert.AlertType.INFORMATION)
+                    .title("Guardar Cliente")
+                    .headerText("Datos incompletos")
+                    .contentText("Por favor, complete todos los datos del cliente antes de confirmar.")
+                    .build()
+                    .showAndWait();
+        }
+
     }
 
     private void clearForm() {

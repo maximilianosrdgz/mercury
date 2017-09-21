@@ -143,7 +143,6 @@ public class ListClientController implements Initializable {
     }
 
     public void filterTable(ActionEvent actionEvent) throws IOException {
-
         int id = 0;
         int age = -1;
         if(!txtId.getText().equals("")) {
@@ -159,10 +158,15 @@ public class ListClientController implements Initializable {
         initClientsTable(results);
     }
 
+    public void filterTableByFlags(ActionEvent actionEvent) {
+        List<Client> results = filterByFlags(chkBuyer.isSelected(),
+                chkConsultant.isSelected(),
+                chkBlacklist.isSelected());
+        initClientsTable(results);
+    }
+
     private List<Client> filterTable(int id, String name, String email, Province province, int age) {
-
         ObservableList<Client> clients = tblClients.getItems();
-
         return clients.stream()
                 .filter(client -> client.getId() == id || id == 0)
                 .filter(client -> StringUtils.containsIgnoreCase(
@@ -176,6 +180,70 @@ public class ListClientController implements Initializable {
                 .collect(Collectors.toList());
     }
 
+    private List<Client> filterByFlags(boolean buyer, boolean consultant, boolean blacklisted) {
+        ObservableList<Client> clients = tblClients.getItems();
+
+        if(buyer && consultant && blacklisted) {
+            return clients.stream()
+                    .filter(client -> client.getBooleanBuyer() == buyer)
+                    .filter(client -> client.getBooleanConsultant() == consultant)
+                    .filter(client -> client.getBooleanBlacklisted() == blacklisted)
+                    .collect(Collectors.toList());
+        }
+        else {
+            if(buyer && consultant) {
+                return clients.stream()
+                        .filter(client -> client.getBooleanBuyer() == buyer)
+                        .filter(client -> client.getBooleanConsultant() == consultant)
+                        .collect(Collectors.toList());
+            }
+            else {
+                if(consultant && blacklisted) {
+                    return clients.stream()
+                            .filter(client -> client.getBooleanConsultant() == consultant)
+                            .filter(client -> client.getBooleanBlacklisted() == blacklisted)
+                            .collect(Collectors.toList());
+                }
+                else {
+                    if(buyer && blacklisted) {
+                        return clients.stream()
+                                .filter(client -> client.getBooleanBuyer() == buyer)
+                                .filter(client -> client.getBooleanBlacklisted() == blacklisted)
+                                .collect(Collectors.toList());
+                    }
+                    else {
+                        if(buyer) {
+                            return clients.stream()
+                                    .filter(client -> client.getBooleanBuyer() == buyer)
+                                    .collect(Collectors.toList());
+                        }
+                        else {
+                            if(consultant) {
+                                return clients.stream()
+                                        .filter(client -> client.getBooleanConsultant() == consultant)
+                                        .collect(Collectors.toList());
+                            }
+                            else {
+                                if(blacklisted) {
+                                    return clients.stream()
+                                            .filter(client -> client.getBooleanBlacklisted() == blacklisted)
+                                            .collect(Collectors.toList());
+                                }
+                                else {
+                                    return clients.stream()
+                                            .filter(client -> client.getBooleanBuyer() == buyer)
+                                            .filter(client -> client.getBooleanConsultant() == consultant)
+                                            .filter(client -> client.getBooleanBlacklisted() == blacklisted)
+                                            .collect(Collectors.toList());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public void reloadForm(ActionEvent actionEvent) throws IOException {
         menuController.loadListClientPane(actionEvent);
     }
@@ -183,6 +251,12 @@ public class ListClientController implements Initializable {
     public void filterWithEnter(KeyEvent keyEvent) throws IOException {
         if(keyEvent.getCode().equals(KeyCode.ENTER)) {
             filterTable(null);
+        }
+    }
+
+    public void openCombo(KeyEvent keyEvent) {
+        if(keyEvent.getCode().equals(KeyCode.ENTER)) {
+            cmbProvince.show();
         }
     }
 }

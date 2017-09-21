@@ -6,6 +6,7 @@ import domain.Client;
 import domain.Province;
 import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;
+import gui.util.TextFieldUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -90,18 +91,30 @@ public class UpdateClientController implements Initializable {
     }
 
     public void updateClient(ActionEvent actionEvent) throws IOException {
-        Client client = buildClient();
-        clientDAO.update(client);
-        alertBuilder.builder()
-                .type(Alert.AlertType.INFORMATION)
-                .title("Modificar Cliente")
-                .headerText("Cliente modificado exitosamente")
-                .contentText("Cliente modificado: " + client)
-                .build()
-                .showAndWait();
-        menuController.loadListClientPane(actionEvent);
-        Stage stage = (Stage) btnUpdateClient.getScene().getWindow();
-        stage.close();
+        if(TextFieldUtils.fieldsFilled(txtName, txtEmail)) {
+            Client client = buildClient();
+            clientDAO.update(client);
+            alertBuilder.builder()
+                    .type(Alert.AlertType.INFORMATION)
+                    .title("Modificar Cliente")
+                    .headerText("Cliente modificado exitosamente")
+                    .contentText("Cliente modificado: " + client)
+                    .build()
+                    .showAndWait();
+            menuController.loadListClientPane(actionEvent);
+            Stage stage = (Stage) btnUpdateClient.getScene().getWindow();
+            stage.close();
+        }
+        else {
+            alertBuilder.builder()
+                    .type(Alert.AlertType.INFORMATION)
+                    .title("Modificar Cliente")
+                    .headerText("Datos incompletos")
+                    .contentText("Por favor, complete todos los datos del cliente antes de confirmar.")
+                    .build()
+                    .showAndWait();
+        }
+
     }
 
     private Client buildClient() {
