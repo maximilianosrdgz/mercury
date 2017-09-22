@@ -81,7 +81,6 @@ public class EntityManagerUtils {
     public Category buildBaseCategory() {
         return Category.builder()
                 .description("Category 1")
-                .product(false)
                 .build();
     }
 
@@ -89,7 +88,6 @@ public class EntityManagerUtils {
         return Category.builder()
                 .id(1)
                 .description("Category 1")
-                .product(false)
                 .build();
     }
 

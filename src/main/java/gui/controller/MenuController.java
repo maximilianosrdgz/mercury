@@ -26,6 +26,12 @@ public class MenuController {
     private Button btnOpenFormClientLoad;
     @FXML
     private Button btnClientList;
+    @FXML
+    private Button btnOpenFormNewProduct;
+    @FXML
+    private Button btnOpenFormNewMaterial;
+    @FXML
+    private Button btnOpenFormNewCategory;
 
     public void setDataPane(Node node) {
         // update VBox with new form(FXML) depends on which button is clicked
@@ -63,5 +69,17 @@ public class MenuController {
 
     public void loadListClientPane(ActionEvent actionEvent) throws IOException {
         setDataPane(fadeAnimate("/list-client.fxml"));
+    }
+
+    public void loadNewProductPane(ActionEvent actionEvent) throws IOException {
+        setDataPane(fadeAnimate("/update-product.fxml"));
+    }
+
+    public void loadNewMaterialPane(ActionEvent actionEvent) throws IOException {
+        setDataPane(fadeAnimate("/update-material.fxml"));
+    }
+
+    public void loadNewCategoryPane(ActionEvent actionEvent) throws IOException {
+        setDataPane(fadeAnimate("/update-category.fxml"));
     }
 }

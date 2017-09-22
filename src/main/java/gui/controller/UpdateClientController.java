@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 @NoArgsConstructor
@@ -44,6 +46,8 @@ public class UpdateClientController implements Initializable {
     private TextField txtEmail;
     @FXML
     private Button btnUpdateClient;
+    @FXML
+    private Button btnCancel;
     @FXML
     private ComboBox<Province> cmbProvinces;
     @FXML
@@ -128,5 +132,19 @@ public class UpdateClientController implements Initializable {
                 .consultant(chkConsultant.isSelected())
                 .blackListed(chkBlacklisted.isSelected())
                 .build();
+    }
+
+    public void closeForm(ActionEvent actionEvent) {
+        Alert alert = alertBuilder.builder()
+                .type(Alert.AlertType.CONFIRMATION)
+                .title("Cancelar Modificación")
+                .headerText("Cancelar modificación del cliente")
+                .contentText("¿Desea cancelar los cambios y volver a la patalla anterior?")
+                .build();
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Stage stage = (Stage) btnCancel.getScene().getWindow();
+            stage.close();
+        }
     }
 }

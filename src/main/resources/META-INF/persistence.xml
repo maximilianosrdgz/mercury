@@ -8,7 +8,9 @@
         <class>domain.Client</class>
         <class>domain.Location</class>
         <class>domain.Material</class>
+        <class>domain.MaterialStock</class>
         <class>domain.Product</class>
+        <class>domain.ProductStock</class>
         <class>domain.Province</class>
         <class>domain.Purchase</class>
         <class>domain.PurchaseDetail</class>

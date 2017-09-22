@@ -30,12 +30,8 @@ public class Category {
     @Column
     private String description;
 
-    @Column
-    private boolean product;
-
-    @Column
-    private boolean material;
-
-    @Column
-    private boolean supplier;
+    @Override
+    public String toString() {
+        return description;
+    }
 }

@@ -23,6 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -134,6 +135,8 @@ public class ListClientController implements Initializable {
         Scene scene = new Scene((Parent)SpringFxmlLoader.load("/update-client.fxml"), 600, 400);
         Stage stage = new Stage();
         stage.setTitle("Modificar Cliente");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(clientListForm.getScene().getWindow());
         stage.setScene(scene);
         stage.show();
     }

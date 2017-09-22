@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,11 +38,11 @@ public class Product {
     @Column
     private double price;
 
-    @ManyToMany//(cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_category")
     private Set<Category> categories;
 
-    @ManyToMany//(cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_material")
     private Set<Material> materials;
 }

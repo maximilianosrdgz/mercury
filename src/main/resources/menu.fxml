@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MenuController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MenuController">
    <children>
       <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="200.0" styleClass="HBox" VBox.vgrow="NEVER">
          <children>
@@ -37,14 +37,25 @@
                                  </children></AnchorPane>
                            </content>
                         </TitledPane>
-                        <TitledPane text="untitled 2">
+                        <TitledPane layoutX="10.0" layoutY="10.0" text="Productos">
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="btnOpenFormNewProduct" mnemonicParsing="false" onAction="#loadNewProductPane" text="Nuevo Producto" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button fx:id="btnOpenFormNewMaterial" layoutX="40.0" layoutY="36.0" mnemonicParsing="false" onAction="#loadNewMaterialPane" text="Nuevo Material" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
+                                    <Button fx:id="btnOpenFormNewCategory" layoutX="8.0" layoutY="70.0" mnemonicParsing="false" onAction="#loadNewCategoryPane" prefHeight="25.0" prefWidth="165.0" text="Actualizar Categorías" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0" />
+                                 </children>
+                              </AnchorPane>
                            </content>
                         </TitledPane>
-                        <TitledPane text="untitled 3">
+                        <TitledPane layoutX="10.0" layoutY="35.0" text="Ventas">
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="btnOpenFormClientLoad11" mnemonicParsing="false" onAction="#loadNewClientPane" text="Nuevo Cliente" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                    <Button fx:id="btnClientList21" layoutX="40.0" layoutY="36.0" mnemonicParsing="false" onAction="#loadListClientPane" text="Clientes Registrados" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
+                                 </children>
+                              </AnchorPane>
                            </content>
                         </TitledPane>
                      </panes>
