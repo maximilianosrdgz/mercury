@@ -7,13 +7,16 @@ import domain.Category;
 import domain.Client;
 import domain.Material;
 import domain.MaterialStock;
+import gui.util.AlertBuilder;
 import gui.util.TextFieldUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -27,6 +30,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -43,6 +47,7 @@ public class UpdateMaterialController implements Initializable {
     public TextField txtQuantity;
     public TextField txtStoreUnit;
     public Button btnSaveMaterial;
+    public Button btnCancel;
     @FXML
     private TableView<Category> tblAllCategories;
     @FXML
@@ -62,28 +67,32 @@ public class UpdateMaterialController implements Initializable {
     private CategoryDAO categoryDAO;
     private ListMaterialController listMaterialController;
     private MenuController menuController;
+    private AlertBuilder alertBuilder;
 
     private MaterialStock selectedMaterialStock;
 
     @Autowired
     public UpdateMaterialController(MaterialDAO materialDAO, MaterialStockDAO materialStockDAO,
                                     CategoryDAO categoryDAO, ListMaterialController listMaterialController,
-                                    MenuController menuController) {
+                                    MenuController menuController, AlertBuilder alertBuilder) {
 
         this.materialDAO = materialDAO;
         this.materialStockDAO = materialStockDAO;
         this.categoryDAO = categoryDAO;
         this.listMaterialController = listMaterialController;
         this.menuController = menuController;
+        this.alertBuilder = alertBuilder;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        TextFieldUtils.setDecimalOnly(txtCost, txtQuantity);
         initCategoryTable(categoryDAO.findAll());
         colDescriptionSelected.setCellValueFactory(new PropertyValueFactory<Client, String>("description"));
         colIdSelected.setCellValueFactory(new PropertyValueFactory<Client, String>("id"));
         loadSelectedMaterial(listMaterialController.getSelectedMaterialStock());
         TextFieldUtils.editable(false, txtId);
+        TextFieldUtils.activated(false, txtId);
     }
 
     private void loadSelectedMaterial(MaterialStock materialStock) {
@@ -124,13 +133,33 @@ public class UpdateMaterialController implements Initializable {
     }
 
     public void saveMaterial(ActionEvent actionEvent) throws IOException {
-        MaterialStock materialStock = buildMaterialStock();
-        materialDAO.update(materialStock.getMaterial());
-        materialStockDAO.update(materialStock);
-        menuController.loadNewMaterialPane(actionEvent);
+        if(TextFieldUtils.fieldsFilled(txtDescription, txtCost, txtQuantity, txtStoreUnit)) {
+            MaterialStock materialStock = buildMaterialStock();
+            Alert alert = alertBuilder.builder()
+                    .type(Alert.AlertType.CONFIRMATION)
+                    .title("Modificar Material")
+                    .headerText("Está por modificar el material: \n" + materialStock.getMaterial().getDescription())
+                    .contentText("¿Confirmar modificación?")
+                    .build();
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                materialDAO.update(materialStock.getMaterial());
+                materialStockDAO.update(materialStock);
+                menuController.loadNewMaterialPane(actionEvent);
 
-        Stage stage = (Stage) btnSaveMaterial.getScene().getWindow();
-        stage.close();
+                Stage stage = (Stage) btnSaveMaterial.getScene().getWindow();
+                stage.close();
+            }
+        }
+        else {
+            alertBuilder.builder()
+                    .type(Alert.AlertType.INFORMATION)
+                    .title("Nuevo Material")
+                    .headerText("Datos incompletos")
+                    .contentText("Por favor, complete TODOS los datos del material antes de confirmar.")
+                    .build()
+                    .showAndWait();
+        }
     }
 
     private MaterialStock buildMaterialStock() {
@@ -147,5 +176,19 @@ public class UpdateMaterialController implements Initializable {
                 .storeType(txtStoreUnit.getText())
                 .material(material)
                 .build();
+    }
+
+    public void cancelLoad(ActionEvent actionEvent) {
+        Alert alert = alertBuilder.builder()
+                .type(Alert.AlertType.CONFIRMATION)
+                .title("Cancelar Modificación")
+                .headerText("Cancelando modificación de material")
+                .contentText("¿Desea cancelar modificación?")
+                .build();
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Stage stage = (Stage) btnCancel.getScene().getWindow();
+            stage.close();
+        }
     }
 }

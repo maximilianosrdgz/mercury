@@ -99,24 +99,33 @@ public class UpdateClientController implements Initializable {
     public void updateClient(ActionEvent actionEvent) throws IOException {
         if(TextFieldUtils.fieldsFilled(txtName, txtEmail)) {
             Client client = buildClient();
-            clientDAO.update(client);
-            alertBuilder.builder()
-                    .type(Alert.AlertType.INFORMATION)
+            Alert alert = alertBuilder.builder()
+                    .type(Alert.AlertType.CONFIRMATION)
                     .title("Modificar Cliente")
-                    .headerText("Cliente modificado exitosamente")
-                    .contentText("Cliente modificado: " + client)
-                    .build()
-                    .showAndWait();
-            menuController.loadListClientPane(actionEvent);
-            Stage stage = (Stage) btnUpdateClient.getScene().getWindow();
-            stage.close();
+                    .headerText("Está por modificar el cliente: \n" + client.getName())
+                    .contentText("¿Confirmar operación?")
+                    .build();
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                clientDAO.update(client);
+                alertBuilder.builder()
+                        .type(Alert.AlertType.INFORMATION)
+                        .title("Modificar Cliente")
+                        .headerText("Cliente modificado exitosamente")
+                        .contentText("Cliente modificado: " + client.getName())
+                        .build()
+                        .showAndWait();
+                menuController.loadListClientPane(actionEvent);
+                Stage stage = (Stage) btnUpdateClient.getScene().getWindow();
+                stage.close();
+            }
         }
         else {
             alertBuilder.builder()
                     .type(Alert.AlertType.INFORMATION)
                     .title("Modificar Cliente")
                     .headerText("Datos incompletos")
-                    .contentText("Por favor, complete todos los datos del cliente antes de confirmar.")
+                    .contentText("Por favor, complete TODOS los datos del cliente antes de confirmar.")
                     .build()
                     .showAndWait();
         }
@@ -129,7 +138,7 @@ public class UpdateClientController implements Initializable {
                 .name(txtName.getText())
                 .email(txtEmail.getText())
                 .province(cmbProvinces.getSelectionModel().getSelectedItem())
-                .birthYear((Integer) cmbBirthYears.getSelectionModel().getSelectedItem())
+                .birthYear(cmbBirthYears.getSelectionModel().getSelectedItem())
                 .buyer(chkBuyer.isSelected())
                 .consultant(chkConsultant.isSelected())
                 .blackListed(chkBlacklisted.isSelected())

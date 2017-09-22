@@ -6,6 +6,7 @@ import domain.Client;
 import domain.Province;
 import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
+import gui.util.TextFieldUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -104,6 +105,7 @@ public class ListClientController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        TextFieldUtils.setNumericOnly(txtId, txtAge);
         initClientsTable(clientDAO.findAll());
         initProvinceCombo();
         txtId.requestFocus();

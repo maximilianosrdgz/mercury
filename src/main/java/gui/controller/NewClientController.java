@@ -3,6 +3,7 @@ package gui.controller;
 import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;
 import gui.util.TextFieldUtils;
+import javafx.scene.control.ButtonType;
 import persistence.EntityManagerUtils;
 import dao.ClientDAO;
 import dao.ProvinceDAO;
@@ -35,6 +36,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -85,26 +87,34 @@ public class NewClientController implements Initializable {
     public void saveClient(ActionEvent actionEvent) {
         if(TextFieldUtils.fieldsFilled(txtName, txtEmail)) {
             Client client = buildClient();
-            clientDAO.create(client);
-            alertBuilder.builder()
-                    .type(Alert.AlertType.INFORMATION)
-                    .title("Guardar Cliente")
-                    .headerText("Cliente guardado exitosamente")
-                    .contentText("Nuevo Cliente: " + clientDAO.find(client.getId()).getName())
-                    .build()
-                    .showAndWait();
-            clearForm();
+            Alert alert = alertBuilder.builder()
+                    .type(Alert.AlertType.CONFIRMATION)
+                    .title("Nuevo Cliente")
+                    .headerText("Guardando nuevo cliente: \n" + client.getName())
+                    .contentText("¿Confirmar operación?")
+                    .build();
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                clientDAO.create(client);
+                alertBuilder.builder()
+                        .type(Alert.AlertType.INFORMATION)
+                        .title("Guardar Cliente")
+                        .headerText("Cliente guardado exitosamente")
+                        .contentText("Nuevo Cliente: " + clientDAO.find(client.getId()).getName())
+                        .build()
+                        .showAndWait();
+                clearForm();
+            }
         }
         else {
             alertBuilder.builder()
                     .type(Alert.AlertType.INFORMATION)
                     .title("Guardar Cliente")
                     .headerText("Datos incompletos")
-                    .contentText("Por favor, complete todos los datos del cliente antes de confirmar.")
+                    .contentText("Por favor, complete TODOS los datos del cliente antes de confirmar.")
                     .build()
                     .showAndWait();
         }
-
     }
 
     private void clearForm() {

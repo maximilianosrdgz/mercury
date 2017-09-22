@@ -12,6 +12,7 @@ import gui.util.AlertBuilder;
 import gui.util.ButtonUtils;
 import gui.util.TextFieldUtils;
 import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,16 +34,19 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.Normalizer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Controller
@@ -113,6 +117,8 @@ public class ListMaterialController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        TextFieldUtils.setDecimalOnly(txtCost, txtQuantity);
+        TextFieldUtils.setNumericOnly(txtFilterId);
         initMaterialTable(materialStockDAO.findAll());
         TextFieldUtils.activated(false, txtDescription, txtCost, txtQuantity, txtStoreUnit);
         ButtonUtils.activated(false, btnConfirm, btnCancel);
@@ -152,24 +158,44 @@ public class ListMaterialController implements Initializable {
     }
 
     public void saveMaterial(ActionEvent actionEvent) throws IOException {
-        List<MaterialStock> materialStockList = tblMaterials.getItems();
-        MaterialStock materialStock = buildMaterialStock();
-        materialStockList.add(materialStock);
-        materialDAO.create(materialStock.getMaterial());
-        materialStockDAO.create(materialStock);
-        initMaterialTable(materialStockList);
-        tblMaterials.getSelectionModel().select(materialStock);
-        Alert alert = alertBuilder.builder()
-                .type(Alert.AlertType.CONFIRMATION)
-                .title("Nuevo Material")
-                .headerText("Guardando nuevo material: \n" + materialStock.getMaterial().getDescription())
-                .contentText("¿Desea agregar categorías?")
-                .build();
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            openFormUpdateMaterial(actionEvent);
+        if(TextFieldUtils.fieldsFilled(txtDescription, txtCost, txtQuantity, txtStoreUnit)) {
+            List<MaterialStock> materialStockList = tblMaterials.getItems();
+            MaterialStock materialStock = buildMaterialStock();
+            Alert confirm = alertBuilder.builder()
+                    .type(Alert.AlertType.CONFIRMATION)
+                    .title("Nuevo Material")
+                    .headerText("Guardando nuevo material: \n" + materialStock.getMaterial().getDescription())
+                    .contentText("¿Confirmar operación?")
+                    .build();
+            Optional<ButtonType> confirmResult = confirm.showAndWait();
+            if (confirmResult.get() == ButtonType.OK) {
+                materialStockList.add(materialStock);
+                materialDAO.create(materialStock.getMaterial());
+                materialStockDAO.create(materialStock);
+                initMaterialTable(materialStockList);
+                tblMaterials.getSelectionModel().select(materialStock);
+                Alert alert = alertBuilder.builder()
+                        .type(Alert.AlertType.CONFIRMATION)
+                        .title("Nuevo Material")
+                        .headerText("Guardando nuevo material: \n" + materialStock.getMaterial().getDescription())
+                        .contentText("¿Desea agregar categorías?")
+                        .build();
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    openFormUpdateMaterial(actionEvent);
+                }
+            }
         }
-        reloadForm(actionEvent);
+        else {
+            alertBuilder.builder()
+                    .type(Alert.AlertType.INFORMATION)
+                    .title("Nuevo Material")
+                    .headerText("Datos incompletos")
+                    .contentText("Por favor, complete TODOS los datos del material antes de confirmar.")
+                    .build()
+                    .showAndWait();
+        }
+
     }
 
     private MaterialStock buildMaterialStock() {
@@ -210,5 +236,38 @@ public class ListMaterialController implements Initializable {
         TextFieldUtils.activated(true, txtDescription, txtCost, txtQuantity, txtStoreUnit);
         ButtonUtils.activated(true, btnConfirm, btnCancel);
         ButtonUtils.activated(true, btnNewMaterial);
+    }
+
+    public void filterMaterials(ActionEvent actionEvent) {
+        int id = 0;
+        if(!txtFilterId.getText().equals("")) {
+            id = Integer.parseInt(txtFilterId.getText());
+        }
+
+        List<MaterialStock> results = doFilterMaterials(id, txtFilterDescription.getText());
+        initMaterialTable(results);
+    }
+
+    private List<MaterialStock> doFilterMaterials(int id, String description) {
+        ObservableList<MaterialStock> materialStocks = tblMaterials.getItems();
+        return materialStocks.stream()
+                .filter(materialStock -> materialStock.getMaterial().getId() == id || id == 0)
+                .filter(materialStock -> StringUtils.containsIgnoreCase(
+                        Normalizer.normalize(materialStock.getMaterial().getDescription(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+                        , Normalizer.normalize(description, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")) || description.equals(""))
+                .collect(Collectors.toList());
+    }
+
+    public void cancelLoad(ActionEvent actionEvent) throws IOException {
+        Alert alert = alertBuilder.builder()
+                .type(Alert.AlertType.CONFIRMATION)
+                .title("Nuevo Material")
+                .headerText("Cancelando carga de nuevo material")
+                .contentText("¿Desea cancelar la operación?")
+                .build();
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            reloadForm(actionEvent);
+        }
     }
 }

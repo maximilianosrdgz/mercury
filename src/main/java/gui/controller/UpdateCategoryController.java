@@ -78,6 +78,7 @@ public class UpdateCategoryController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        TextFieldUtils.setNumericOnly(txtFilterId);
         TextFieldUtils.activated(false, txtId, txtDescription);
         ButtonUtils.activated(false, btnCancel, btnConfirm);
         initCategoryTable(categoryDAO.findAll());
@@ -112,31 +113,42 @@ public class UpdateCategoryController implements Initializable {
     }
 
     public void confirmUpdate(ActionEvent actionEvent) throws IOException {
-        if(isNew) {
-            Alert alert = alertBuilder.builder()
-                    .type(Alert.AlertType.CONFIRMATION)
-                    .title("Nueva Categoría")
-                    .headerText("Está por agregar una nueva categoría: \n" + txtDescription.getText())
-                    .contentText("¿Confirmar operación?")
-                    .build();
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                categoryDAO.create(buildCategory());
+        if(TextFieldUtils.fieldsFilled(txtDescription)) {
+            if(isNew) {
+                Alert alert = alertBuilder.builder()
+                        .type(Alert.AlertType.CONFIRMATION)
+                        .title("Nueva Categoría")
+                        .headerText("Está por agregar una nueva categoría: \n" + txtDescription.getText())
+                        .contentText("¿Confirmar operación?")
+                        .build();
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    categoryDAO.create(buildCategory());
+                }
             }
+            else {
+                Alert alert = alertBuilder.builder()
+                        .type(Alert.AlertType.CONFIRMATION)
+                        .title("Modificar Categoría")
+                        .headerText("Está por modificar la categoría: \n" + tblCategories.getSelectionModel().getSelectedItem())
+                        .contentText("¿Confirmar modificación?")
+                        .build();
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    categoryDAO.update(buildCategory());
+                }
+            }
+            reloadForm(actionEvent);
         }
         else {
-            Alert alert = alertBuilder.builder()
-                    .type(Alert.AlertType.CONFIRMATION)
-                    .title("Modificar Categoría")
-                    .headerText("Está por modificar la categoría: \n" + tblCategories.getSelectionModel().getSelectedItem())
-                    .contentText("¿Confirmar modificación?")
-                    .build();
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                categoryDAO.update(buildCategory());
-            }
+            alertBuilder.builder()
+                    .type(Alert.AlertType.INFORMATION)
+                    .title("Actualizar Categorías")
+                    .headerText("Datos incompletos")
+                    .contentText("Por favor, complete TODOS los datos de la categoría antes de confirmar.")
+                    .build()
+                    .showAndWait();
         }
-        reloadForm(actionEvent);
     }
 
     public void cancelUpdate(ActionEvent actionEvent) {

@@ -55,7 +55,7 @@
                     <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
                     </GridPane.margin></Label>
-                <Button fx:id="btnFilter" mnemonicParsing="false" prefHeight="25.0" prefWidth="113.0" text="Filtrar" GridPane.halignment="CENTER" />
+                <Button fx:id="btnFilter" mnemonicParsing="false" onAction="#filterMaterials" prefHeight="25.0" prefWidth="113.0" text="Filtrar" GridPane.halignment="CENTER" />
                 <Button fx:id="btnResetFilter" layoutX="167.0" layoutY="13.0" mnemonicParsing="false" onAction="#reloadForm" prefHeight="25.0" prefWidth="138.0" text="Reestablecer Filtros" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER">
                     <GridPane.margin>
                         <Insets />
@@ -167,7 +167,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </TextField>
-                  <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#reloadForm" text="Cancelar" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                  <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancelLoad" text="Cancelar" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding></Button>
