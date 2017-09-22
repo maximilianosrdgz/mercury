@@ -76,7 +76,7 @@ public class MenuController {
     }
 
     public void loadNewMaterialPane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/update-material.fxml"));
+        setDataPane(fadeAnimate("/list-material.fxml"));
     }
 
     public void loadNewCategoryPane(ActionEvent actionEvent) throws IOException {

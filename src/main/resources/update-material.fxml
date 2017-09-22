@@ -6,7 +6,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -14,143 +13,135 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="clientListForm" alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.UpdateMaterialController">
+<VBox alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.UpdateMaterialController">
     <children>
         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
             <children>
-                <Label text="Categorías Registradas">
+                <Label text="Modificar Material">
                     <font>
                         <Font size="18.0" />
                     </font>
                 </Label>
             </children>
         </HBox>
+      <HBox>
+         <children>
+            <TableView fx:id="tblAllCategories" prefHeight="200.0" prefWidth="250.0">
+              <columns>
+                <TableColumn fx:id="colIdAll" prefWidth="90.0" text="Nro. Categoría" />
+                <TableColumn fx:id="colDescriptionAll" prefWidth="130.0" text="Descripción" />
+              </columns>
+            </TableView>
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Button fx:id="btnSelectCategory" mnemonicParsing="false" onAction="#selectCategory" text="--&gt;" GridPane.valignment="BOTTOM">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="btnRemoveCategory" mnemonicParsing="false" onAction="#removeCategory" text="&lt;--" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="btnRemoveAllCategories" mnemonicParsing="false" onAction="#removeAllCategories" text="&lt;&lt;" GridPane.rowIndex="2" GridPane.valignment="TOP">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Button>
+               </children>
+            </GridPane>
+            <TableView fx:id="tblSelectedCategories" prefHeight="200.0" prefWidth="250.0">
+              <columns>
+                <TableColumn fx:id="colIdSelected" prefWidth="90.0" text="Nro. Categoría" />
+                <TableColumn fx:id="colDescriptionSelected" prefWidth="130.0" text="Descripción" />
+              </columns>
+            </TableView>
+         </children>
+         <VBox.margin>
+            <Insets left="30.0" />
+         </VBox.margin>
+      </HBox>
         <GridPane>
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="200.0" />
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <TextField fx:id="txtFilterId" onKeyReleased="#filterWithEnter" GridPane.rowIndex="2">
-                    <GridPane.margin>
-                        <Insets left="5.0" right="5.0" />
-                    </GridPane.margin></TextField>
-                <TextField fx:id="txtFilterDescription" onKeyReleased="#filterWithEnter" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                    <GridPane.margin>
-                        <Insets left="5.0" right="5.0" />
-                    </GridPane.margin></TextField>
-                <Label text="Descripción" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets left="5.0" right="5.0" />
-                    </GridPane.margin></Label>
-                <Label text="Nro de Categoría" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets left="5.0" right="5.0" />
-                    </GridPane.margin></Label>
-                <Button fx:id="btnFilter" mnemonicParsing="false" prefHeight="25.0" prefWidth="113.0" text="Filtrar" GridPane.halignment="CENTER" />
-                <Button fx:id="btnResetFilter" layoutX="167.0" layoutY="13.0" mnemonicParsing="false" onAction="#reloadForm" prefHeight="25.0" prefWidth="138.0" text="Reestablecer Filtros" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER">
-                    <GridPane.margin>
-                        <Insets />
-                    </GridPane.margin>
-                </Button>
+                <Label text="Nro. Material" GridPane.halignment="RIGHT">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></Label>
+                <Label text="Descripción" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></Label>
+                <TextField fx:id="txtId" maxWidth="500.0" prefWidth="235.0" GridPane.columnIndex="1" GridPane.halignment="LEFT">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></TextField>
+                <TextField fx:id="txtDescription" maxWidth="500.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></TextField>
+                <Button fx:id="btnSaveMaterial" mnemonicParsing="false" onAction="#saveMaterial" prefHeight="26.0" prefWidth="90.0" text="Guardar" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></Button>
+                <Label layoutX="10.0" layoutY="47.0" text="Costo" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></Label>
+                <Label layoutX="10.0" layoutY="77.0" text="Stock" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></Label>
+                <Label layoutX="10.0" layoutY="107.0" text="Cantidad" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></Label>
+                <Label layoutX="10.0" layoutY="137.0" text="Unidad de Stock" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></Label>
+            <TextField fx:id="txtCost" layoutX="210.0" layoutY="43.0" maxWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextField fx:id="txtQuantity" layoutX="210.0" layoutY="73.0" maxWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextField fx:id="txtStoreUnit" layoutX="210.0" layoutY="133.0" maxWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TextField>
             </children>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
         </GridPane>
-        <HBox>
-            <children>
-                <TableView fx:id="tblCategories" maxWidth="350.0" prefWidth="350.0">
-                    <columns>
-                        <TableColumn fx:id="colId" minWidth="150.0" prefWidth="-1.0" text="Nro. Material" />
-                        <TableColumn fx:id="colDescription" minWidth="200.0" prefWidth="-1.0" text="Descripción" />
-                        <TableColumn fx:id="colCost" minWidth="200.0" prefWidth="-1.0" text="Costo" />
-                        <TableColumn fx:id="colCategories" minWidth="200.0" prefWidth="-1.0" text="Categorías" />
-                    </columns>
-                </TableView>
-                <AnchorPane prefHeight="400.0" prefWidth="450.0">
-                    <children>
-                        <Button fx:id="btnNewCategory" layoutX="44.0" layoutY="46.0" mnemonicParsing="false" text="Nuevo Material" />
-                        <Button fx:id="btnUpdateCategory" layoutX="203.0" layoutY="46.0" mnemonicParsing="false" text="Modificar" />
-                        <GridPane layoutX="28.0" layoutY="93.0">
-                            <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                            </columnConstraints>
-                            <rowConstraints>
-                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            </rowConstraints>
-                            <children>
-                                <TextField fx:id="txtId" GridPane.columnIndex="1">
-                                    <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" top="5.0" />
-                                    </GridPane.margin></TextField>
-                                <TextField fx:id="txtDescription" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                    <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" top="5.0" />
-                                    </GridPane.margin></TextField>
-                                <Label text="Nro. Material" GridPane.halignment="RIGHT">
-                                    <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </GridPane.margin></Label>
-                                <Label text="Descripción" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                                    <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                    </GridPane.margin></Label>
-                        <TextField fx:id="txtCost" layoutX="95.0" layoutY="50.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </TextField>
-                        <Label layoutX="15.0" layoutY="54.0" text="Costo" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <Label layoutX="54.0" layoutY="87.0" text="Stock" GridPane.halignment="CENTER" GridPane.rowIndex="3">
-                           <GridPane.margin>
-                              <Insets left="10.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <TextField fx:id="txtQuantity" layoutX="95.0" layoutY="83.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </TextField>
-                        <TextField fx:id="txtStoreType" layoutX="95.0" layoutY="83.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </TextField>
-                        <Label layoutX="54.0" layoutY="87.0" text="Cantidad" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <Label layoutX="54.0" layoutY="87.0" text="Unidad de Stock" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </Label>
-                            </children>
-                        </GridPane>
-                        <Button fx:id="btnSaveMaterial" layoutX="193.0" layoutY="317.0" mnemonicParsing="false" onAction="#saveMaterial" text="Confirmar" />
-                        <Button fx:id="btnCancel" layoutX="117.0" layoutY="317.0" mnemonicParsing="false" text="Cancelar" />
-                    </children>
-                </AnchorPane>
-            </children>
-        </HBox>
     </children>
 </VBox>

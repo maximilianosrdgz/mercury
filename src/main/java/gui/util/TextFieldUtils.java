@@ -15,13 +15,18 @@ public class TextFieldUtils {
                 .collect(Collectors.toList()).size() == 0;
     }
 
-    public static void activated(boolean activated, TextField... fields) {
+    public static void editable(boolean editable, TextField... fields) {
         Arrays.stream(fields)
-                .forEach(field -> field.setEditable(activated));
+                .forEach(field -> field.setEditable(editable));
     }
 
     public static void clear(TextField... fields) {
         Arrays.stream(fields)
                 .forEach(field -> field.setText(""));
+    }
+
+    public static void activated(boolean activated, TextField... fields) {
+        Arrays.stream(fields)
+                .forEach(field -> field.setDisable(!activated));
     }
 }

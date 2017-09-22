@@ -51,7 +51,7 @@ public class UpdateClientController implements Initializable {
     @FXML
     private ComboBox<Province> cmbProvinces;
     @FXML
-    private ComboBox cmbBirthYears;
+    private ComboBox<Integer> cmbBirthYears;
     @FXML
     private CheckBox chkBlacklisted;
     @FXML
@@ -78,9 +78,11 @@ public class UpdateClientController implements Initializable {
         Client client = listController.getSelectedClient();
 
         txtId.setText(String.valueOf(client.getId()));
+        TextFieldUtils.activated(false, txtId);
         txtName.setText(client.getName());
         txtEmail.setText(client.getEmail());
         cmbProvinces.getSelectionModel().select(client.getProvince());
+        cmbBirthYears.getSelectionModel().select(new Integer(client.getBirthYear()));
         cmbBirthYears.getSelectionModel().select(new Integer(client.getBirthYear()));
         chkBlacklisted.setSelected(client.isBlackListed());
         chkBuyer.setSelected(client.getBooleanBuyer());
