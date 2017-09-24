@@ -1,18 +1,16 @@
 package gui.controller;
 
-import dao.CategoryDAO;
 import dao.MaterialDAO;
 import dao.MaterialStockDAO;
 import domain.Category;
-import domain.Client;
 import domain.Material;
 import domain.MaterialStock;
 import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
 import gui.util.ButtonUtils;
+import gui.util.ComboBoxLoader;
 import gui.util.TextFieldUtils;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,11 +22,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -52,6 +53,16 @@ import java.util.stream.Collectors;
 @Controller
 public class ListMaterialController implements Initializable {
 
+    @FXML
+    private Button btnResetCategoryFilter;
+    @FXML
+    private TableColumn colCategoryDescription;
+    @FXML
+    private TableView<Category> tblCategories;
+    @FXML
+    private Button btnFilterByCategory;
+    @FXML
+    private ComboBox<Category> cmbCategories;
     @FXML
     private TableColumn colQuantity;
     @FXML
@@ -99,24 +110,26 @@ public class ListMaterialController implements Initializable {
 
     private MaterialDAO materialDAO;
     private MaterialStockDAO materialStockDAO;
-    private CategoryDAO categoryDAO;
     private AlertBuilder alertBuilder;
     private MenuController menuController;
+    private ComboBoxLoader comboBoxLoader;
 
     @Autowired
     public ListMaterialController(MaterialDAO materialDAO, MaterialStockDAO materialStockDAO,
-                                  CategoryDAO categoryDAO, AlertBuilder alertBuilder,
-                                  MenuController menuController) {
+                                  AlertBuilder alertBuilder, MenuController menuController,
+                                  ComboBoxLoader comboBoxLoader) {
 
         this.materialDAO = materialDAO;
         this.materialStockDAO = materialStockDAO;
-        this.categoryDAO = categoryDAO;
         this.alertBuilder = alertBuilder;
         this.menuController = menuController;
+        this.comboBoxLoader = comboBoxLoader;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        colCategoryDescription.setCellValueFactory(new PropertyValueFactory<Category, String>("description"));
+        comboBoxLoader.initCategoriesCombo(cmbCategories, -1);
         TextFieldUtils.setDecimalOnly(txtCost, txtQuantity);
         TextFieldUtils.setNumericOnly(txtFilterId);
         initMaterialTable(materialStockDAO.findAll());
@@ -184,6 +197,16 @@ public class ListMaterialController implements Initializable {
                 if (result.get() == ButtonType.OK) {
                     openFormUpdateMaterial(actionEvent);
                 }
+                else {
+                    alertBuilder.builder()
+                            .type(Alert.AlertType.INFORMATION)
+                            .title("Nuevo Material")
+                            .headerText("Material guardado exitosamente")
+                            .contentText("Se ha guardado el nuevo material: " + materialStock.getMaterial().getDescription())
+                            .build()
+                            .showAndWait();
+                    reloadForm(actionEvent);
+                }
             }
         }
         else {
@@ -211,7 +234,10 @@ public class ListMaterialController implements Initializable {
                 .build();
     }
 
-    public void filterWithEnter(KeyEvent keyEvent) {
+    public void filterWithEnter(KeyEvent keyEvent) throws IOException {
+        if(keyEvent.getCode().equals(KeyCode.ENTER)) {
+            filterMaterials(null);
+        }
     }
 
     public void reloadForm(ActionEvent actionEvent) throws IOException {
@@ -235,7 +261,7 @@ public class ListMaterialController implements Initializable {
     public void activateFields(ActionEvent actionEvent) {
         TextFieldUtils.activated(true, txtDescription, txtCost, txtQuantity, txtStoreUnit);
         ButtonUtils.activated(true, btnConfirm, btnCancel);
-        ButtonUtils.activated(true, btnNewMaterial);
+        ButtonUtils.activated(false, btnNewMaterial, btnUpdateMaterial);
     }
 
     public void filterMaterials(ActionEvent actionEvent) {
@@ -269,5 +295,53 @@ public class ListMaterialController implements Initializable {
         if (result.get() == ButtonType.OK) {
             reloadForm(actionEvent);
         }
+    }
+
+    public void addCategoryToFilter(ActionEvent actionEvent) {
+        if(!tblCategories.getItems().contains(cmbCategories.getSelectionModel().getSelectedItem())) {
+            tblCategories.getItems().add(cmbCategories.getSelectionModel().getSelectedItem());
+        }
+    }
+
+    public void clearCategoryTable(ActionEvent actionEvent) {
+        tblCategories.getItems().clear();
+        cmbCategories.getSelectionModel().select(-1);
+        tblCategories.getItems().remove(0);
+    }
+
+    public void removeCategory(MouseEvent mouseEvent) {
+        if(mouseEvent.getClickCount() == 2) {
+            tblCategories.getItems().remove(tblCategories.getSelectionModel().getSelectedItem());
+            if(tblCategories.getItems().size() == 1) {
+                tblCategories.getItems().remove(0);
+            }
+            cmbCategories.getSelectionModel().select(-1);
+        }
+    }
+
+    public void filterByCategory(ActionEvent actionEvent) {
+        List<MaterialStock> materialStocks = tblMaterials.getItems();
+        ObservableList<MaterialStock> result = FXCollections.observableArrayList();
+        List<Category> categories = tblCategories.getItems();
+
+        if(tblCategories.getItems().isEmpty()) {
+            for(MaterialStock stock : materialStocks) {
+                if(stock.getMaterial().getCategories().isEmpty()) {
+                    result.add(stock);
+                }
+            }
+        }
+        else {
+            for(MaterialStock stock : materialStocks) {
+                Set<Category> materialCategories = stock.getMaterial().getCategories();
+                for(Category category: categories) {
+                    if(materialCategories.contains(category)) {
+                        result.add(stock);
+                    }
+                }
+            }
+        }
+        tblMaterials.setItems(result);
+        tblMaterials.getSelectionModel().selectFirst();
     }
 }

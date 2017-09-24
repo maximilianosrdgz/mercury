@@ -21,6 +21,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,7 +146,7 @@ public class UpdateMaterialController implements Initializable {
             if (result.get() == ButtonType.OK) {
                 materialDAO.update(materialStock.getMaterial());
                 materialStockDAO.update(materialStock);
-                menuController.loadNewMaterialPane(actionEvent);
+                listMaterialController.reloadForm(actionEvent);
 
                 Stage stage = (Stage) btnSaveMaterial.getScene().getWindow();
                 stage.close();
@@ -178,7 +179,7 @@ public class UpdateMaterialController implements Initializable {
                 .build();
     }
 
-    public void cancelLoad(ActionEvent actionEvent) {
+    public void cancelLoad(ActionEvent actionEvent) throws IOException {
         Alert alert = alertBuilder.builder()
                 .type(Alert.AlertType.CONFIRMATION)
                 .title("Cancelar Modificación")
@@ -187,8 +188,21 @@ public class UpdateMaterialController implements Initializable {
                 .build();
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
+            listMaterialController.reloadForm(actionEvent);
             Stage stage = (Stage) btnCancel.getScene().getWindow();
             stage.close();
+        }
+    }
+
+    public void selectCategoryOnClick(MouseEvent mouseEvent) {
+        if(mouseEvent.getClickCount() == 2) {
+            selectCategory(null);
+        }
+    }
+
+    public void removeCategoryOnClick(MouseEvent mouseEvent) {
+        if(mouseEvent.getClickCount() == 2) {
+            removeCategory(null);
         }
     }
 }

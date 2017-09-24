@@ -42,7 +42,7 @@
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
                                     <Button fx:id="btnOpenFormNewProduct" mnemonicParsing="false" onAction="#loadNewProductPane" text="Nuevo Producto" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                    <Button fx:id="btnOpenFormNewMaterial" layoutX="40.0" layoutY="36.0" mnemonicParsing="false" onAction="#loadNewMaterialPane" text="Nuevo Material" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
+                                    <Button fx:id="btnOpenFormNewMaterial" layoutX="40.0" layoutY="36.0" mnemonicParsing="false" onAction="#loadNewMaterialPane" text="Actualizar Materiales" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
                                     <Button fx:id="btnOpenFormNewCategory" layoutX="8.0" layoutY="70.0" mnemonicParsing="false" onAction="#loadNewCategoryPane" prefHeight="25.0" prefWidth="165.0" text="Actualizar Categorías" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0" />
                                  </children>
                               </AnchorPane>

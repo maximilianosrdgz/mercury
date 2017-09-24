@@ -72,7 +72,7 @@ public class MenuController {
     }
 
     public void loadNewProductPane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/update-product.fxml"));
+        setDataPane(fadeAnimate("/list-product.fxml"));
     }
 
     public void loadNewMaterialPane(ActionEvent actionEvent) throws IOException {

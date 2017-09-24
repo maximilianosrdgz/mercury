@@ -26,7 +26,7 @@
         </HBox>
       <HBox>
          <children>
-            <TableView fx:id="tblAllCategories" prefHeight="200.0" prefWidth="250.0">
+            <TableView fx:id="tblAllCategories" onMouseClicked="#selectCategoryOnClick" prefHeight="200.0" prefWidth="250.0">
               <columns>
                 <TableColumn fx:id="colIdAll" prefWidth="90.0" text="Nro. Categoría" />
                 <TableColumn fx:id="colDescriptionAll" prefWidth="130.0" text="Descripción" />
@@ -59,7 +59,7 @@
                   </Button>
                </children>
             </GridPane>
-            <TableView fx:id="tblSelectedCategories" prefHeight="200.0" prefWidth="250.0">
+            <TableView fx:id="tblSelectedCategories" onMouseClicked="#removeCategoryOnClick" prefHeight="200.0" prefWidth="250.0">
               <columns>
                 <TableColumn fx:id="colIdSelected" prefWidth="90.0" text="Nro. Categoría" />
                 <TableColumn fx:id="colDescriptionSelected" prefWidth="130.0" text="Descripción" />
