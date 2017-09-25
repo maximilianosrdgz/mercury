@@ -165,6 +165,9 @@ public class UpdateProductController implements Initializable {
     }
 
     public void selectCategoryOnClick(MouseEvent mouseEvent) {
+        if(mouseEvent.getClickCount() == 2) {
+            selectCategory(null);
+        }
     }
 
     public void selectCategory(ActionEvent actionEvent) {
@@ -189,9 +192,13 @@ public class UpdateProductController implements Initializable {
         ObservableList<Category> selectedCategories = tblSelectedCategories.getItems();
         tblAllCategories.getItems().addAll(selectedCategories);
         tblSelectedCategories.getItems().removeAll(selectedCategories);
+        tblAllCategories.getSelectionModel().selectFirst();
     }
 
     public void removeCategoryOnClick(MouseEvent mouseEvent) {
+        if(mouseEvent.getClickCount() == 2) {
+            removeCategory(null);
+        }
     }
 
     public void addMaterialQuantity(ActionEvent actionEvent) {
@@ -245,6 +252,12 @@ public class UpdateProductController implements Initializable {
                     }
                 }
 
+                for(MaterialQuantity mq : materialQuantityDAO.findByProductId(productStock.getProduct().getId())) {
+                    if(!materialQuantities.contains(mq)) {
+                        materialQuantityDAO.delete(mq);
+                    }
+                }
+
                 listProductController.reloadForm(actionEvent);
                 Stage stage = (Stage) btnSaveMaterial.getScene().getWindow();
                 stage.close();
@@ -274,7 +287,7 @@ public class UpdateProductController implements Initializable {
                 .build();
         return ProductStock.builder()
                 .id(Integer.parseInt(txtId.getText()))
-                .quantity(Double.parseDouble(txtPrice.getText()))
+                .quantity(Double.parseDouble(txtQuantity.getText()))
                 .storeType("Unidades")
                 .product(product)
                 .build();
@@ -300,6 +313,13 @@ public class UpdateProductController implements Initializable {
     }
 
     public void setStoreUnit(ActionEvent actionEvent) {
-        lblStoreUnit.setText(materialStockDAO.findByMaterialId(cmbMaterials.getSelectionModel().getSelectedItem().getId()).getStoreType());
+        lblStoreUnit.setText(materialStockDAO
+                .findByMaterialId(cmbMaterials.getSelectionModel().getSelectedItem().getId()).getStoreType());
+    }
+
+    public void removeMaterialOnClick(MouseEvent mouseEvent) {
+        if(mouseEvent.getClickCount() == 2) {
+            removeMaterialQuantity(null);
+        }
     }
 }

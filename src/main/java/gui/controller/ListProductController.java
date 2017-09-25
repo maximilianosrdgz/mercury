@@ -8,7 +8,6 @@ import dao.ProductStockDAO;
 import domain.Category;
 import domain.Material;
 import domain.MaterialQuantity;
-import domain.MaterialStock;
 import domain.Product;
 import domain.ProductStock;
 import gui.form.SpringFxmlLoader;
@@ -31,17 +30,21 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -147,14 +150,16 @@ public class ListProductController implements Initializable {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ProductStock, String> data) {
                 double cost = 0;
-                for(Material material : data.getValue().getProduct().getMaterials()) {
-                    ObservableList<MaterialQuantity> quantities = FXCollections.observableArrayList();
-                    quantities.addAll(materialQuantityDAO.findByProductId(data.getValue().getProduct().getId()));
-                    cost += quantities.stream()
-                            .filter(q -> q.getMaterial().getId() == material.getId())
-                            .collect(Collectors.toList())
-                            .get(0)
-                            .getQuantity() * material.getCost();
+                if(data.getValue().getProduct().getMaterials() != null) {
+                    for(Material material : data.getValue().getProduct().getMaterials()) {
+                        ObservableList<MaterialQuantity> quantities = FXCollections.observableArrayList();
+                        quantities.addAll(materialQuantityDAO.findByProductId(data.getValue().getProduct().getId()));
+                        cost += quantities.stream()
+                                .filter(q -> q.getMaterial().getId() == material.getId())
+                                .collect(Collectors.toList())
+                                .get(0)
+                                .getQuantity() * material.getCost();
+                    }
                 }
                 return new ReadOnlyStringWrapper(String.valueOf(cost));
             }
@@ -185,9 +190,29 @@ public class ListProductController implements Initializable {
     }
 
     public void filterWithEnter(KeyEvent keyEvent) {
+        if(keyEvent.getCode().equals(KeyCode.ENTER)) {
+            filterProducts(null);
+        }
     }
 
     public void filterProducts(ActionEvent actionEvent) {
+        int id = 0;
+        if(!txtFilterId.getText().equals("")) {
+            id = Integer.parseInt(txtFilterId.getText());
+        }
+
+        List<ProductStock> results = doFilterProducts(id, txtFilterDescription.getText());
+        initProductTable(results);
+    }
+
+    private List<ProductStock> doFilterProducts(int id, String description) {
+        ObservableList<ProductStock> productStocks = tblProducts.getItems();
+        return productStocks.stream()
+                .filter(productStock -> productStock.getProduct().getId() == id || id == 0)
+                .filter(productStock -> StringUtils.containsIgnoreCase(
+                        Normalizer.normalize(productStock.getProduct().getDescription(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")
+                        , Normalizer.normalize(description, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "")) || description.equals(""))
+                .collect(Collectors.toList());
     }
 
     public void reloadForm(ActionEvent actionEvent) throws IOException {
@@ -204,10 +229,14 @@ public class ListProductController implements Initializable {
         stage.show();
     }
 
-    public void filterByCategory(ActionEvent actionEvent) {
-    }
-
-    public void filterByMaterial(ActionEvent actionEvent) {
+    public void filterByCategoryAndMaterials(ActionEvent actionEvent) {
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/category-material-filter.fxml"), 600, 600);
+        Stage stage = new Stage();
+        stage.setTitle("Filtro por Categorías y Materiales");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(productListForm.getScene().getWindow());
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void activateFields(ActionEvent actionEvent) {
@@ -229,64 +258,8 @@ public class ListProductController implements Initializable {
         }
     }
 
-    public void saveTest() {
-        Material material = materialDAO.find(2);
-        Product product = productDAO.find(1);
-        Set<Material> materials = product.getMaterials();
-        materials.add(material);
-        product.setMaterials(materials);
-        productDAO.update(product);
-        MaterialQuantity quantity = MaterialQuantity.builder()
-                .product(product)
-                .material(material)
-                .quantity(5)
-                .build();
-        materialQuantityDAO.create(quantity);
-    }
-
-    public void saveTest1() {
-        Material material = materialDAO.find(1);
-        Category category = categoryDAO.find(1);
-        Set<Category> categories = new HashSet<>();
-        categories.add(category);
-        Set<Material> materials = new HashSet<>();
-        materials.add(material);
-
-        Product product = Product.builder()
-                .price(10)
-                .description("Producto Prueba")
-                .categories(categories)
-                .materials(materials)
-                .build();
-        System.out.println("Product created");
-        ProductStock stock = ProductStock.builder()
-                .product(product)
-                .quantity(100)
-                .storeType("Unidades")
-                .build();
-        System.out.println("Stock created");
-        productDAO.create(product);
-        System.out.println("Product persisted");
-        productStockDAO.create(stock);
-        System.out.println("Stock persisted");
-        MaterialQuantity materialQuantity = MaterialQuantity.builder()
-                .quantity(10)
-                .material(material)
-                .product(productDAO.find(1))
-                .build();
-        System.out.println("Quantity created");
-        materialQuantityDAO.create(materialQuantity);
-        System.out.println("Quiantity persisted");
-        product = productDAO.find(1);
-        System.out.println("Product fetched");
-        System.out.println(product);
-        productDAO.update(product);
-        System.out.println("Product updated persisted");
-    }
-
     public void saveProduct(ActionEvent actionEvent) throws IOException {
         if(TextFieldUtils.fieldsFilled(txtDescription, txtPrice, txtQuantity)) {
-            List<ProductStock> productStockList = tblProducts.getItems();
             ProductStock productStock = buildProductStock();
             Alert confirm = alertBuilder.builder()
                     .type(Alert.AlertType.CONFIRMATION)
@@ -296,10 +269,9 @@ public class ListProductController implements Initializable {
                     .build();
             Optional<ButtonType> confirmResult = confirm.showAndWait();
             if (confirmResult.get() == ButtonType.OK) {
-                productStockList.add(productStock);
                 productDAO.create(productStock.getProduct());
                 productStockDAO.create(productStock);
-                initProductTable(productStockList);
+                tblProducts.getItems().add(productStock);
                 tblProducts.getSelectionModel().select(productStock);
                 Alert alert = alertBuilder.builder()
                         .type(Alert.AlertType.CONFIRMATION)
@@ -342,11 +314,35 @@ public class ListProductController implements Initializable {
         Product product = Product.builder()
                 .description(txtDescription.getText())
                 .price(Double.parseDouble(txtPrice.getText()))
+                .categories(new HashSet<>())
+                .materials(new HashSet<>())
                 .build();
         return ProductStock.builder()
                 .quantity(Double.parseDouble(txtQuantity.getText()))
                 .storeType(txtStoreUnit.getText())
                 .product(product)
                 .build();
+    }
+
+    public void filterTableByCategoryAndMaterials(Set<Category> categories, Set<Material> materials) {
+        List<ProductStock> productStocks = new ArrayList<>(tblProducts.getItems());
+        List<ProductStock> results = new ArrayList<>();
+        tblProducts.getItems().removeAll(productStocks);
+        if(!categories.isEmpty()) {
+            for(Category c : categories) {
+                results.addAll(productStocks.stream()
+                        .filter(ps -> ps.getProduct().getCategories().contains(c))
+                        .collect(Collectors.toList()));
+            }
+        }
+        if(!materials.isEmpty()) {
+            for(Material m : materials) {
+                results.addAll(productStocks.stream()
+                        .filter(ps -> ps.getProduct().getMaterials().contains(m))
+                        .collect(Collectors.toList()));
+            }
+        }
+        tblProducts.getItems().addAll(results);
+        tblProducts.getSelectionModel().selectFirst();
     }
 }

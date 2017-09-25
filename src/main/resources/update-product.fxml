@@ -16,7 +16,7 @@
 
 <VBox alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.UpdateProductController">
     <children>
-        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css" VBox.vgrow="NEVER">
             <children>
                 <Label text="Modificar Producto">
                     <font>
@@ -111,7 +111,7 @@
                   </Label>
                </children>
             </GridPane>
-            <TableView fx:id="tblSelectedMaterials" onMouseClicked="#removeCategoryOnClick" prefHeight="200.0" prefWidth="250.0">
+            <TableView fx:id="tblSelectedMaterials" onMouseClicked="#removeMaterialOnClick" prefHeight="200.0" prefWidth="250.0">
                <columns>
                   <TableColumn fx:id="colMaterialDescriptionSelected" prefWidth="163.0" text="Material" />
                   <TableColumn fx:id="colMaterialQuantitySelected" prefWidth="85.0" text="Cantidad" />
@@ -181,10 +181,13 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
-                <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancelLoad" text="Cancelar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+                <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancelLoad" text="Cancelar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></Button>
             </children>
             <VBox.margin>
-                <Insets top="20.0" />
+                <Insets bottom="10.0" top="20.0" />
             </VBox.margin>
         </GridPane>
     </children>

@@ -78,6 +78,16 @@ public abstract class AbstractDAO<T> {
         }
     }
 
+    public void delete(T entity) {
+        try {
+            emu.getEntityManager().getTransaction().begin();
+            emu.getEntityManager().remove(entity);
+            emu.getEntityManager().getTransaction().commit();
+        } catch (Exception e) {
+            emu.getEntityManager().getTransaction().rollback();
+        }
+    }
+
     public T findByProductAndMaterialId(int productId, int materialId) {
         List<T> result = new ArrayList<>();
         try {

@@ -15,7 +15,7 @@
 
 <VBox fx:id="productListForm" alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ListProductController">
     <children>
-        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css" VBox.vgrow="NEVER">
             <children>
                 <Label text="Productos Registrados">
                     <font>
@@ -92,21 +92,15 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <Button fx:id="btnFilterByCategory" mnemonicParsing="false" onAction="#filterByCategory" text="Por Categorías" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
+                        <Button fx:id="btnFilterByCategory" mnemonicParsing="false" onAction="#filterByCategoryAndMaterials" text="Filtrar por&#10;Categorías o&#10;Materiales" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER">
                             <GridPane.margin>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin>
                         </Button>
-                        <Button fx:id="btnFilterByMaterial" mnemonicParsing="false" onAction="#filterByMaterial" text="Por Materiales" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </GridPane.margin></Button>
-                  <Label text="Aplicar Filtros:" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
-                     <GridPane.margin>
-                        <Insets bottom="40.0" />
-                     </GridPane.margin>
-                  </Label>
                     </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
                 </GridPane>
             </children>
         </HBox>

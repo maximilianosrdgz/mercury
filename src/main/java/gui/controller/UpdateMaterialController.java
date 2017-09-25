@@ -70,8 +70,6 @@ public class UpdateMaterialController implements Initializable {
     private MenuController menuController;
     private AlertBuilder alertBuilder;
 
-    private MaterialStock selectedMaterialStock;
-
     @Autowired
     public UpdateMaterialController(MaterialDAO materialDAO, MaterialStockDAO materialStockDAO,
                                     CategoryDAO categoryDAO, ListMaterialController listMaterialController,
@@ -138,6 +136,7 @@ public class UpdateMaterialController implements Initializable {
         ObservableList<Category> selectedCategories = tblSelectedCategories.getItems();
         tblAllCategories.getItems().addAll(selectedCategories);
         tblSelectedCategories.getItems().removeAll(selectedCategories);
+        tblAllCategories.getSelectionModel().selectFirst();
     }
 
     public void saveMaterial(ActionEvent actionEvent) throws IOException {

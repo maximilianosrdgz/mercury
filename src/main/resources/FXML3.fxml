@@ -50,7 +50,7 @@
 
 <VBox alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.NewClientController">
     <children>
-        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css" VBox.vgrow="NEVER">
             <children>
                 <Button mnemonicParsing="false" onAction="#saveClient" text="Cliente">
                     <HBox.margin>
@@ -60,7 +60,7 @@
                 <Button mnemonicParsing="false" onAction="#sendEmail" text="E-Mail" />
             </children>
         </HBox>
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css" VBox.vgrow="NEVER">
+      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css" VBox.vgrow="NEVER">
          <children>
             <Button mnemonicParsing="false" text="Material">
                 <HBox.margin>
@@ -70,7 +70,7 @@
             <Button mnemonicParsing="false" text="Categoría" />
          </children>
       </HBox>
-      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css">
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css">
          <children>
             <Button mnemonicParsing="false" onAction="#saveClient" text="Ubicación">
                <HBox.margin>
@@ -80,7 +80,7 @@
             <Button mnemonicParsing="false" text="Compra" />
          </children>
       </HBox>
-      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" styleClass="VBox" stylesheets="@style.css">
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css">
          <children>
             <Button mnemonicParsing="false" onAction="#saveClient" text="Provincia">
                <HBox.margin>
