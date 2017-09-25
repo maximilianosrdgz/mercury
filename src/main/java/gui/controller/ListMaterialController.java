@@ -218,7 +218,6 @@ public class ListMaterialController implements Initializable {
                     .build()
                     .showAndWait();
         }
-
     }
 
     private MaterialStock buildMaterialStock() {

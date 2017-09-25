@@ -98,6 +98,7 @@ public class UpdateMaterialController implements Initializable {
 
     private void loadSelectedMaterial(MaterialStock materialStock) {
         tblSelectedCategories.getItems().addAll(materialStock.getMaterial().getCategories());
+        tblSelectedCategories.getSelectionModel().selectFirst();
         tblAllCategories.getItems().removeAll(materialStock.getMaterial().getCategories());
         txtId.setText(String.valueOf(materialStock.getMaterial().getId()));
         txtCost.setText(String.valueOf(materialStock.getMaterial().getCost()));
@@ -107,8 +108,8 @@ public class UpdateMaterialController implements Initializable {
     }
 
     private void initCategoryTable(List<Category> categoryList) {
-        colDescriptionAll.setCellValueFactory(new PropertyValueFactory<Client, String>("description"));
-        colIdAll.setCellValueFactory(new PropertyValueFactory<Client, String>("id"));
+        colDescriptionAll.setCellValueFactory(new PropertyValueFactory<Category, String>("description"));
+        colIdAll.setCellValueFactory(new PropertyValueFactory<Category, String>("id"));
         ObservableList<Category> categories = FXCollections.observableArrayList();
         categories.addAll(categoryList);
         tblAllCategories.setItems(categories);
@@ -116,15 +117,21 @@ public class UpdateMaterialController implements Initializable {
     }
 
     public void selectCategory(ActionEvent actionEvent) {
-        Category category = tblAllCategories.getSelectionModel().getSelectedItem();
-        tblAllCategories.getItems().remove(category);
-        tblSelectedCategories.getItems().add(category);
+        if(!tblAllCategories.getItems().isEmpty()) {
+            Category category = tblAllCategories.getSelectionModel().getSelectedItem();
+            tblAllCategories.getItems().remove(category);
+            tblSelectedCategories.getItems().add(category);
+            tblSelectedCategories.getSelectionModel().selectFirst();
+        }
     }
 
     public void removeCategory(ActionEvent actionEvent) {
-        Category category = tblSelectedCategories.getSelectionModel().getSelectedItem();
-        tblSelectedCategories.getItems().remove(category);
-        tblAllCategories.getItems().add(category);
+        if(!tblSelectedCategories.getItems().isEmpty()) {
+            Category category = tblSelectedCategories.getSelectionModel().getSelectedItem();
+            tblSelectedCategories.getItems().remove(category);
+            tblAllCategories.getItems().add(category);
+            tblAllCategories.getSelectionModel().selectFirst();
+        }
     }
 
     public void removeAllCategories(ActionEvent actionEvent) {

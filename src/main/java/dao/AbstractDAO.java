@@ -77,4 +77,23 @@ public abstract class AbstractDAO<T> {
             emu.getEntityManager().getTransaction().rollback();
         }
     }
+
+    public T findByProductAndMaterialId(int productId, int materialId) {
+        List<T> result = new ArrayList<>();
+        try {
+            Query query = emu.getEntityManager()
+                    .createQuery("SELECT qu FROM MaterialQuantity qu WHERE qu.product.id = ?1 AND qu.material.id = ?2");
+            query.setParameter(1, productId);
+            query.setParameter(2, materialId);
+            result = query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(result.size() == 0) {
+            return null;
+        }
+        else {
+            return result.get(0);
+        }
+    }
 }
