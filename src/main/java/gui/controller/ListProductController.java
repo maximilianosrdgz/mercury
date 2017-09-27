@@ -342,7 +342,7 @@ public class ListProductController implements Initializable {
                         .collect(Collectors.toList()));
             }
         }
-        tblProducts.getItems().addAll(results);
+        tblProducts.getItems().addAll(new HashSet<>(results));
         tblProducts.getSelectionModel().selectFirst();
     }
 }

@@ -6,7 +6,6 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>domain.Category</class>
         <class>domain.Client</class>
-        <class>domain.Location</class>
         <class>domain.Material</class>
         <class>domain.MaterialQuantity</class>
         <class>domain.MaterialStock</class>
