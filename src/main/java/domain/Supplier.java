@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,7 +40,7 @@ public class Supplier {
     @ManyToOne//(cascade = CascadeType.PERSIST)
     private Province province;
 
-    @ManyToMany//(cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.EAGER)//(cascade = CascadeType.MERGE)
     @JoinTable(name = "supplier_category")
     private Set<Category> categories;
 }

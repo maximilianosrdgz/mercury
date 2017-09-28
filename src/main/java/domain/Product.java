@@ -46,4 +46,9 @@ public class Product {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_material")
     private Set<Material> materials;
+
+    @Override
+    public String toString() {
+        return description;
+    }
 }

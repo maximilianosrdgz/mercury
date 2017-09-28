@@ -35,6 +35,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Optional;
 import java.util.Properties;
@@ -189,6 +190,7 @@ public class NewClientController implements Initializable {
                 .email(txtEmail.getText())
                 .province(cmbProvinces.getSelectionModel().getSelectedItem())
                 .birthYear((Integer) cmbBirthYears.getSelectionModel().getSelectedItem())
+                .purchases(new ArrayList<>())
                 .buyer(chkBuyer.isSelected())
                 .consultant(chkConsultant.isSelected())
                 .blackListed(chkBlacklisted.isSelected())

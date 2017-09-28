@@ -45,12 +45,8 @@ import java.util.stream.Collectors;
 @Controller
 public class ListClientController implements Initializable {
 
-    
-    private MenuController menuController;
-    private ProvinceDAO provinceDAO;
-    private ClientDAO clientDAO;
-    private AlertBuilder alertBuilder;
-
+    @FXML
+    private Button btnSelectClient;
     @FXML
     private VBox clientListForm;
     @FXML
@@ -71,7 +67,6 @@ public class ListClientController implements Initializable {
     private TableColumn colConsultant;
     @FXML
     private TableColumn colBlacklist;
-
     @FXML
     private Button btnUpdateClient;
     @FXML
@@ -95,12 +90,22 @@ public class ListClientController implements Initializable {
     @FXML
     private Button btnResetFilter;
 
+    private MenuController menuController;
+    private ProvinceDAO provinceDAO;
+    private ClientDAO clientDAO;
+    private AlertBuilder alertBuilder;
+    private NewPurchaseController newPurchaseController;
+
     @Autowired
-    public ListClientController(MenuController menuController, ProvinceDAO provinceDAO, ClientDAO clientDAO, AlertBuilder alertBuilder) {
+    public ListClientController(MenuController menuController, ProvinceDAO provinceDAO,
+                                ClientDAO clientDAO, AlertBuilder alertBuilder,
+                                NewPurchaseController newPurchaseController) {
+
         this.menuController = menuController;
         this.provinceDAO = provinceDAO;
         this.clientDAO = clientDAO;
         this.alertBuilder = alertBuilder;
+        this.newPurchaseController = newPurchaseController;
     }
 
     @Override
@@ -263,5 +268,11 @@ public class ListClientController implements Initializable {
         if(keyEvent.getCode().equals(KeyCode.ENTER)) {
             cmbProvince.show();
         }
+    }
+
+    public void selectClient(ActionEvent actionEvent) {
+        newPurchaseController.loadSelectedClient(getSelectedClient());
+        Stage stage = (Stage) btnSelectClient.getScene().getWindow();
+        stage.close();
     }
 }

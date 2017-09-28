@@ -17,6 +17,10 @@ import java.io.IOException;
 public class MenuController {
 
     @FXML
+    private Button btnOpenFormNewSales;
+    @FXML
+    private Button btnOpenFormRegisteredSales;
+    @FXML
     private Button btnClose;
     @FXML
     private Button openFrm3;
@@ -81,5 +85,13 @@ public class MenuController {
 
     public void loadNewCategoryPane(ActionEvent actionEvent) throws IOException {
         setDataPane(fadeAnimate("/update-category.fxml"));
+    }
+
+    public void loadNewPurchasePane(ActionEvent actionEvent) throws IOException {
+        setDataPane(fadeAnimate("/new-purchase.fxml"));
+    }
+
+    public void loadRegisteredPurchasesPane(ActionEvent actionEvent) throws IOException {
+        setDataPane(fadeAnimate("/list-purchase.fxml"));
     }
 }

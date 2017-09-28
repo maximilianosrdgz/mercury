@@ -8,10 +8,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,14 +33,11 @@ public class PurchaseDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
-    private int purchaseId;
-
-    @OneToOne//(cascade = CascadeType.MERGE)
+    @ManyToOne//(cascade = CascadeType.MERGE)
     private Product product;
 
     @Column
-    private int quantity;
+    private double quantity;
 
     @Column
     private double unitPrice;

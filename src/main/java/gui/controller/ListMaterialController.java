@@ -310,9 +310,11 @@ public class ListMaterialController implements Initializable {
 
     public void removeCategory(MouseEvent mouseEvent) {
         if(mouseEvent.getClickCount() == 2) {
-            tblCategories.getItems().remove(tblCategories.getSelectionModel().getSelectedItem());
-            if(tblCategories.getItems().size() == 1) {
-                tblCategories.getItems().remove(0);
+            if(tblCategories.getItems().size() > 1) {
+                tblCategories.getItems().remove(tblCategories.getSelectionModel().getSelectedItem());
+            }
+            else {
+                clearCategoryTable(null);
             }
             cmbCategories.getSelectionModel().select(-1);
         }

@@ -2,8 +2,10 @@ package gui.util;
 
 import dao.CategoryDAO;
 import dao.MaterialDAO;
+import dao.ProductDAO;
 import domain.Category;
 import domain.Material;
+import domain.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
@@ -17,11 +19,13 @@ public class ComboBoxLoader {
 
     private CategoryDAO categoryDAO;
     private MaterialDAO materialDAO;
+    private ProductDAO productDAO;
 
     @Autowired
-    public ComboBoxLoader (CategoryDAO categoryDAO, MaterialDAO materialDAO) {
+    public ComboBoxLoader (CategoryDAO categoryDAO, MaterialDAO materialDAO, ProductDAO productDAO) {
         this.categoryDAO = categoryDAO;
         this.materialDAO = materialDAO;
+        this.productDAO = productDAO;
     }
 
     public static void initBirthYearsCombo(ComboBox<Integer> comboBox) {
@@ -45,6 +49,13 @@ public class ComboBoxLoader {
         ObservableList<Material> materials = FXCollections.observableArrayList();
         materials.addAll(materialDAO.findAll());
         comboBox.setItems(materials);
+        comboBox.getSelectionModel().select(selectedIndex);
+    }
+
+    public void initProductsCombo(ComboBox<Product> comboBox, int selectedIndex) {
+        ObservableList<Product> products = FXCollections.observableArrayList();
+        products.addAll(productDAO.findAll());
+        comboBox.setItems(products);
         comboBox.getSelectionModel().select(selectedIndex);
     }
 }
