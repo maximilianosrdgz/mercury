@@ -91,7 +91,7 @@ public class MenuController {
         setDataPane(fadeAnimate("/new-purchase.fxml"));
     }
 
-    public void loadRegisteredPurchasesPane(ActionEvent actionEvent) throws IOException {
+    public void loadListPurchasePane(ActionEvent actionEvent) throws IOException {
         setDataPane(fadeAnimate("/list-purchase.fxml"));
     }
 }

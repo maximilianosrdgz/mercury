@@ -128,8 +128,11 @@ public class ListProductController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         TextFieldUtils.activated(false, txtStoreUnit, txtDescription, txtPrice, txtQuantity);
+        TextFieldUtils.setNumericOnly(txtFilterId);
+        TextFieldUtils.setDecimalOnly(txtPrice);
         ButtonUtils.activated(false, btnCancel, btnConfirm);
         txtStoreUnit.setText("Unidades");
+        txtQuantity.setText("0");
         initProductTable(productStockDAO.findAll());
     }
 
@@ -240,7 +243,7 @@ public class ListProductController implements Initializable {
     }
 
     public void activateFields(ActionEvent actionEvent) {
-        TextFieldUtils.activated(true, txtQuantity, txtPrice, txtDescription);
+        TextFieldUtils.activated(true, txtPrice, txtDescription);
         ButtonUtils.activated(true, btnConfirm, btnCancel);
         ButtonUtils.activated(false, btnNewProduct, btnUpdateProduct);
     }
@@ -259,7 +262,8 @@ public class ListProductController implements Initializable {
     }
 
     public void saveProduct(ActionEvent actionEvent) throws IOException {
-        if(TextFieldUtils.fieldsFilled(txtDescription, txtPrice, txtQuantity)) {
+        TextFieldUtils.setZeroIfPoint(txtPrice);
+        if(TextFieldUtils.fieldsFilled(txtDescription, txtPrice)) {
             ProductStock productStock = buildProductStock();
             Alert confirm = alertBuilder.builder()
                     .type(Alert.AlertType.CONFIRMATION)
@@ -318,7 +322,7 @@ public class ListProductController implements Initializable {
                 .materials(new HashSet<>())
                 .build();
         return ProductStock.builder()
-                .quantity(Double.parseDouble(txtQuantity.getText()))
+                .quantity(0)
                 .storeType(txtStoreUnit.getText())
                 .product(product)
                 .build();

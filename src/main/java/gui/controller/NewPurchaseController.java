@@ -3,8 +3,6 @@ package gui.controller;
 import dao.ClientDAO;
 import dao.ProductStockDAO;
 import domain.Client;
-import domain.MaterialQuantity;
-import domain.MaterialStock;
 import domain.Product;
 import domain.ProductStock;
 import domain.Purchase;
@@ -42,7 +40,6 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -170,41 +167,29 @@ public class NewPurchaseController implements Initializable {
     }
 
     public void addPurchaseDetail(ActionEvent actionEvent) {
-        try {
-            if(!getSelectedProducts().contains(cmbProducts.getSelectionModel().getSelectedItem())) {
-                if(TextFieldUtils.fieldsFilled(txtProductQuantity, txtUnitPrice) &&
-                        cmbProducts.getSelectionModel().getSelectedIndex() > -1) {
-                    if(Double.parseDouble(lblStock.getText()) - Double.parseDouble(txtProductQuantity.getText()) >= 0) {
-                        if(Double.parseDouble(txtProductQuantity.getText()) > 0 &&
-                                Double.parseDouble(txtUnitPrice.getText()) > 0) {
-                            PurchaseDetail detail = PurchaseDetail.builder()
-                                    .product(cmbProducts.getSelectionModel().getSelectedItem())
-                                    .quantity(Double.parseDouble(txtProductQuantity.getText()))
-                                    .unitPrice(Double.parseDouble(txtUnitPrice.getText()))
-                                    .build();
-                            tblSelectedProducts.getItems().add(detail);
-                            tblSelectedProducts.getSelectionModel().select(detail);
-                            setTotalPrice();
-                        }
-                        else {
-                            alertBuilder.builder()
-                                    .type(Alert.AlertType.INFORMATION)
-                                    .title("Nueva Venta")
-                                    .headerText("Cantidad/Precio incorrecto/s")
-                                    .contentText("La cantidad/precio ingresado/s no es correcta. " +
-                                            "Por favor, ingrese un valor numérico mayor a 0")
-                                    .build()
-                                    .showAndWait();
-                            txtProductQuantity.requestFocus();
-                        }
+        TextFieldUtils.setZeroIfPoint(txtProductQuantity, txtUnitPrice);
+        if(!getSelectedProducts().contains(cmbProducts.getSelectionModel().getSelectedItem())) {
+            if(TextFieldUtils.fieldsFilled(txtProductQuantity, txtUnitPrice) &&
+                    cmbProducts.getSelectionModel().getSelectedIndex() > -1) {
+                if(Double.parseDouble(lblStock.getText()) - Double.parseDouble(txtProductQuantity.getText()) >= 0) {
+                    if(Double.parseDouble(txtProductQuantity.getText()) > 0 &&
+                            Double.parseDouble(txtUnitPrice.getText()) > 0) {
+                        PurchaseDetail detail = PurchaseDetail.builder()
+                                .product(cmbProducts.getSelectionModel().getSelectedItem())
+                                .quantity(Double.parseDouble(txtProductQuantity.getText()))
+                                .unitPrice(Double.parseDouble(txtUnitPrice.getText()))
+                                .build();
+                        tblSelectedProducts.getItems().add(detail);
+                        tblSelectedProducts.getSelectionModel().select(detail);
+                        setTotalPrice();
                     }
                     else {
                         alertBuilder.builder()
                                 .type(Alert.AlertType.INFORMATION)
                                 .title("Nueva Venta")
-                                .headerText("Stock insuficiente")
-                                .contentText("La cantidad vendida seleccionada supera las existencias del producto. " +
-                                        "Si esto no es correcto, actualice el stock del producto antes de registrar la venta.")
+                                .headerText("Cantidad/Precio incorrecto/s")
+                                .contentText("La cantidad/precio ingresado/s no es correcta. " +
+                                        "Por favor, ingrese un valor numérico mayor a 0")
                                 .build()
                                 .showAndWait();
                         txtProductQuantity.requestFocus();
@@ -214,29 +199,30 @@ public class NewPurchaseController implements Initializable {
                     alertBuilder.builder()
                             .type(Alert.AlertType.INFORMATION)
                             .title("Nueva Venta")
-                            .headerText("Datos incompletos")
-                            .contentText("Por favor, complete TODOS los datos del detalle antes de confirmar.")
+                            .headerText("Stock insuficiente")
+                            .contentText("La cantidad vendida seleccionada supera las existencias del producto. " +
+                                    "Si esto no es correcto, actualice el stock del producto antes de registrar la venta.")
                             .build()
                             .showAndWait();
+                    txtProductQuantity.requestFocus();
                 }
             }
             else {
                 alertBuilder.builder()
                         .type(Alert.AlertType.INFORMATION)
                         .title("Nueva Venta")
-                        .headerText("Producto ya seleccionado")
-                        .contentText("El producto seleccionado ya se encuentra en la lista de detalles")
+                        .headerText("Datos incompletos")
+                        .contentText("Por favor, complete TODOS los datos del detalle antes de confirmar.")
                         .build()
                         .showAndWait();
             }
         }
-        catch (NumberFormatException nfe) {
+        else {
             alertBuilder.builder()
                     .type(Alert.AlertType.INFORMATION)
                     .title("Nueva Venta")
-                    .headerText("Error en los datos ingresados")
-                    .contentText("Por favor, corrobore los datos ingresados. " +
-                            "Recuerde que sólo puede ingresar valores numéricos.")
+                    .headerText("Producto ya seleccionado")
+                    .contentText("El producto seleccionado ya se encuentra en la lista de detalles")
                     .build()
                     .showAndWait();
         }
@@ -270,6 +256,7 @@ public class NewPurchaseController implements Initializable {
     }
 
     public void savePurchase(ActionEvent actionEvent) throws IOException {
+        TextFieldUtils.setZeroIfPoint(txtProductQuantity, txtUnitPrice);
         if(TextFieldUtils.fieldsFilled(txtClient) && !tblSelectedProducts.getItems().isEmpty()) {
             Alert alert = alertBuilder.builder()
                     .type(Alert.AlertType.CONFIRMATION)
@@ -282,6 +269,7 @@ public class NewPurchaseController implements Initializable {
                 Purchase purchase = Purchase.builder()
                         .date(java.sql.Date.valueOf(dtpDate.getValue()))
                         .purchaseDetails(tblSelectedProducts.getItems())
+                        .canceled(false)
                         .build();
                 client.getPurchases().add(purchase);
                 clientDAO.update(client);

@@ -79,7 +79,7 @@ public class Client {
 
     public String isBuyer() {
         if(buyer) {
-            return "Si";
+            return "Sí";
         }
         else {
             return "No";
@@ -88,7 +88,7 @@ public class Client {
 
     public String isConsultant() {
         if(consultant) {
-            return "Si";
+            return "Sí";
         }
         else {
             return "No";
@@ -97,7 +97,7 @@ public class Client {
 
     public String isBlacklist() {
         if(blackListed) {
-            return "Si";
+            return "Sí";
         }
         else {
             return "No";

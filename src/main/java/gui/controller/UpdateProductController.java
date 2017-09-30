@@ -9,6 +9,7 @@ import domain.Category;
 import domain.Client;
 import domain.Material;
 import domain.MaterialQuantity;
+import domain.MaterialStock;
 import domain.Product;
 import domain.ProductStock;
 import gui.util.AlertBuilder;
@@ -107,6 +108,7 @@ public class UpdateProductController implements Initializable {
     private MaterialStockDAO materialStockDAO;
     private ProductDAO productDAO;
     private ProductStockDAO productStockDAO;
+    private ProductStock selectedProductStock;
 
     @Autowired
     public UpdateProductController(ComboBoxLoader comboBoxLoader, AlertBuilder alertBuilder,
@@ -127,6 +129,7 @@ public class UpdateProductController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        TextFieldUtils.setDecimalOnly(txtPrice, txtMaterialQuantity, txtQuantity);
         TextFieldUtils.activated(false, txtId);
         txtMaterialQuantity.setText("0");
         initCategoryTable(categoryDAO.findAll());
@@ -144,6 +147,7 @@ public class UpdateProductController implements Initializable {
     }
 
     private void loadSelectedProduct(ProductStock productStock) {
+        selectedProductStock = productStock;
         tblSelectedMaterials.getItems().addAll(materialQuantityDAO.findByProductId(productStock.getProduct().getId()));
         tblSelectedMaterials.getSelectionModel().selectFirst();
         tblSelectedCategories.getItems().addAll(productStock.getProduct().getCategories());
@@ -202,15 +206,47 @@ public class UpdateProductController implements Initializable {
     }
 
     public void addMaterialQuantity(ActionEvent actionEvent) {
-        ObservableList<Material> materialsSelected = FXCollections.observableArrayList();
-        tblSelectedMaterials.getItems().forEach(m -> materialsSelected.add(m.getMaterial()));
-        if(!materialsSelected.contains(cmbMaterials.getSelectionModel().getSelectedItem()) &&
-                cmbMaterials.getSelectionModel().getSelectedIndex() != -1) {
-            MaterialQuantity quantity = MaterialQuantity.builder()
-                    .material(cmbMaterials.getSelectionModel().getSelectedItem())
-                    .quantity(Double.parseDouble(txtMaterialQuantity.getText()))
-                    .build();
-            tblSelectedMaterials.getItems().add(quantity);
+        TextFieldUtils.setZeroIfPoint(txtMaterialQuantity);
+        if(Double.parseDouble(txtMaterialQuantity.getText()) > 0) {
+            ObservableList<Material> materialsSelected = FXCollections.observableArrayList();
+            tblSelectedMaterials.getItems().forEach(m -> materialsSelected.add(m.getMaterial()));
+            if(!materialsSelected.contains(cmbMaterials.getSelectionModel().getSelectedItem()) &&
+                    cmbMaterials.getSelectionModel().getSelectedIndex() != -1) {
+                MaterialQuantity quantity = MaterialQuantity.builder()
+                        .material(cmbMaterials.getSelectionModel().getSelectedItem())
+                        .quantity(Double.parseDouble(txtMaterialQuantity.getText()))
+                        .build();
+                tblSelectedMaterials.getItems().add(quantity);
+            }
+            else {
+                if(cmbMaterials.getSelectionModel().getSelectedIndex() == -1) {
+                    alertBuilder.builder()
+                            .type(Alert.AlertType.INFORMATION)
+                            .title("Modificar Producto")
+                            .headerText("Material no agregado")
+                            .contentText("Por favor, seleccione un material para agregar.")
+                            .build()
+                            .showAndWait();
+                }
+                else {
+                    alertBuilder.builder()
+                            .type(Alert.AlertType.INFORMATION)
+                            .title("Modificar Producto")
+                            .headerText("Material no agregado")
+                            .contentText("El material ya se encuentra en la lista.")
+                            .build()
+                            .showAndWait();
+                }
+            }
+        }
+        else {
+            alertBuilder.builder()
+                    .type(Alert.AlertType.INFORMATION)
+                    .title("Modificar Producto")
+                    .headerText("Material no agregado")
+                    .contentText("Por favor, elija una cantidad mayor a 0.")
+                    .build()
+                    .showAndWait();
         }
     }
 
@@ -225,42 +261,62 @@ public class UpdateProductController implements Initializable {
     }
 
     public void saveProduct(ActionEvent actionEvent) throws IOException {
+        TextFieldUtils.setZeroIfPoint(txtQuantity, txtPrice);
         if(TextFieldUtils.fieldsFilled(txtDescription, txtPrice, txtQuantity)) {
             ProductStock productStock = buildProductStock();
             List<MaterialQuantity> materialQuantities = buildMaterialQuantityList();
             materialQuantities.forEach(quant -> quant.setProduct(productStock.getProduct()));
-            Alert alert = alertBuilder.builder()
-                    .type(Alert.AlertType.CONFIRMATION)
-                    .title("Modificar Producto")
-                    .headerText("Está por modificar el producto: \n" + productStock.getProduct().getDescription())
-                    .contentText("¿Confirmar modificación?")
-                    .build();
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                productDAO.update(productStock.getProduct());
-                productStockDAO.update(productStock);
-
-                for(MaterialQuantity mq: materialQuantities) {
-                    MaterialQuantity existent =
-                            materialQuantityDAO.findByProductAndMaterialId(mq.getProduct().getId(), mq.getMaterial().getId());
-                    if(existent != null) {
-                        mq.setId(existent.getId());
-                        materialQuantityDAO.update(mq);
+            double oldQuantity = selectedProductStock.getQuantity();
+            double quantityAdded = productStock.getQuantity() - selectedProductStock.getQuantity();
+            if(enoughMaterialsInStock(productStock, quantityAdded)) {
+                Alert alert = alertBuilder.builder()
+                        .type(Alert.AlertType.CONFIRMATION)
+                        .title("Modificar Producto")
+                        .headerText("Está por modificar el producto: \n" + productStock.getProduct().getDescription())
+                        .contentText("¿Confirmar modificación?")
+                        .build();
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    productDAO.update(productStock.getProduct());
+                    productStockDAO.update(productStock);
+                    for(MaterialQuantity mq: materialQuantities) {
+                        MaterialQuantity existent =
+                                materialQuantityDAO.findByProductAndMaterialId(mq.getProduct().getId(), mq.getMaterial().getId());
+                        if(existent != null) {
+                            mq.setId(existent.getId());
+                            materialQuantityDAO.update(mq);
+                        }
+                        else {
+                            materialQuantityDAO.create(mq);
+                        }
                     }
-                    else {
-                        materialQuantityDAO.create(mq);
+                    for(MaterialQuantity mq : materialQuantityDAO.findByProductId(productStock.getProduct().getId())) {
+                        if(!materialQuantities.contains(mq)) {
+                            materialQuantityDAO.delete(mq);
+                        }
                     }
+                    if(productStock.getQuantity() > oldQuantity) {
+                        List<MaterialQuantity> materialQuantityList = materialQuantityDAO
+                                .findByProductId(productStock.getProduct().getId());
+                        for(MaterialQuantity quantity : materialQuantityList) {
+                            MaterialStock stock = materialStockDAO.findByMaterialId(quantity.getMaterial().getId());
+                            stock.setQuantity(stock.getQuantity() - (quantity.getQuantity() * quantityAdded));
+                            materialStockDAO.update(stock);
+                        }
+                    }
+                    listProductController.reloadForm(actionEvent);
+                    Stage stage = (Stage) btnSaveMaterial.getScene().getWindow();
+                    stage.close();
                 }
-
-                for(MaterialQuantity mq : materialQuantityDAO.findByProductId(productStock.getProduct().getId())) {
-                    if(!materialQuantities.contains(mq)) {
-                        materialQuantityDAO.delete(mq);
-                    }
-                }
-
-                listProductController.reloadForm(actionEvent);
-                Stage stage = (Stage) btnSaveMaterial.getScene().getWindow();
-                stage.close();
+            }
+            else {
+                alertBuilder.builder()
+                        .type(Alert.AlertType.INFORMATION)
+                        .title("Nuevo Producto")
+                        .headerText("Materiales insuficientes")
+                        .contentText("Si esto no es correcto, actualice el stock de materiales antes de cargar el producto.")
+                        .build()
+                        .showAndWait();
             }
         }
         else {
@@ -272,6 +328,21 @@ public class UpdateProductController implements Initializable {
                     .build()
                     .showAndWait();
         }
+    }
+
+    private boolean enoughMaterialsInStock(ProductStock productStock, double quantityAdded) {
+        boolean result = true;
+        if(productStock.getQuantity() > selectedProductStock.getQuantity()) {
+            List<MaterialQuantity> materialQuantityList = tblSelectedMaterials.getItems();
+            for(MaterialQuantity quantity : materialQuantityList) {
+                MaterialStock stock = materialStockDAO.findByMaterialId(quantity.getMaterial().getId());
+                if(stock.getQuantity() < quantity.getQuantity() * quantityAdded) {
+                    result = false;
+                }
+            }
+        }
+
+        return result;
     }
 
     private ProductStock buildProductStock() {

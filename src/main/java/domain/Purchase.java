@@ -42,4 +42,20 @@ public class Purchase {
 
     @OneToMany(fetch = FetchType.EAGER)//(cascade = CascadeType.PERSIST)
     private List<PurchaseDetail> purchaseDetails;
+
+    @Column
+    private boolean canceled;
+
+    public boolean getBooleanCanceled() {
+        return canceled;
+    }
+
+    public String isCanceled() {
+        if(canceled) {
+            return "Anulada";
+        }
+        else {
+            return "Válida";
+        }
+    }
 }

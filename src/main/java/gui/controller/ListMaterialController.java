@@ -171,6 +171,7 @@ public class ListMaterialController implements Initializable {
     }
 
     public void saveMaterial(ActionEvent actionEvent) throws IOException {
+        TextFieldUtils.setZeroIfPoint(txtCost, txtQuantity);
         if(TextFieldUtils.fieldsFilled(txtDescription, txtCost, txtQuantity, txtStoreUnit)) {
             List<MaterialStock> materialStockList = tblMaterials.getItems();
             MaterialStock materialStock = buildMaterialStock();

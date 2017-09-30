@@ -55,4 +55,13 @@ public class TextFieldUtils {
                     }
                 }));
     }
+
+    public static void setZeroIfPoint(TextField... fields) {
+        Arrays.stream(fields)
+                .forEach(field -> {
+                    if(field.getText().equals(".")) {
+                        field.setText("0");
+                    }
+                });
+    }
 }

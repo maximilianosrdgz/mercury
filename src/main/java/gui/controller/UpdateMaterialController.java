@@ -140,6 +140,7 @@ public class UpdateMaterialController implements Initializable {
     }
 
     public void saveMaterial(ActionEvent actionEvent) throws IOException {
+        TextFieldUtils.setZeroIfPoint(txtCost, txtQuantity);
         if(TextFieldUtils.fieldsFilled(txtDescription, txtCost, txtQuantity, txtStoreUnit)) {
             MaterialStock materialStock = buildMaterialStock();
             Alert alert = alertBuilder.builder()
