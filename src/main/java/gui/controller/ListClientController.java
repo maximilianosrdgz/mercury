@@ -6,6 +6,7 @@ import domain.Client;
 import domain.Province;
 import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
+import gui.util.ComboBoxLoader;
 import gui.util.TextFieldUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -95,32 +96,27 @@ public class ListClientController implements Initializable {
     private ClientDAO clientDAO;
     private AlertBuilder alertBuilder;
     private NewPurchaseController newPurchaseController;
+    private ComboBoxLoader comboBoxLoader;
 
     @Autowired
     public ListClientController(MenuController menuController, ProvinceDAO provinceDAO,
                                 ClientDAO clientDAO, AlertBuilder alertBuilder,
-                                NewPurchaseController newPurchaseController) {
+                                NewPurchaseController newPurchaseController, ComboBoxLoader comboBoxLoader) {
 
         this.menuController = menuController;
         this.provinceDAO = provinceDAO;
         this.clientDAO = clientDAO;
         this.alertBuilder = alertBuilder;
         this.newPurchaseController = newPurchaseController;
+        this.comboBoxLoader = comboBoxLoader;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         TextFieldUtils.setNumericOnly(txtId, txtAge);
         initClientsTable(clientDAO.findAll());
-        initProvinceCombo();
+        comboBoxLoader.initProvinceCombo(cmbProvince, -1);
         txtId.requestFocus();
-    }
-
-    private void initProvinceCombo() {
-        ObservableList<Province> provinceList = FXCollections.observableArrayList();
-        provinceList.addAll(provinceDAO.findAll());
-        cmbProvince.setItems(provinceList);
-        cmbProvince.getSelectionModel().select(-1);
     }
 
     public void initClientsTable(List<Client> clientList) {

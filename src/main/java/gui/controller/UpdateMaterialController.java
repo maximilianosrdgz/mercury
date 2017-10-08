@@ -162,7 +162,7 @@ public class UpdateMaterialController implements Initializable {
         else {
             alertBuilder.builder()
                     .type(Alert.AlertType.INFORMATION)
-                    .title("Nuevo Material")
+                    .title("Modificar Material")
                     .headerText("Datos incompletos")
                     .contentText("Por favor, complete TODOS los datos del material antes de confirmar.")
                     .build()

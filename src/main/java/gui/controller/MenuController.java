@@ -17,6 +17,10 @@ import java.io.IOException;
 public class MenuController {
 
     @FXML
+    private Button btnOpenFormSendEmail;
+    @FXML
+    private Button btnOpenFormListSupplier;
+    @FXML
     private Button btnOpenFormNewSales;
     @FXML
     private Button btnOpenFormRegisteredSales;
@@ -93,5 +97,13 @@ public class MenuController {
 
     public void loadListPurchasePane(ActionEvent actionEvent) throws IOException {
         setDataPane(fadeAnimate("/list-purchase.fxml"));
+    }
+
+    public void loadListSupplierPane(ActionEvent actionEvent) throws IOException {
+        setDataPane(fadeAnimate("/list-supplier.fxml"));
+    }
+
+    public void loadSendEmailPane(ActionEvent actionEvent) throws IOException {
+        setDataPane(fadeAnimate("/send-email.fxml"));
     }
 }

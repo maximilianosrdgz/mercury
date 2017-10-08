@@ -43,4 +43,9 @@ public class Supplier {
     @ManyToMany(fetch = FetchType.EAGER)//(cascade = CascadeType.MERGE)
     @JoinTable(name = "supplier_category")
     private Set<Category> categories;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

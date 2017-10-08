@@ -58,6 +58,24 @@
                               </AnchorPane>
                            </content>
                         </TitledPane>
+                        <TitledPane layoutX="10.0" layoutY="60.0" text="Proveedores">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="btnOpenFormListSupplier" mnemonicParsing="false" onAction="#loadListSupplierPane" text="Actualizar Proveedores" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                        <TitledPane layoutX="10.0" layoutY="85.0" text="E-mail">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="btnOpenFormSendEmail" mnemonicParsing="false" onAction="#loadSendEmailPane" text="Enviar E-mail" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
                      </panes>
                   </Accordion>
                </children>
