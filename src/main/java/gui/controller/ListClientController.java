@@ -97,11 +97,13 @@ public class ListClientController implements Initializable {
     private AlertBuilder alertBuilder;
     private NewPurchaseController newPurchaseController;
     private ComboBoxLoader comboBoxLoader;
+    private SendEmailController sendEmailController;
 
     @Autowired
     public ListClientController(MenuController menuController, ProvinceDAO provinceDAO,
                                 ClientDAO clientDAO, AlertBuilder alertBuilder,
-                                NewPurchaseController newPurchaseController, ComboBoxLoader comboBoxLoader) {
+                                NewPurchaseController newPurchaseController, ComboBoxLoader comboBoxLoader,
+                                SendEmailController sendEmailController) {
 
         this.menuController = menuController;
         this.provinceDAO = provinceDAO;
@@ -109,6 +111,7 @@ public class ListClientController implements Initializable {
         this.alertBuilder = alertBuilder;
         this.newPurchaseController = newPurchaseController;
         this.comboBoxLoader = comboBoxLoader;
+        this.sendEmailController = sendEmailController;
     }
 
     @Override
@@ -135,7 +138,7 @@ public class ListClientController implements Initializable {
     }
 
     public void updateClient(ActionEvent actionEvent) {
-        Scene scene = new Scene((Parent)SpringFxmlLoader.load("/update-client.fxml"), 600, 400);
+        Scene scene = new Scene((Parent)SpringFxmlLoader.load("/forms/clients/update-client.fxml"), 600, 400);
         Stage stage = new Stage();
         stage.setTitle("Modificar Cliente");
         stage.initModality(Modality.WINDOW_MODAL);
@@ -266,8 +269,14 @@ public class ListClientController implements Initializable {
         }
     }
 
-    public void selectClient(ActionEvent actionEvent) {
+    public void selectClientPurchase(ActionEvent actionEvent) {
         newPurchaseController.loadSelectedClient(getSelectedClient());
+        Stage stage = (Stage) btnSelectClient.getScene().getWindow();
+        stage.close();
+    }
+
+    public void selectClientEmail(ActionEvent actionEvent) {
+        sendEmailController.loadSelectedClient(getSelectedClient());
         Stage stage = (Stage) btnSelectClient.getScene().getWindow();
         stage.close();
     }

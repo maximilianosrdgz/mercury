@@ -14,7 +14,7 @@
 
 <VBox alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.CategoryMaterialFilterController">
     <children>
-        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css" VBox.vgrow="NEVER">
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
             <children>
                 <Label text="Categorías">
                     <font>
@@ -69,7 +69,7 @@
                 <Insets left="30.0" />
             </VBox.margin>
         </HBox>
-      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css">
+      <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css">
          <children>
             <Label text="Materiales">
                <font>

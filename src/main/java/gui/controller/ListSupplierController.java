@@ -1,7 +1,5 @@
 package gui.controller;
 
-import dao.CategoryDAO;
-import dao.ProvinceDAO;
 import dao.SupplierDAO;
 import domain.Category;
 import domain.Province;
@@ -175,7 +173,7 @@ public class ListSupplierController implements Initializable {
     }
 
     public void openFormUpdateSupplier(ActionEvent actionEvent) {
-        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/update-supplier.fxml"), 600, 500);
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/suppliers/update-supplier.fxml"), 600, 500);
         Stage stage = new Stage();
         stage.setTitle("Modificar Proveedor");
         stage.initModality(Modality.WINDOW_MODAL);

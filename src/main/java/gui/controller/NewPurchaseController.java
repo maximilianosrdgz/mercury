@@ -136,7 +136,7 @@ public class NewPurchaseController implements Initializable {
     }
 
     public void openFormListClient(ActionEvent actionEvent) {
-        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/pick-client.fxml"), 1130, 500);
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/clients/pick-client-purchase.fxml"), 1130, 600);
         Stage stage = new Stage();
         stage.setTitle("Seleccionar Cliente");
         stage.initModality(Modality.WINDOW_MODAL);

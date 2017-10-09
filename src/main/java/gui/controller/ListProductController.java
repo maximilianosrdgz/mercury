@@ -223,7 +223,7 @@ public class ListProductController implements Initializable {
     }
 
     public void openFormUpdateProduct(ActionEvent actionEvent) {
-        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/update-product.fxml"), 600, 600);
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/products/update-product.fxml"), 600, 600);
         Stage stage = new Stage();
         stage.setTitle("Modificar Producto");
         stage.initModality(Modality.WINDOW_MODAL);
@@ -233,7 +233,7 @@ public class ListProductController implements Initializable {
     }
 
     public void filterByCategoryAndMaterials(ActionEvent actionEvent) {
-        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/category-material-filter.fxml"), 600, 600);
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/products/category-material-filter.fxml"), 600, 600);
         Stage stage = new Stage();
         stage.setTitle("Filtro por Categorías y Materiales");
         stage.initModality(Modality.WINDOW_MODAL);

@@ -36,7 +36,6 @@ import java.net.URL;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -191,7 +190,7 @@ public class ListPurchaseController implements Initializable {
     }
 
     public void openFormViewDetail(ActionEvent actionEvent) {
-        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/view-purchase-details.fxml"), 900, 350);
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/purchases/view-purchase-details.fxml"), 900, 350);
         Stage stage = new Stage();
         stage.setTitle("Detalles de la Venta");
         stage.initModality(Modality.WINDOW_MODAL);

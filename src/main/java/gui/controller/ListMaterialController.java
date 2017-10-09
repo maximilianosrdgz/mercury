@@ -245,7 +245,7 @@ public class ListMaterialController implements Initializable {
     }
 
     public void openFormUpdateMaterial(ActionEvent actionEvent) {
-        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/update-material.fxml"), 600, 500);
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/products/update-material.fxml"), 600, 500);
         Stage stage = new Stage();
         stage.setTitle("Modificar Material");
         stage.initModality(Modality.WINDOW_MODAL);

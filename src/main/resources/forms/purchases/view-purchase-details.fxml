@@ -14,7 +14,7 @@
 
 <VBox fx:id="purchaseDetailsForm" alignment="CENTER" prefHeight="410.0" prefWidth="930.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ViewPurchaseDetailsController">
     <children>
-        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css" VBox.vgrow="NEVER">
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
             <children>
                 <Label text="Detalle de Venta">
                     <font>

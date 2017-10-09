@@ -1,5 +1,6 @@
 package gui.util;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import dao.CategoryDAO;
 import dao.MaterialDAO;
 import dao.ProductDAO;
@@ -69,6 +70,13 @@ public class ComboBoxLoader {
         ObservableList<Province> provinceList = FXCollections.observableArrayList();
         provinceList.addAll(provinceDAO.findAll());
         comboBox.setItems(provinceList);
+        comboBox.getSelectionModel().select(selectedIndex);
+    }
+
+    public void initBooleanStringCombo(ComboBox<String> comboBox, int selectedIndex) {
+        ObservableList<String> items = FXCollections.observableArrayList();
+        items.addAll("Sí/No", "Sí", "No");
+        comboBox.setItems(items);
         comboBox.getSelectionModel().select(selectedIndex);
     }
 }

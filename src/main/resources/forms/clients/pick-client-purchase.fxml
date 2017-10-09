@@ -17,7 +17,7 @@
 
 <VBox fx:id="clientListForm" alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ListClientController">
     <children>
-        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css" VBox.vgrow="NEVER">
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
             <children>
                 <Label text="Clientes Registrados">
                     <font>
@@ -95,9 +95,9 @@
                 <TableColumn fx:id="colBlacklist" minWidth="100.0" prefWidth="-1.0" text="Blacklist" />
             </columns>
         </TableView>
-        <Button fx:id="btnSelectClient" mnemonicParsing="false" onAction="#selectClient" text="Seleccionar Cliente">
+        <Button fx:id="btnSelectClient" mnemonicParsing="false" onAction="#selectClientPurchase" text="Seleccionar Cliente">
             <VBox.margin>
-                <Insets top="10.0" />
+                <Insets bottom="5.0" top="10.0" />
             </VBox.margin></Button>
     </children>
 </VBox>

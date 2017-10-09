@@ -15,11 +15,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="sendEmailForm" alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.SendEmailController">
+<VBox fx:id="purchaseListForm" alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ListPurchaseController">
     <children>
-        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@style.css" VBox.vgrow="NEVER">
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
             <children>
-                <Label text="Enviar E-mail">
+                <Label text="Ventas Registradas">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -40,47 +40,47 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <TextField fx:id="txtClientName" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                <TextField fx:id="txtClientName" onKeyReleased="#filterWithEnter" GridPane.columnIndex="3" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
                     </GridPane.margin></TextField>
                 <Label text="Cliente:" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin></Label>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></Label>
                 <Label text="Anulada" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                 <CheckBox fx:id="chkCanceled" mnemonicParsing="false" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                <Button fx:id="btnFilter" mnemonicParsing="false" prefHeight="25.0" prefWidth="197.0" text="Filtrar por Cliente" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin></Button>
-                <Button fx:id="btnResetFilter" layoutX="167.0" layoutY="13.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="138.0" text="Reestablecer Filtros" GridPane.halignment="CENTER">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Button>
-                <Button fx:id="btnFilterByCanceled" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Filtrar Anuladas/Válidas" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
-                <DatePicker fx:id="dtpFrom" prefHeight="25.0" prefWidth="135.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                <DatePicker fx:id="dtpTo" prefHeight="25.0" prefWidth="135.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                <Label text="Desde" GridPane.rowIndex="2">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Label>
-                <Label text="Hasta" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </Label>
-                <Button fx:id="btnFilterByDate" mnemonicParsing="false" text="Filtrar por Fecha" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                <Button fx:id="btnFilter" mnemonicParsing="false" onAction="#filterByClient" prefHeight="25.0" prefWidth="197.0" text="Filtrar por Cliente" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin></Button>
+                <Button fx:id="btnResetFilter" layoutX="167.0" layoutY="13.0" mnemonicParsing="false" onAction="#reloadForm" prefHeight="25.0" prefWidth="138.0" text="Reestablecer Filtros" GridPane.halignment="CENTER">
                     <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </Button>
+                <Button fx:id="btnFilterByCanceled" mnemonicParsing="false" onAction="#filterTableByCanceled" prefHeight="25.0" prefWidth="143.0" text="Filtrar Anuladas/Válidas" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
+            <DatePicker fx:id="dtpFrom" prefHeight="25.0" prefWidth="135.0" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <DatePicker fx:id="dtpTo" prefHeight="25.0" prefWidth="135.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <Label text="Desde" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Hasta" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <Button fx:id="btnFilterByDate" mnemonicParsing="false" onAction="#filterByDate" text="Filtrar por Fecha" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Button>
             </children>
-            <VBox.margin>
-                <Insets bottom="5.0" />
-            </VBox.margin>
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
         </GridPane>
         <TableView fx:id="tblPurchases">
             <columns>
@@ -91,12 +91,12 @@
                 <TableColumn fx:id="colTotal" minWidth="68.0" prefWidth="124.0" text="Importe" />
             </columns>
         </TableView>
-        <Button fx:id="btnViewDetail" mnemonicParsing="false" text="Ver Detalle">
+        <Button fx:id="btnViewDetail" mnemonicParsing="false" onAction="#openFormViewDetail" text="Ver Detalle">
             <VBox.margin>
                 <Insets top="10.0" />
             </VBox.margin>
-            <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-            </padding></Button>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding></Button>
     </children>
 </VBox>

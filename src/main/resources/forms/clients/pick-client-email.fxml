@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="clientListForm" alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ListClientController">
+    <children>
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
+            <children>
+                <Label text="Clientes Registrados">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <TextField fx:id="txtId" onKeyReleased="#filterWithEnter" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </GridPane.margin></TextField>
+                <TextField fx:id="txtName" onKeyReleased="#filterWithEnter" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </GridPane.margin></TextField>
+                <TextField fx:id="txtEmail" onKeyReleased="#filterWithEnter" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </GridPane.margin></TextField>
+                <ComboBox fx:id="cmbProvince" onKeyReleased="#openCombo" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </GridPane.margin></ComboBox>
+                <TextField fx:id="txtAge" onKeyReleased="#filterWithEnter" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                    <GridPane.margin>
+                        <Insets left="5.0" right="5.0" />
+                    </GridPane.margin></TextField>
+                <Label text="Nombre" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="Nro de Cliente" GridPane.rowIndex="1" />
+                <Label text="E-mail" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label text="Provincia" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                <Label text="Edad" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                <Label text="Compró" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                <Label text="Consultó" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                <Label text="Blacklist" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                <CheckBox fx:id="chkBuyer" mnemonicParsing="false" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                <CheckBox fx:id="chkConsultant" mnemonicParsing="false" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                <CheckBox fx:id="chkBlacklist" mnemonicParsing="false" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                <Button fx:id="btnFilter" mnemonicParsing="false" onAction="#filterTable" prefHeight="25.0" prefWidth="113.0" text="Filtrar por Datos" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                <Button fx:id="btnResetFilter" layoutX="167.0" layoutY="13.0" mnemonicParsing="false" onAction="#reloadForm" prefHeight="25.0" prefWidth="138.0" text="Reestablecer Filtros" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+                    <GridPane.margin>
+                        <Insets />
+                    </GridPane.margin>
+                </Button>
+                <Button fx:id="btnFilterByFlags" mnemonicParsing="false" onAction="#filterTableByFlags" text="Filtrar por C/C/B" GridPane.columnIndex="5" GridPane.halignment="CENTER" />
+            </children>
+        </GridPane>
+        <TableView fx:id="tblClients">
+            <columns>
+                <TableColumn fx:id="colId" minWidth="100.0" prefWidth="-1.0" text="Nro. Cliente" />
+                <TableColumn fx:id="colName" minWidth="200.0" prefWidth="-1.0" text="Nombre" />
+                <TableColumn fx:id="colEmail" minWidth="250.0" prefWidth="-1.0" text="E-mail" />
+                <TableColumn fx:id="colProvince" minWidth="100.0" prefWidth="-1.0" text="Provincia" />
+                <TableColumn fx:id="colAge" minWidth="100.0" prefWidth="-1.0" text="Edad" />
+                <TableColumn fx:id="colBuyer" minWidth="100.0" prefWidth="-1.0" text="Compró" />
+                <TableColumn fx:id="colConsultant" minWidth="100.0" prefWidth="-1.0" text="Consultó" />
+                <TableColumn fx:id="colBlacklist" minWidth="100.0" prefWidth="-1.0" text="Blacklist" />
+            </columns>
+        </TableView>
+        <Button fx:id="btnSelectClient" mnemonicParsing="false" onAction="#selectClientEmail" text="Seleccionar Cliente">
+            <VBox.margin>
+                <Insets bottom="5.0" top="10.0" />
+            </VBox.margin></Button>
+    </children>
+</VBox>

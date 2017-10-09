@@ -64,46 +64,42 @@ public class MenuController {
     }
 
     public void loadPane(ActionEvent event) throws IOException {
-        setDataPane(fadeAnimate("/new-client.fxml"));
+        setDataPane(fadeAnimate("/forms/clients/new-client.fxml"));
     }
 
     public void loadNewClientPane(ActionEvent event) throws IOException {
-        setDataPane(fadeAnimate("/new-client.fxml"));
-    }
-
-    public void loadPane3(ActionEvent event) throws IOException {
-        setDataPane(fadeAnimate("/FXML3.fxml"));
+        setDataPane(fadeAnimate("/forms/clients/new-client.fxml"));
     }
 
     public void loadListClientPane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/list-client.fxml"));
+        setDataPane(fadeAnimate("/forms/clients/list-client.fxml"));
     }
 
     public void loadNewProductPane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/list-product.fxml"));
+        setDataPane(fadeAnimate("/forms/products/list-product.fxml"));
     }
 
     public void loadNewMaterialPane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/list-material.fxml"));
+        setDataPane(fadeAnimate("/forms/products/list-material.fxml"));
     }
 
     public void loadNewCategoryPane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/update-category.fxml"));
+        setDataPane(fadeAnimate("/forms/products/update-category.fxml"));
     }
 
     public void loadNewPurchasePane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/new-purchase.fxml"));
+        setDataPane(fadeAnimate("/forms/purchases/new-purchase.fxml"));
     }
 
     public void loadListPurchasePane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/list-purchase.fxml"));
+        setDataPane(fadeAnimate("/forms/purchases/list-purchase.fxml"));
     }
 
     public void loadListSupplierPane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/list-supplier.fxml"));
+        setDataPane(fadeAnimate("/forms/suppliers/list-supplier.fxml"));
     }
 
     public void loadSendEmailPane(ActionEvent actionEvent) throws IOException {
-        setDataPane(fadeAnimate("/send-email.fxml"));
+        setDataPane(fadeAnimate("/forms/email/send-email.fxml"));
     }
 }
