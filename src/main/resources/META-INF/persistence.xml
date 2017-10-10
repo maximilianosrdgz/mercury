@@ -14,6 +14,7 @@
         <class>domain.Province</class>
         <class>domain.Purchase</class>
         <class>domain.PurchaseDetail</class>
+        <class>domain.Store</class>
         <class>domain.Supplier</class>
         <properties>
             <property name="javax.persistence.jdbc.password" value="imladris"/>

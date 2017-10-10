@@ -93,6 +93,7 @@
             <TableColumn fx:id="colBuyer" minWidth="100.0" prefWidth="-1.0" text="Compró" />
             <TableColumn fx:id="colConsultant" minWidth="100.0" prefWidth="-1.0" text="Consultó" />
             <TableColumn fx:id="colBlacklist" minWidth="100.0" prefWidth="-1.0" text="Blacklist" />
+            <TableColumn fx:id="colReceiver" minWidth="100.0" prefWidth="-1.0" text="Suscrito" />
         </columns>
       </TableView>
       <Button fx:id="btnUpdateClient" mnemonicParsing="false" onAction="#updateClient" text="Modificar">

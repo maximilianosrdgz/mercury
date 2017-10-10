@@ -4,7 +4,6 @@ import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;
 import gui.util.TextFieldUtils;
 import javafx.scene.control.ButtonType;
-import persistence.EntityManagerUtils;
 import dao.ClientDAO;
 import dao.ProvinceDAO;
 import domain.Client;
@@ -36,7 +35,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -48,15 +46,10 @@ import java.util.ResourceBundle;
 @Controller
 public class NewClientController implements Initializable {
 
-    private EntityManagerUtils emu;
-    private ClientDAO clientDAO;
-    private ProvinceDAO provinceDAO;
-    private AlertBuilder alertBuilder;
-
     @FXML
     private ComboBox<Province> cmbProvinces;
     @FXML
-    private ComboBox cmbBirthYears;
+    private ComboBox<Integer> cmbBirthYears;
     @FXML
     private Button btnSaveClient;
     @FXML
@@ -69,11 +62,17 @@ public class NewClientController implements Initializable {
     private CheckBox chkBuyer;
     @FXML
     private CheckBox chkConsultant;
+    @FXML
+    private CheckBox chkReceiver;
+
+    private ClientDAO clientDAO;
+    private ProvinceDAO provinceDAO;
+    private AlertBuilder alertBuilder;
 
     @Autowired
-    public NewClientController(EntityManagerUtils emu, ClientDAO clientDAO,
-                               ProvinceDAO provinceDAO, AlertBuilder alertBuilder) {
-        this.emu = emu;
+    public NewClientController(ClientDAO clientDAO, ProvinceDAO provinceDAO,
+                               AlertBuilder alertBuilder) {
+
         this.clientDAO = clientDAO;
         this.provinceDAO = provinceDAO;
         this.alertBuilder = alertBuilder;
@@ -128,62 +127,6 @@ public class NewClientController implements Initializable {
         this.chkBlacklisted.setSelected(false);
     }
 
-    public void sendEmail() {
-        final String USERNAME = "mizu.store.cba@gmail.com";
-        final String PASSWORD = "PaRaDiSeKiSs1987";
-        final String HTML_FILE_PATH = "D:/Projects/mercury/src/main/resources/utils/hyperlink-image.html";
-
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-
-        Session session = Session.getInstance(props,
-                new Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(USERNAME, PASSWORD);
-                    }
-                });
-
-        try {
-            Client client = Client.builder()
-                    .name("Maxi")
-                    .email("maxi.mxpw@gmail.com")
-                    .build();
-
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(USERNAME));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(client.getEmail()));
-            message.setSubject("Hola, " + client.getName() + "!");
-            message.setContent(readHTML(HTML_FILE_PATH), "text/html; charset=utf-8");
-
-            Transport.send(message);
-
-            //buildAlert("E-Mail Enviado", "E-Mail enviado exitosamente!").showAndWait();
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String readHTML(String path) throws IOException {
-        String line;
-        FileReader fr = new FileReader(path);
-        BufferedReader br = new BufferedReader(fr);
-        StringBuilder content = new StringBuilder(1024);
-
-        while((line = br.readLine()) != null)
-        {
-            content.append(line);
-        }
-
-        return content.toString();
-    }
-
     private Client buildClient() {
         return Client.builder()
                 .name(txtName.getText())
@@ -194,6 +137,7 @@ public class NewClientController implements Initializable {
                 .buyer(chkBuyer.isSelected())
                 .consultant(chkConsultant.isSelected())
                 .blackListed(chkBlacklisted.isSelected())
+                .receiver(chkReceiver.isSelected())
                 .build();
     }
 

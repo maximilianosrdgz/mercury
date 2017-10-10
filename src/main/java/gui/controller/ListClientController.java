@@ -69,6 +69,8 @@ public class ListClientController implements Initializable {
     @FXML
     private TableColumn colBlacklist;
     @FXML
+    private TableColumn colReceiver;
+    @FXML
     private Button btnUpdateClient;
     @FXML
     private TextField txtName;
@@ -92,23 +94,18 @@ public class ListClientController implements Initializable {
     private Button btnResetFilter;
 
     private MenuController menuController;
-    private ProvinceDAO provinceDAO;
     private ClientDAO clientDAO;
-    private AlertBuilder alertBuilder;
     private NewPurchaseController newPurchaseController;
     private ComboBoxLoader comboBoxLoader;
     private SendEmailController sendEmailController;
 
     @Autowired
-    public ListClientController(MenuController menuController, ProvinceDAO provinceDAO,
-                                ClientDAO clientDAO, AlertBuilder alertBuilder,
+    public ListClientController(MenuController menuController, ClientDAO clientDAO,
                                 NewPurchaseController newPurchaseController, ComboBoxLoader comboBoxLoader,
                                 SendEmailController sendEmailController) {
 
         this.menuController = menuController;
-        this.provinceDAO = provinceDAO;
         this.clientDAO = clientDAO;
-        this.alertBuilder = alertBuilder;
         this.newPurchaseController = newPurchaseController;
         this.comboBoxLoader = comboBoxLoader;
         this.sendEmailController = sendEmailController;
@@ -131,6 +128,7 @@ public class ListClientController implements Initializable {
         colBuyer.setCellValueFactory(new PropertyValueFactory<Client, String>("buyer"));
         colConsultant.setCellValueFactory(new PropertyValueFactory<Client, String>("consultant"));
         colBlacklist.setCellValueFactory(new PropertyValueFactory<Client, String>("blacklist"));
+        colReceiver.setCellValueFactory(new PropertyValueFactory<Client, String>("receiver"));
         ObservableList<Client> clients = FXCollections.observableArrayList();
         clients.addAll(clientList);
         tblClients.setItems(clients);
@@ -279,5 +277,6 @@ public class ListClientController implements Initializable {
         sendEmailController.loadSelectedClient(getSelectedClient());
         Stage stage = (Stage) btnSelectClient.getScene().getWindow();
         stage.close();
+        sendEmailController.updateClientCount();
     }
 }

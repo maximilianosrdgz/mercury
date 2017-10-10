@@ -32,12 +32,8 @@ import java.util.ResourceBundle;
 @Controller
 public class UpdateClientController implements Initializable {
 
-    private ListClientController listController;
-    private MenuController menuController;
-    private ProvinceDAO provinceDAO;
-    private ClientDAO clientDAO;
-    private AlertBuilder alertBuilder;
-
+    @FXML
+    private CheckBox chkReceiver;
     @FXML
     private TextField txtId;
     @FXML
@@ -59,10 +55,17 @@ public class UpdateClientController implements Initializable {
     @FXML
     private CheckBox chkConsultant;
 
+    private ListClientController listController;
+    private MenuController menuController;
+    private ProvinceDAO provinceDAO;
+    private ClientDAO clientDAO;
+    private AlertBuilder alertBuilder;
+
     @Autowired
     public UpdateClientController(ListClientController listController,
                                   MenuController menuController, ProvinceDAO provinceDAO,
                                   ClientDAO clientDAO, AlertBuilder alertBuilder) {
+
         this.listController = listController;
         this.menuController = menuController;
         this.provinceDAO = provinceDAO;
@@ -87,6 +90,7 @@ public class UpdateClientController implements Initializable {
         chkBlacklisted.setSelected(client.isBlackListed());
         chkBuyer.setSelected(client.getBooleanBuyer());
         chkConsultant.setSelected(client.getBooleanConsultant());
+        chkReceiver.setSelected(client.getBooleanReceiver());
     }
 
     private void initProvinceCombo() {
@@ -142,6 +146,7 @@ public class UpdateClientController implements Initializable {
                 .buyer(chkBuyer.isSelected())
                 .consultant(chkConsultant.isSelected())
                 .blackListed(chkBlacklisted.isSelected())
+                .receiver(chkReceiver.isSelected())
                 .build();
     }
 

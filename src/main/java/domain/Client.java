@@ -4,22 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -44,7 +38,7 @@ public class Client {
     @Column
     private String email;
 
-    @ManyToOne//(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Province province;
 
     @Column
@@ -62,6 +56,9 @@ public class Client {
     @Column
     private boolean blackListed;
 
+    @Column
+    private boolean receiver;
+
     public int getAge() {
         return Calendar.getInstance().get(Calendar.YEAR) - birthYear;
     }
@@ -76,6 +73,10 @@ public class Client {
 
     public boolean getBooleanBlacklisted() {
         return blackListed;
+    }
+
+    public boolean getBooleanReceiver() {
+        return receiver;
     }
 
     public String isBuyer() {
@@ -98,6 +99,15 @@ public class Client {
 
     public String isBlacklist() {
         if(blackListed) {
+            return "Sí";
+        }
+        else {
+            return "No";
+        }
+    }
+
+    public String isReceiver() {
+        if(receiver) {
             return "Sí";
         }
         else {

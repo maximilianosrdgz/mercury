@@ -44,7 +44,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnSearchFile" mnemonicParsing="false" text="Buscar Archivo" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                  <Button fx:id="btnSearchFile" mnemonicParsing="false" onAction="#openFileChooser" text="Buscar Archivo" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin></Button>
@@ -110,6 +110,16 @@
                         <Insets bottom="5.0" left="5.0" right="40.0" top="5.0" />
                      </GridPane.margin>
                   </Label>
+                  <Label text="Asunto" GridPane.halignment="RIGHT">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField fx:id="txtSubject" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </TextField>
                </children>
             </GridPane>
             <GridPane>
@@ -130,14 +140,19 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                     </TableView>
-                  <Button fx:id="btnRemoveClient" mnemonicParsing="false" onAction="#removeClient" text="Quitar Cliente" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                  <Button fx:id="btnRemoveClient" mnemonicParsing="false" onAction="#removeClient" text="Quitar Cliente" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                      <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="50.0" top="5.0" />
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin></Button>
                   <Button fx:id="btnAddClient" mnemonicParsing="false" onAction="#openPickClientForm" text="Agregar Cliente" GridPane.halignment="LEFT" GridPane.rowIndex="1">
                      <GridPane.margin>
-                        <Insets bottom="5.0" left="50.0" right="5.0" top="5.0" />
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin></Button>
+                  <Label fx:id="lblClientCount" text="Clientes: 0" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Label>
                </children>
             </GridPane>
          </children>
@@ -148,15 +163,28 @@
          </VBox.margin>
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
          </columnConstraints>
          <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-              <Button fx:id="btnSendEmail" mnemonicParsing="false" onAction="#sendEmail" text="Enviar E-mail" GridPane.halignment="CENTER">
+              <Button fx:id="btnSendEmail" mnemonicParsing="false" onAction="#sendEmail" text="Enviar E-mail" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                   <padding>
                       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                   </padding>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="btnSelfSendTest" mnemonicParsing="false" onAction="#selfSendTest" text="Prueba de Envío" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="btnConfigAccount" mnemonicParsing="false" onAction="#openFormConfigAccount" text="Configurar Cuenta" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>

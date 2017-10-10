@@ -35,4 +35,13 @@ public class AlertBuilder {
     public Alert build() {
         return alert;
     }
+
+    public Alert buildAlert(Alert.AlertType type, String title, String header, String content) {
+        return builder()
+                .type(type)
+                .title(title)
+                .headerText(header)
+                .contentText(content)
+                .build();
+    }
 }

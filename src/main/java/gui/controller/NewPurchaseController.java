@@ -272,6 +272,9 @@ public class NewPurchaseController implements Initializable {
                         .canceled(false)
                         .build();
                 client.getPurchases().add(purchase);
+                if(!client.getBooleanBuyer()) {
+                    client.setBuyer(true);
+                }
                 clientDAO.update(client);
                 updateProductsStock(purchase.getPurchaseDetails());
                 alertBuilder.builder()
@@ -283,7 +286,6 @@ public class NewPurchaseController implements Initializable {
                         .showAndWait();
                 reloadForm();
             }
-
         }
         else {
             alertBuilder.builder()

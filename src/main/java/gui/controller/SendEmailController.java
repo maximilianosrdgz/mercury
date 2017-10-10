@@ -1,14 +1,17 @@
 package gui.controller;
 
 import dao.ClientDAO;
+import dao.StoreDAO;
 import domain.Category;
 import domain.Client;
 import domain.Product;
 import domain.Province;
 import domain.Purchase;
+import domain.Store;
 import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;
+import gui.util.TextFieldUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,12 +29,26 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,6 +56,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,6 +65,14 @@ import java.util.stream.Collectors;
 @Controller
 public class SendEmailController implements Initializable {
 
+    @FXML
+    private Button btnSelfSendTest;
+    @FXML
+    private Button btnConfigAccount;
+    @FXML
+    private TextField txtSubject;
+    @FXML
+    private Label lblClientCount;
     @FXML
     private Label lblProductCount;
     @FXML
@@ -86,22 +112,31 @@ public class SendEmailController implements Initializable {
     @FXML
     private Button btnSendEmail;
 
+    private final FileChooser fileChooser = new FileChooser();
+
     private ComboBoxLoader comboBoxLoader;
     private ClientDAO clientDAO;
     private MenuController menuController;
     private AlertBuilder alertBuilder;
+    private StoreDAO storeDAO;
     private List<Product> selectedProducts;
     private List<Category> selectedCategories;
     private List<Province> selectedProvinces;
 
+    private Store store;
+    private File htmlFile;
+    private Session session;
+
     @Autowired
     public SendEmailController(ComboBoxLoader comboBoxLoader, ClientDAO clientDAO,
-                               MenuController menuController, AlertBuilder alertBuilder) {
+                               MenuController menuController, AlertBuilder alertBuilder,
+                               StoreDAO storeDAO) {
 
         this.comboBoxLoader = comboBoxLoader;
         this.clientDAO = clientDAO;
         this.menuController = menuController;
         this.alertBuilder = alertBuilder;
+        this.storeDAO = storeDAO;
     }
 
     @Override
@@ -112,13 +147,20 @@ public class SendEmailController implements Initializable {
         selectedProducts = new ArrayList<>();
         selectedCategories = new ArrayList<>();
         selectedProvinces = new ArrayList<>();
+        updateClientCount();
+        TextFieldUtils.editable(false, txtFilePath);
+        configureFileChooser();
+        store = storeDAO.find(1);
+        openSession();
     }
 
     private void initClientsTable(List<Client> clientList) {
         colName.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
         colEmail.setCellValueFactory(new PropertyValueFactory<Client, String>("email"));
         ObservableList<Client> clients = FXCollections.observableArrayList();
-        clients.addAll(clientList);
+        clients.addAll(clientList.stream()
+                .filter(Client::getBooleanReceiver)
+                .collect(Collectors.toList()));
         tblClients.setItems(clients);
         tblClients.getSelectionModel().selectFirst();
     }
@@ -199,6 +241,7 @@ public class SendEmailController implements Initializable {
         List<Client> results = doFilterClients(isBuyerSelected, isConsultantSelected, buyer, consultant,
                 selectedProducts, selectedCategories, selectedProvinces);
         initClientsTable(results);
+        updateClientCount();
     }
 
     private List<Client> doFilterClients(boolean isBuyerSelected, boolean isConsultantSelected,
@@ -208,23 +251,42 @@ public class SendEmailController implements Initializable {
         ObservableList<Client> clients = tblClients.getItems();
         Set<Client> results = new HashSet<>();
 
-        results.addAll(clients.stream()
-                .filter(client -> client.getBooleanBuyer() == isBuyer || !isBuyerSelected)
-                .collect(Collectors.toList()));
-        results.addAll(clients.stream()
-                .filter(client -> client.getBooleanConsultant() == isConsultant || !isConsultantSelected)
-                .collect(Collectors.toList()));
-        results.addAll(clients.stream()
-                .filter(client -> !Collections.disjoint(getProductsPurchased(client), products) || products.isEmpty())
-                .collect(Collectors.toList()));
-        results.addAll(clients.stream()
-                .filter(client -> !Collections.disjoint(getCategoriesPurchased(client), categories) || categories.isEmpty())
-                .collect(Collectors.toList()));
-        results.addAll(clients.stream()
-                .filter(client -> provinces.contains(client.getProvince()) || provinces.isEmpty())
-                .collect(Collectors.toList()));
+        if(isBuyerSelected) {
+            results.addAll(clients.stream()
+                    .filter(client -> client.getBooleanBuyer() == isBuyer)
+                    .collect(Collectors.toList()));
+        }
 
-        return new ArrayList<>(results);
+        if(isConsultantSelected) {
+            results.addAll(clients.stream()
+                    .filter(client -> client.getBooleanConsultant() == isConsultant)
+                    .collect(Collectors.toList()));
+        }
+
+        if(!products.isEmpty()) {
+            results.addAll(clients.stream()
+                    .filter(client -> !Collections.disjoint(getProductsPurchased(client), products))
+                    .collect(Collectors.toList()));
+        }
+
+        if(!categories.isEmpty()) {
+            results.addAll(clients.stream()
+                    .filter(client -> !Collections.disjoint(getCategoriesPurchased(client), categories))
+                    .collect(Collectors.toList()));
+        }
+
+        if(!provinces.isEmpty()) {
+            results.addAll(clients.stream()
+                    .filter(client -> provinces.contains(client.getProvince()))
+                    .collect(Collectors.toList()));
+        }
+
+        if(!isBuyerSelected && !isConsultantSelected && products.isEmpty() && categories.isEmpty() && provinces.isEmpty()) {
+            return clients;
+        }
+        else {
+            return new ArrayList<>(results);
+        }
     }
 
     private List<Product> getProductsPurchased(Client client) {
@@ -245,6 +307,7 @@ public class SendEmailController implements Initializable {
 
     public void removeClient(ActionEvent actionEvent) {
         tblClients.getItems().remove(tblClients.getSelectionModel().getSelectedItem());
+        updateClientCount();
     }
 
     public void openPickClientForm(ActionEvent actionEvent) {
@@ -258,6 +321,60 @@ public class SendEmailController implements Initializable {
     }
 
     public void sendEmail(ActionEvent actionEvent) {
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(store.getEmail()));
+
+            tblClients.getItems().forEach(client -> {
+                try {
+                    message.setRecipients(Message.RecipientType.TO,
+                            InternetAddress.parse(client.getEmail()));
+                    message.setSubject(String.format("%s, %s", client.getName(), txtSubject.getText()));
+                    message.setContent(readHTML(htmlFile), "text/html; charset=utf-8");
+                    Transport.send(message);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (AddressException e) {
+            e.printStackTrace();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openSession() {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        try {
+            session = Session.getInstance(props,
+                    new Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(store.getEmail(), store.getPassword());
+                        }
+                    });
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String readHTML(File htmlFile) throws IOException {
+        String line;
+        FileReader fileReader = new FileReader(htmlFile);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        StringBuilder content = new StringBuilder(2048);
+
+        while((line = bufferedReader.readLine()) != null) {
+            content.append(line);
+        }
+        return content.toString();
     }
 
     public void loadSelectedClient(Client client) {
@@ -299,5 +416,63 @@ public class SendEmailController implements Initializable {
 
     public void reloadForm() throws IOException {
         menuController.loadSendEmailPane(null);
+    }
+
+    public void updateClientCount() {
+        lblClientCount.setText("Clientes: " + tblClients.getItems().size());
+    }
+
+    public void openFileChooser(ActionEvent actionEvent) {
+        htmlFile = fileChooser.showOpenDialog(sendEmailForm.getScene().getWindow());
+        txtFilePath.setText(htmlFile.getAbsolutePath());
+    }
+
+    private void configureFileChooser() {
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("HTML", "*.html")
+        );
+        fileChooser.setTitle("Enviar e-mail");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir") + "\\src\\main\\resources\\utils"));
+    }
+
+    public void selfSendTest(ActionEvent actionEvent) {
+        if(TextFieldUtils.fieldsFilled(txtFilePath)) {
+            if(!TextFieldUtils.fieldsFilled(txtSubject)) {
+                Alert noSubjectAlert = alertBuilder.buildAlert(Alert.AlertType.CONFIRMATION, "Enviar e-mail",
+                        "E-mail sin asunto.", "¿Desea enviar e-mail sin asunto?");
+                Optional<ButtonType> resultNoSubject = noSubjectAlert.showAndWait();
+                if(resultNoSubject.get() == ButtonType.OK) {
+                    Alert alert = alertBuilder.buildAlert(Alert.AlertType.CONFIRMATION, "Enviar e-mail",
+                            "Prueba de envío", "¿Proceder con envío de prueba?");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if(result.get() == ButtonType.OK) {
+                        try {
+                            Message message = new MimeMessage(session);
+                            message.setFrom(new InternetAddress(store.getEmail()));
+
+                            message.setRecipients(Message.RecipientType.TO,
+                                    InternetAddress.parse(store.getEmail()));
+                            message.setSubject(String.format("%s, %s", store.getName(), txtSubject.getText()));
+                            message.setContent(readHTML(htmlFile), "text/html; charset=utf-8");
+                            Transport.send(message);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (AddressException e) {
+                            e.printStackTrace();
+                        } catch (MessagingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            alertBuilder.buildAlert(Alert.AlertType.INFORMATION, "Enviar e-mail",
+                    "Archivo no seleccionado", "Por favor, seleccione el archivo a enviar.")
+                    .showAndWait();
+        }
+    }
+
+    public void openFormConfigAccount(ActionEvent actionEvent) {
     }
 }
