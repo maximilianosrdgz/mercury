@@ -8,6 +8,7 @@ import domain.Product;
 import domain.Province;
 import domain.Purchase;
 import domain.Store;
+import factory.emailprops.EmailPropertiesFactory;
 import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;
@@ -36,6 +37,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.mail.AuthenticationFailedException;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -47,7 +49,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
@@ -119,6 +120,7 @@ public class SendEmailController implements Initializable {
     private MenuController menuController;
     private AlertBuilder alertBuilder;
     private StoreDAO storeDAO;
+    private EmailPropertiesFactory propertiesFactory;
     private List<Product> selectedProducts;
     private List<Category> selectedCategories;
     private List<Province> selectedProvinces;
@@ -130,13 +132,14 @@ public class SendEmailController implements Initializable {
     @Autowired
     public SendEmailController(ComboBoxLoader comboBoxLoader, ClientDAO clientDAO,
                                MenuController menuController, AlertBuilder alertBuilder,
-                               StoreDAO storeDAO) {
+                               StoreDAO storeDAO, EmailPropertiesFactory propertiesFactory) {
 
         this.comboBoxLoader = comboBoxLoader;
         this.clientDAO = clientDAO;
         this.menuController = menuController;
         this.alertBuilder = alertBuilder;
         this.storeDAO = storeDAO;
+        this.propertiesFactory = propertiesFactory;
     }
 
     @Override
@@ -189,6 +192,16 @@ public class SendEmailController implements Initializable {
         Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/clients/pick-provinces.fxml"), 600, 500);
         Stage stage = new Stage();
         stage.setTitle("Seleccionar Provincias");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(sendEmailForm.getScene().getWindow());
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void openFormConfigAccount(ActionEvent actionEvent) {
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/email/config-store.fxml"), 500, 200);
+        Stage stage = new Stage();
+        stage.setTitle("Configurar Negocio");
         stage.initModality(Modality.WINDOW_MODAL);
         stage.initOwner(sendEmailForm.getScene().getWindow());
         stage.setScene(scene);
@@ -320,37 +333,104 @@ public class SendEmailController implements Initializable {
         stage.show();
     }
 
-    public void sendEmail(ActionEvent actionEvent) {
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(store.getEmail()));
-
-            tblClients.getItems().forEach(client -> {
+    public void selfSendTest(ActionEvent actionEvent) {
+        if(TextFieldUtils.fieldsFilled(txtFilePath)) {
+            Alert alert;
+            if (!TextFieldUtils.fieldsFilled(txtSubject)) {
+                alert = alertBuilder.buildAlert(Alert.AlertType.CONFIRMATION, "Enviar e-mail",
+                        "E-mail sin asunto.", "¿Desea enviar e-mail sin asunto?");
+            } else {
+                alert = alertBuilder.buildAlert(Alert.AlertType.CONFIRMATION, "Enviar e-mail",
+                        "Prueba de envío", "¿Proceder con envío de prueba?");
+            }
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
                 try {
+                    String content = readHTML(htmlFile) + "</br></br>Clientes: </br>" +
+                            getClientNames() + "</br></br>Productos: </br>" +
+                            getProductListString() + "</br></br>Categorías: </br>" +
+                            getCategoryListString()  + "</br></br>Provincias: </br>" +
+                            getProvinceListString();
+                    Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(store.getEmail()));
                     message.setRecipients(Message.RecipientType.TO,
-                            InternetAddress.parse(client.getEmail()));
-                    message.setSubject(String.format("%s, %s", client.getName(), txtSubject.getText()));
-                    message.setContent(readHTML(htmlFile), "text/html; charset=utf-8");
+                            InternetAddress.parse(store.getEmail()));
+                    message.setSubject(String.format("%s, %s", store.getName(), txtSubject.getText()));
+                    message.setContent(content, "text/html; charset=utf-8");
                     Transport.send(message);
+                    alertBuilder.buildAlert(Alert.AlertType.INFORMATION, "Enviar e-mail",
+                            "Prueba de envío", "Mail de prueba enviado exitosamente a " + store.getEmail())
+                            .showAndWait();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                } catch (AddressException ae) {
+                    ae.printStackTrace();
+                } catch (AuthenticationFailedException afe) {
+                    alertBuilder.buildAlert(Alert.AlertType.ERROR, "Enviar e-mail",
+                            "Error en el envío",
+                            "Fallo de autenticación. Corrobore usuario y contraseña de la cuenta " + store.getEmail())
+                            .showAndWait();
+                } catch (MessagingException me) {
+                    me.printStackTrace();
+                }
+            }
+        }
+        else {
+            alertBuilder.buildAlert(Alert.AlertType.INFORMATION, "Enviar e-mail",
+                    "Archivo no seleccionado", "Por favor, seleccione el archivo a enviar.")
+                    .showAndWait();
+        }
+    }
+
+    public void sendEmail(ActionEvent actionEvent) {
+        if(TextFieldUtils.fieldsFilled(txtFilePath)) {
+            Alert alert;
+            if(!TextFieldUtils.fieldsFilled(txtSubject)) {
+                alert = alertBuilder.buildAlert(Alert.AlertType.CONFIRMATION, "Enviar e-mail",
+                        "E-mail sin asunto.", "¿Desea enviar e-mail sin asunto?");
+            }
+            else {
+                alert = alertBuilder.buildAlert(Alert.AlertType.CONFIRMATION, "Enviar e-mail",
+                        "Enviando e-mail a clientes seleccionados", "¿Proceder con el envío?");
+            }
+            Optional<ButtonType> result = alert.showAndWait();
+            if(result.get() == ButtonType.OK) {
+                try {
+                    Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(store.getEmail()));
+
+                    tblClients.getItems().forEach(client -> {
+                        try {
+                            message.setRecipients(Message.RecipientType.TO,
+                                    InternetAddress.parse(client.getEmail()));
+                            message.setSubject(String.format("%s, %s", client.getName(), txtSubject.getText()));
+                            message.setContent(readHTML(htmlFile), "text/html; charset=utf-8");
+                            Transport.send(message);
+                        } catch (MessagingException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } catch (AddressException e) {
+                    e.printStackTrace();
                 } catch (MessagingException e) {
                     e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
-            });
-        } catch (AddressException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
-            e.printStackTrace();
+                alertBuilder.buildAlert(Alert.AlertType.INFORMATION, "Enviar e-mail",
+                        "Envío finalizado", "Proceso finalizado con éxito!")
+                        .showAndWait();
+            }
+        }
+        else {
+            alertBuilder.buildAlert(Alert.AlertType.INFORMATION, "Enviar e-mail",
+                    "Archivo no seleccionado", "Por favor, seleccione el archivo a enviar.")
+                    .showAndWait();
         }
     }
 
     public void openSession() {
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
+        Properties props = propertiesFactory.getProperties(getStoreEmailDomain()).createProperties();
 
         try {
             session = Session.getInstance(props,
@@ -363,6 +443,10 @@ public class SendEmailController implements Initializable {
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String getStoreEmailDomain() {
+        return store.getEmail().substring(store.getEmail().indexOf("@") + 1);
     }
 
     private String readHTML(File htmlFile) throws IOException {
@@ -435,44 +519,27 @@ public class SendEmailController implements Initializable {
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir") + "\\src\\main\\resources\\utils"));
     }
 
-    public void selfSendTest(ActionEvent actionEvent) {
-        if(TextFieldUtils.fieldsFilled(txtFilePath)) {
-            if(!TextFieldUtils.fieldsFilled(txtSubject)) {
-                Alert noSubjectAlert = alertBuilder.buildAlert(Alert.AlertType.CONFIRMATION, "Enviar e-mail",
-                        "E-mail sin asunto.", "¿Desea enviar e-mail sin asunto?");
-                Optional<ButtonType> resultNoSubject = noSubjectAlert.showAndWait();
-                if(resultNoSubject.get() == ButtonType.OK) {
-                    Alert alert = alertBuilder.buildAlert(Alert.AlertType.CONFIRMATION, "Enviar e-mail",
-                            "Prueba de envío", "¿Proceder con envío de prueba?");
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if(result.get() == ButtonType.OK) {
-                        try {
-                            Message message = new MimeMessage(session);
-                            message.setFrom(new InternetAddress(store.getEmail()));
-
-                            message.setRecipients(Message.RecipientType.TO,
-                                    InternetAddress.parse(store.getEmail()));
-                            message.setSubject(String.format("%s, %s", store.getName(), txtSubject.getText()));
-                            message.setContent(readHTML(htmlFile), "text/html; charset=utf-8");
-                            Transport.send(message);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (AddressException e) {
-                            e.printStackTrace();
-                        } catch (MessagingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }
-        else {
-            alertBuilder.buildAlert(Alert.AlertType.INFORMATION, "Enviar e-mail",
-                    "Archivo no seleccionado", "Por favor, seleccione el archivo a enviar.")
-                    .showAndWait();
-        }
+    private String getClientNames() {
+        return tblClients.getItems().stream()
+                .map(Client::getName)
+                .collect(Collectors.joining ("</br>"));
     }
 
-    public void openFormConfigAccount(ActionEvent actionEvent) {
+    private String getProductListString() {
+        return selectedProducts.stream()
+                .map(Product::getDescription)
+                .collect(Collectors.joining("</br>"));
+    }
+
+    private String getCategoryListString() {
+        return selectedCategories.stream()
+                .map(Category::getDescription)
+                .collect(Collectors.joining("</br>"));
+    }
+
+    private String getProvinceListString() {
+        return selectedProvinces.stream()
+                .map(Province::getName)
+                .collect(Collectors.joining("</br>"));
     }
 }

@@ -9,8 +9,9 @@
     <context:annotation-config />
     <!--context:property-placeholder location="classpath:/application.properties" /-->
     <context:component-scan base-package="persistence,
-    dao,
-    gui.controller,
-    gui.util" />
+        dao,
+        gui.controller,
+        gui.util,
+        factory.emailprops" />
 
 </beans>
