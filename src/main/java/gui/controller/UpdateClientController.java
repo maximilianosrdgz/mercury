@@ -76,7 +76,7 @@ public class UpdateClientController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initProvinceCombo();
-        ComboBoxLoader.initBirthYearsCombo(cmbBirthYears);
+        ComboBoxLoader.initYearsCombo(cmbBirthYears);
 
         Client client = listController.getSelectedClient();
 

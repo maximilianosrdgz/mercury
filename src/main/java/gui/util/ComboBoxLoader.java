@@ -1,11 +1,12 @@
 package gui.util;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import dao.CategoryDAO;
+import dao.ClientDAO;
 import dao.MaterialDAO;
 import dao.ProductDAO;
 import dao.ProvinceDAO;
 import domain.Category;
+import domain.Client;
 import domain.Material;
 import domain.Product;
 import domain.Province;
@@ -35,7 +36,7 @@ public class ComboBoxLoader {
         this.provinceDAO = provinceDAO;
     }
 
-    public static void initBirthYearsCombo(ComboBox<Integer> comboBox) {
+    public static void initYearsCombo(ComboBox<Integer> comboBox) {
         ObservableList<Integer> years = FXCollections.observableArrayList();
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
         for (int i = thisYear; i >= 1940; i--) {
@@ -77,6 +78,14 @@ public class ComboBoxLoader {
         ObservableList<String> items = FXCollections.observableArrayList();
         items.addAll("Sí/No", "Sí", "No");
         comboBox.setItems(items);
+        comboBox.getSelectionModel().select(selectedIndex);
+    }
+
+    public static void initMonthCombo(ComboBox<String> comboBox, int selectedIndex) {
+        ObservableList<String> months = FXCollections.observableArrayList();
+        months.addAll("Enero", "Febrero", "Marzo", "Abril", "Mayo",
+                "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+        comboBox.setItems(months);
         comboBox.getSelectionModel().select(selectedIndex);
     }
 }

@@ -22,21 +22,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.ResourceBundle;
 
 /**
@@ -81,7 +69,7 @@ public class NewClientController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initProvinceCombo();
-        ComboBoxLoader.initBirthYearsCombo(cmbBirthYears);
+        ComboBoxLoader.initYearsCombo(cmbBirthYears);
     }
 
     public void saveClient(ActionEvent actionEvent) {

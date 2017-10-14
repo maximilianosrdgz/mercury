@@ -79,6 +79,11 @@ public class Client {
         return receiver;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public String isBuyer() {
         if(buyer) {
             return "Sí";
