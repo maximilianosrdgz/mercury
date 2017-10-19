@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="purchaseDetailsForm" alignment="CENTER" prefHeight="410.0" prefWidth="930.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.ViewPurchaseDetailsController">
+<VBox fx:id="purchaseDetailsForm" alignment="CENTER" prefHeight="410.0" prefWidth="930.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.purchase.ViewPurchaseDetailsController">
     <children>
         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
             <children>

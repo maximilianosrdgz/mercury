@@ -1,7 +1,8 @@
-package gui.controller;
+package gui.controller.client;
 
 import dao.ProvinceDAO;
 import domain.Province;
+import gui.controller.email.SendEmailController;
 import gui.util.AlertBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

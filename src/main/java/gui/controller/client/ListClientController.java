@@ -1,11 +1,13 @@
-package gui.controller;
+package gui.controller.client;
 
 import dao.ClientDAO;
-import dao.ProvinceDAO;
 import domain.Client;
 import domain.Province;
+import gui.controller.report.MainReportController;
+import gui.controller.MenuController;
+import gui.controller.purchase.NewPurchaseController;
+import gui.controller.email.SendEmailController;
 import gui.form.SpringFxmlLoader;
-import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;
 import gui.util.TextFieldUtils;
 import javafx.collections.FXCollections;
@@ -98,17 +100,19 @@ public class ListClientController implements Initializable {
     private NewPurchaseController newPurchaseController;
     private ComboBoxLoader comboBoxLoader;
     private SendEmailController sendEmailController;
+    private MainReportController mainReportController;
 
     @Autowired
     public ListClientController(MenuController menuController, ClientDAO clientDAO,
                                 NewPurchaseController newPurchaseController, ComboBoxLoader comboBoxLoader,
-                                SendEmailController sendEmailController) {
+                                SendEmailController sendEmailController, MainReportController mainReportController) {
 
         this.menuController = menuController;
         this.clientDAO = clientDAO;
         this.newPurchaseController = newPurchaseController;
         this.comboBoxLoader = comboBoxLoader;
         this.sendEmailController = sendEmailController;
+        this.mainReportController = mainReportController;
     }
 
     @Override
@@ -278,5 +282,11 @@ public class ListClientController implements Initializable {
         Stage stage = (Stage) btnSelectClient.getScene().getWindow();
         stage.close();
         sendEmailController.updateClientCount();
+    }
+
+    public void selectClientReport(ActionEvent actionEvent) {
+        mainReportController.loadSelectedClient(getSelectedClient());
+        Stage stage = (Stage) btnSelectClient.getScene().getWindow();
+        stage.close();
     }
 }

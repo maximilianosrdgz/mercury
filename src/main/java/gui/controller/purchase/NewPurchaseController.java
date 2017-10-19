@@ -1,4 +1,4 @@
-package gui.controller;
+package gui.controller.purchase;
 
 import dao.ClientDAO;
 import dao.ProductStockDAO;
@@ -7,6 +7,7 @@ import domain.Product;
 import domain.ProductStock;
 import domain.Purchase;
 import domain.PurchaseDetail;
+import gui.controller.MenuController;
 import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;

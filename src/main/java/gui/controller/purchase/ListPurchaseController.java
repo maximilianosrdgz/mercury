@@ -1,9 +1,10 @@
-package gui.controller;
+package gui.controller.purchase;
 
 import dao.ClientDAO;
 import dao.PurchaseDAO;
 import domain.Client;
 import domain.Purchase;
+import gui.controller.MenuController;
 import gui.form.SpringFxmlLoader;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ObservableValue;

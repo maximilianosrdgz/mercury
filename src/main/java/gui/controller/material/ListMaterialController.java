@@ -1,10 +1,11 @@
-package gui.controller;
+package gui.controller.material;
 
 import dao.MaterialDAO;
 import dao.MaterialStockDAO;
 import domain.Category;
 import domain.Material;
 import domain.MaterialStock;
+import gui.controller.MenuController;
 import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
 import gui.util.ButtonUtils;

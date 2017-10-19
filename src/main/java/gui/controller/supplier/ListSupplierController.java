@@ -1,9 +1,10 @@
-package gui.controller;
+package gui.controller.supplier;
 
 import dao.SupplierDAO;
 import domain.Category;
 import domain.Province;
 import domain.Supplier;
+import gui.controller.MenuController;
 import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
 import gui.util.ButtonUtils;

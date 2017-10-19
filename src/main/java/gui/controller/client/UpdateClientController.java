@@ -1,9 +1,10 @@
-package gui.controller;
+package gui.controller.client;
 
 import dao.ClientDAO;
 import dao.ProvinceDAO;
 import domain.Client;
 import domain.Province;
+import gui.controller.MenuController;
 import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;
 import gui.util.TextFieldUtils;

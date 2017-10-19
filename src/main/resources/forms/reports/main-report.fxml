@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="604.0" prefWidth="974.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MainReportController">
+<VBox fx:id="mainReportForm" alignment="CENTER" prefHeight="604.0" prefWidth="974.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.report.MainReportController">
     <children>
         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
             <children>
@@ -51,11 +51,6 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </ComboBox>
-            <ComboBox fx:id="cmbClientClients" prefWidth="150.0" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </GridPane.margin>
-            </ComboBox>
             <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -81,22 +76,22 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Label" GridPane.rowIndex="3">
+            <Label text="Cantidad Prod Vendidos" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <Label text="Cantidad Cat Vendidas" GridPane.columnIndex="1" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Label" GridPane.rowIndex="6">
+            <Label text="Porcentaje Prods" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <Label text="Porcentaje Cats" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
@@ -161,11 +156,11 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </ComboBox>
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+            <TableView fx:id="tblPurchasesByClient" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
               <columns>
-                <TableColumn prefWidth="75.0" text="Nro." />
-                <TableColumn prefWidth="255.0" text="Nombre" />
-                  <TableColumn minWidth="0.0" prefWidth="143.0" text="Productos" />
+                <TableColumn fx:id="colClientIdPurchases" prefWidth="75.0" text="Nro." />
+                <TableColumn fx:id="colClientNamePurchases" prefWidth="255.0" text="Nombre" />
+                  <TableColumn fx:id="colClientProductsPurchases" minWidth="0.0" prefWidth="143.0" text="Productos" />
               </columns>
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -216,6 +211,11 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </TableView>
+            <Button fx:id="btnSearchClient" mnemonicParsing="false" onAction="#openPickClientForm" text="Buscar Cliente" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Button>
          </children>
       </GridPane>
         <GridPane>

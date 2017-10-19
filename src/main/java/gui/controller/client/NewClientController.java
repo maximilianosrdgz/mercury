@@ -1,4 +1,4 @@
-package gui.controller;
+package gui.controller.client;
 
 import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;

@@ -1,4 +1,4 @@
-package gui.controller;
+package gui.controller.product;
 
 import dao.CategoryDAO;
 import dao.MaterialDAO;
@@ -10,6 +10,7 @@ import domain.Material;
 import domain.MaterialQuantity;
 import domain.Product;
 import domain.ProductStock;
+import gui.controller.MenuController;
 import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
 import gui.util.ButtonUtils;

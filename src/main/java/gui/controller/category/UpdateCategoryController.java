@@ -1,8 +1,9 @@
-package gui.controller;
+package gui.controller.category;
 
 import dao.CategoryDAO;
 import domain.Category;
 import domain.Client;
+import gui.controller.MenuController;
 import gui.util.AlertBuilder;
 import gui.util.ButtonUtils;
 import gui.util.TextFieldUtils;

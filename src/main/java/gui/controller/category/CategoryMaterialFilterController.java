@@ -1,9 +1,10 @@
-package gui.controller;
+package gui.controller.category;
 
 import dao.CategoryDAO;
 import dao.MaterialDAO;
 import domain.Category;
 import domain.Material;
+import gui.controller.product.ListProductController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

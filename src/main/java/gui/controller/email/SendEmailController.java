@@ -1,4 +1,4 @@
-package gui.controller;
+package gui.controller.email;
 
 import dao.ClientDAO;
 import dao.StoreDAO;
@@ -9,6 +9,7 @@ import domain.Province;
 import domain.Purchase;
 import domain.Store;
 import factory.emailprops.EmailPropertiesFactory;
+import gui.controller.MenuController;
 import gui.form.SpringFxmlLoader;
 import gui.util.AlertBuilder;
 import gui.util.ComboBoxLoader;
@@ -198,6 +199,16 @@ public class SendEmailController implements Initializable {
         stage.show();
     }
 
+    public void openPickClientForm(ActionEvent actionEvent) {
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/clients/pick-client-email.fxml"), 1130, 600);
+        Stage stage = new Stage();
+        stage.setTitle("Seleccionar Cliente");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(sendEmailForm.getScene().getWindow());
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public void openFormConfigAccount(ActionEvent actionEvent) {
         Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/email/config-store.fxml"), 500, 200);
         Stage stage = new Stage();
@@ -321,16 +332,6 @@ public class SendEmailController implements Initializable {
     public void removeClient(ActionEvent actionEvent) {
         tblClients.getItems().remove(tblClients.getSelectionModel().getSelectedItem());
         updateClientCount();
-    }
-
-    public void openPickClientForm(ActionEvent actionEvent) {
-        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/clients/pick-client-email.fxml"), 1130, 600);
-        Stage stage = new Stage();
-        stage.setTitle("Seleccionar Cliente");
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(sendEmailForm.getScene().getWindow());
-        stage.setScene(scene);
-        stage.show();
     }
 
     public void selfSendTest(ActionEvent actionEvent) {

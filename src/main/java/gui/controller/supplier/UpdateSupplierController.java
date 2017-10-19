@@ -1,4 +1,4 @@
-package gui.controller;
+package gui.controller.supplier;
 
 import dao.CategoryDAO;
 import dao.SupplierDAO;

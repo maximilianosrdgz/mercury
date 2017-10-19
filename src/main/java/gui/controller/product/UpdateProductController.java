@@ -1,4 +1,4 @@
-package gui.controller;
+package gui.controller.product;
 
 import dao.CategoryDAO;
 import dao.MaterialQuantityDAO;

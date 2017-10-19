@@ -1,11 +1,9 @@
-package gui.controller;
+package gui.controller.purchase;
 
 import dao.ClientDAO;
-import dao.MaterialStockDAO;
 import dao.ProductStockDAO;
 import dao.PurchaseDAO;
 import domain.Client;
-import domain.Product;
 import domain.ProductStock;
 import domain.Purchase;
 import domain.PurchaseDetail;

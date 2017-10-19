@@ -1,4 +1,4 @@
-package gui.controller;
+package gui.controller.material;
 
 import dao.CategoryDAO;
 import dao.MaterialDAO;
@@ -7,6 +7,7 @@ import domain.Category;
 import domain.Client;
 import domain.Material;
 import domain.MaterialStock;
+import gui.controller.MenuController;
 import gui.util.AlertBuilder;
 import gui.util.TextFieldUtils;
 import javafx.collections.FXCollections;

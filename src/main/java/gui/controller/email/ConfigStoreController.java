@@ -1,4 +1,4 @@
-package gui.controller;
+package gui.controller.email;
 
 import dao.StoreDAO;
 import domain.Store;
