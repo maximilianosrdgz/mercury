@@ -72,13 +72,13 @@ public class MainReportController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         ComboBoxLoader.initYearsCombo(cmbClientYears);
         ComboBoxLoader.initMonthCombo(cmbClientMonths, 0);
-        initPurchasesByClientTable(clientDAO.findAll());
+        //initPurchasesByClientTable(clientDAO.findAll());
     }
 
     public void loadSelectedClient(Client client) {
         this.client = client;
     }
-
+/*
     private void initPurchasesByClientTable(List<Client> clientList) {
         colClientIdPurchases.setCellValueFactory(new PropertyValueFactory<Client, String>("id"));
         colClientNamePurchases.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
@@ -103,7 +103,7 @@ public class MainReportController implements Initializable {
                         .sum())
                 .sum();
         return quantity.intValue();
-    }
+    }*/
 
     public void openPickClientForm(ActionEvent actionEvent) {
         Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/clients/pick-client-report.fxml"), 1130, 600);

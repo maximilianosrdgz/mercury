@@ -3,6 +3,8 @@ package dao;
 import domain.Purchase;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Created by MaxPower on 12/09/2017.
  */
