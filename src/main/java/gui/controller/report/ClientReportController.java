@@ -27,8 +27,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Controller
@@ -74,6 +77,7 @@ public class ClientReportController implements Initializable {
     private TableColumn<Client, Integer> colClientProducts;
 
     private List<Client> allClients;
+    private List<Province> allProvinces;
 
     private ProvinceDAO provinceDAO;
     private ClientDAO clientDAO;
@@ -86,24 +90,34 @@ public class ClientReportController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initDatePickers();
         allClients = clientDAO.findAll();
-        initProvinceTable(provinceDAO.findAll());
-        initClientsProductsTable(allClients);
+        allProvinces = provinceDAO.findAll();
+        initProvinceTable(allProvinces, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
+        initClientsProductsTable(allClients, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
         initClientsPurchasesTable(allClients);
     }
 
-    private void initProvinceTable(List<Province> provinceList) {
+    private void initDatePickers() {
+        dtpFrom.setValue(LocalDate.now());
+        dtpTo.setValue(LocalDate.now());
+        dtpFrom.setEditable(false);
+        dtpTo.setEditable(false);
+    }
+
+    private void initProvinceTable(List<Province> provinceList, LocalDate dateFrom, LocalDate dateTo) {
+        tblProvinces.getItems().clear();
         colProvinceName.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
         colProvincePurchases.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Province,Integer>, ObservableValue<Integer>>() {
             @Override
             public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Province, Integer> data) {
-                return new SimpleIntegerProperty(calculateProvincePurchases(data.getValue())).asObject();
+                return new SimpleIntegerProperty(calculateProvincePurchases(data.getValue(), dateFrom, dateTo)).asObject();
             }
         });
         colProvinceProducts.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Province,Integer>, ObservableValue<Integer>>() {
             @Override
             public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Province, Integer> data) {
-                return new SimpleIntegerProperty(calculateProvinceProducts(data.getValue())).asObject();
+                return new SimpleIntegerProperty(calculateProvinceProducts(data.getValue(), dateFrom, dateTo)).asObject();
             }
         });
         ObservableList<Province> provinces = FXCollections.observableArrayList();
@@ -114,7 +128,24 @@ public class ClientReportController implements Initializable {
         tblProvinces.getSelectionModel().selectFirst();
     }
 
-    private void initClientsProductsTable(List<Client> clientList) {
+    private void initClientsProductsTable(List<Client> clientList, LocalDate dateFrom, LocalDate dateTo) {
+        colClientIdProducts.setCellValueFactory(new PropertyValueFactory<Client, String>("id"));
+        colClientNameProducts.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
+        colClientProducts.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Client,Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Client, Integer> data) {
+                return new SimpleIntegerProperty(calculateProductQuantity(data.getValue(), dateFrom, dateTo)).asObject();
+            }
+        });
+        ObservableList<Client> clients = FXCollections.observableArrayList();
+        clients.addAll(clientList);
+        colClientProducts.setSortType(TableColumn.SortType.DESCENDING);
+        tblClientsProducts.setItems(clients);
+        tblClientsProducts.getSortOrder().add(colClientProducts);
+        tblClientsProducts.getSelectionModel().selectFirst();
+    }
+
+    private void initClientsPurchasesTable(List<Client> clientList) {
         colClientIdPurchases.setCellValueFactory(new PropertyValueFactory<Client, String>("id"));
         colClientNamePurchases.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
         colClientPurchases.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Client,Integer>, ObservableValue<Integer>>() {
@@ -131,24 +162,9 @@ public class ClientReportController implements Initializable {
         tblClientsPurchases.getSelectionModel().selectFirst();
     }
 
-    private void initClientsPurchasesTable(List<Client> clientList) {
-        colClientIdProducts.setCellValueFactory(new PropertyValueFactory<Client, String>("id"));
-        colClientNameProducts.setCellValueFactory(new PropertyValueFactory<Client, String>("name"));
-        colClientProducts.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Client,Integer>, ObservableValue<Integer>>() {
-            @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Client, Integer> data) {
-                return new SimpleIntegerProperty(calculateProductQuantity(data.getValue())).asObject();
-            }
-        });
-        ObservableList<Client> clients = FXCollections.observableArrayList();
-        clients.addAll(clientList);
-        colClientProducts.setSortType(TableColumn.SortType.DESCENDING);
-        tblClientsProducts.setItems(clients);
-        tblClientsProducts.getSortOrder().add(colClientProducts);
-        tblClientsProducts.getSelectionModel().selectFirst();
-    }
-
-    private int calculateProductQuantity(Client client) {
+    private int calculateProductQuantity(Client client, LocalDate localDateFrom, LocalDate localDateTo) {
+        Date dateFrom = java.sql.Date.valueOf(localDateFrom);
+        Date dateTo = java.sql.Date.valueOf(localDateTo);
         Double quantity = client.getPurchases().stream()
                 .mapToDouble(p -> p.getPurchaseDetails().stream()
                         .mapToDouble(PurchaseDetail::getQuantity)
@@ -157,18 +173,26 @@ public class ClientReportController implements Initializable {
         return quantity.intValue();
     }
 
-    private int calculateProvincePurchases(Province province) {
+    private int calculateProvincePurchases(Province province, LocalDate localDateFrom, LocalDate localDateTo) {
+        Date dateFrom = java.sql.Date.valueOf(localDateFrom);
+        Date dateTo = java.sql.Date.valueOf(localDateTo);
         return allClients.stream()
                 .filter(c -> c.getProvince().equals(province))
-                .mapToInt(c -> c.getPurchases().size())
+                .mapToInt(c -> c.getPurchases().stream()
+                        .filter(p -> p.getDate().compareTo(dateFrom) >= 0 && p.getDate().compareTo(dateTo) <= 0)
+                        .collect(Collectors.toList())
+                        .size())
                 .sum();
     }
 
-    private int calculateProvinceProducts(Province province) {
+    private int calculateProvinceProducts(Province province, LocalDate localDateFrom, LocalDate localDateTo) {
+        Date dateFrom = java.sql.Date.valueOf(localDateFrom);
+        Date dateTo = java.sql.Date.valueOf(localDateTo);
         Double quantity = 0d;
         for(Client c : allClients) {
             if(c.getProvince().equals(province)) {
                 quantity += c.getPurchases().stream()
+                        .filter(p -> p.getDate().compareTo(dateFrom) >= 0 && p.getDate().compareTo(dateTo) <= 0)
                         .mapToDouble(p -> p.getPurchaseDetails().stream()
                                 .mapToDouble(PurchaseDetail::getQuantity)
                                 .sum())
@@ -181,7 +205,8 @@ public class ClientReportController implements Initializable {
     public void openFormPickClient(ActionEvent actionEvent) {
     }
 
-    public void applyfilter(ActionEvent actionEvent) {
+    public void applyFilter(ActionEvent actionEvent) {
+        initProvinceTable(allProvinces, dtpFrom.getValue(), dtpTo.getValue());
     }
 
     public void resetFilter(ActionEvent actionEvent) {

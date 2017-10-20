@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="clientReportForm" alignment="CENTER" prefHeight="522.0" prefWidth="911.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.report.ClientReportController">
+<VBox fx:id="clientReportForm" alignment="CENTER" prefHeight="522.0" prefWidth="1047.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.report.ClientReportController">
     <children>
         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
             <children>
@@ -27,10 +27,10 @@
         </HBox>
         <HBox prefHeight="231.0" prefWidth="728.0">
             <children>
-                <GridPane prefHeight="231.0" prefWidth="446.0">
+                <GridPane prefHeight="231.0" prefWidth="513.0">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="251.0" minWidth="10.0" prefWidth="187.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="338.0" minWidth="10.0" prefWidth="326.0" />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -56,7 +56,7 @@
                             <GridPane.margin>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin></Label>
-                  <Button fx:id="btnApplyFilter" mnemonicParsing="false" onAction="#applyfilter" text="Aplicar" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                  <Button fx:id="btnApplyFilter" mnemonicParsing="false" onAction="#applyFilter" text="Aplicar" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
@@ -78,68 +78,95 @@
                   </DatePicker>
                     </children>
                 </GridPane>
-                <GridPane>
+                <GridPane prefHeight="263.0" prefWidth="513.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="215.0" minHeight="10.0" prefHeight="199.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <TableView fx:id="tblProvinces" prefHeight="400.0" prefWidth="440.0">
+                        <TableView fx:id="tblProvinces" prefHeight="221.0" prefWidth="440.0" GridPane.rowIndex="1">
                             <columns>
                                 <TableColumn fx:id="colProvinceName" minWidth="60.99999237060547" prefWidth="248.0" text="Provincia" />
-                                <TableColumn fx:id="colProvinceProducts" minWidth="84.0" prefWidth="97.0" text="Productos" />
-                        <TableColumn fx:id="colProvincePurchases" minWidth="87.99998474121094" prefWidth="94.0" text="Ventas" />
+                                <TableColumn fx:id="colProvinceProducts" minWidth="84.0" prefWidth="131.0" text="Productos" />
+                        <TableColumn fx:id="colProvincePurchases" minWidth="87.99998474121094" prefWidth="121.0" text="Ventas" />
                             </columns>
                             <GridPane.margin>
                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                             </GridPane.margin>
                         </TableView>
+                  <Label text="Provincias - Cantidad de Productos y Ventas">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                     </children>
                 </GridPane>
             </children>
         </HBox>
-      <HBox layoutX="10.0" layoutY="60.0" prefHeight="231.0" prefWidth="728.0">
+      <HBox layoutX="10.0" layoutY="60.0" prefHeight="274.0" prefWidth="911.0">
          <children>
-            <GridPane>
+            <GridPane prefHeight="263.0" prefWidth="513.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                </columnConstraints>
                <rowConstraints>
+                  <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <TableView fx:id="tblClientsPurchases" prefHeight="221.0" prefWidth="440.0">
+                  <TableView fx:id="tblClientsPurchases" prefHeight="221.0" prefWidth="440.0" GridPane.rowIndex="1">
                      <columns>
-                        <TableColumn fx:id="colClientIdPurchases" minWidth="0.0" prefWidth="66.0" text="Cod." />
-                        <TableColumn fx:id="colClientNamePurchases" minWidth="0.0" prefWidth="156.0" text="Cliente" />
-                        <TableColumn fx:id="colClientPurchases" minWidth="0.0" prefWidth="111.0" text="Ventas" />
+                        <TableColumn fx:id="colClientIdPurchases" minWidth="0.0" prefWidth="81.0" text="Cod." />
+                        <TableColumn fx:id="colClientNamePurchases" minWidth="0.0" prefWidth="305.0" text="Cliente" />
+                        <TableColumn fx:id="colClientPurchases" minWidth="0.0" prefWidth="116.0" text="Compras" />
                      </columns>
                      <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </TableView>
+                  <Label text="Clientes - Cantidad de Compras Efectuadas">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Label>
                </children>
             </GridPane>
-            <GridPane layoutX="10.0" layoutY="10.0">
+            <GridPane layoutX="10.0" layoutY="10.0" prefHeight="263.0" prefWidth="513.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                </columnConstraints>
                <rowConstraints>
+                  <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <TableView fx:id="tblClientsProducts" prefHeight="400.0" prefWidth="440.0">
+                  <TableView fx:id="tblClientsProducts" prefHeight="221.0" prefWidth="440.0" GridPane.rowIndex="1">
                      <columns>
-                        <TableColumn fx:id="colClientIdProducts" minWidth="60.99999237060547" prefWidth="66.0" text="Cod." />
-                        <TableColumn fx:id="colClientNameProducts" minWidth="60.99999237060547" prefWidth="213.0" text="Cliente" />
-                        <TableColumn fx:id="colClientProducts" minWidth="84.0" prefWidth="95.0" text="Productos" />
+                        <TableColumn fx:id="colClientIdProducts" minWidth="60.99999237060547" prefWidth="87.0" text="Cod." />
+                        <TableColumn fx:id="colClientNameProducts" minWidth="60.99999237060547" prefWidth="278.0" text="Cliente" />
+                        <TableColumn fx:id="colClientProducts" minWidth="84.0" prefWidth="137.0" text="Productos" />
                      </columns>
                      <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </TableView>
+                  <Label text="Clientes - Cantidad de Productos Comprados">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Label>
                </children>
             </GridPane>
          </children>
