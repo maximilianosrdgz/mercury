@@ -3,7 +3,7 @@ package gui.controller.client;
 import dao.ClientDAO;
 import domain.Client;
 import domain.Province;
-import gui.controller.report.MainReportController;
+import gui.controller.report.ClientReportController;
 import gui.controller.MenuController;
 import gui.controller.purchase.NewPurchaseController;
 import gui.controller.email.SendEmailController;
@@ -48,6 +48,8 @@ import java.util.stream.Collectors;
 @Controller
 public class ListClientController implements Initializable {
 
+    @FXML
+    private Button btnSelectClientReport;
     @FXML
     private Button btnSelectClient;
     @FXML
@@ -100,19 +102,19 @@ public class ListClientController implements Initializable {
     private NewPurchaseController newPurchaseController;
     private ComboBoxLoader comboBoxLoader;
     private SendEmailController sendEmailController;
-    private MainReportController mainReportController;
+    private ClientReportController clientReportController;
 
     @Autowired
     public ListClientController(MenuController menuController, ClientDAO clientDAO,
                                 NewPurchaseController newPurchaseController, ComboBoxLoader comboBoxLoader,
-                                SendEmailController sendEmailController, MainReportController mainReportController) {
+                                SendEmailController sendEmailController, ClientReportController clientReportController) {
 
         this.menuController = menuController;
         this.clientDAO = clientDAO;
         this.newPurchaseController = newPurchaseController;
         this.comboBoxLoader = comboBoxLoader;
         this.sendEmailController = sendEmailController;
-        this.mainReportController = mainReportController;
+        this.clientReportController = clientReportController;
     }
 
     @Override
@@ -285,8 +287,8 @@ public class ListClientController implements Initializable {
     }
 
     public void selectClientReport(ActionEvent actionEvent) {
-        mainReportController.loadSelectedClient(getSelectedClient());
-        Stage stage = (Stage) btnSelectClient.getScene().getWindow();
+        clientReportController.loadSelectedClient(getSelectedClient());
+        Stage stage = (Stage) btnSelectClientReport.getScene().getWindow();
         stage.close();
     }
 }

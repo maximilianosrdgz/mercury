@@ -96,7 +96,7 @@
                 <TableColumn fx:id="colReceiver" minWidth="100.0" prefWidth="-1.0" text="Suscrito" />
             </columns>
         </TableView>
-        <Button fx:id="btnSelectClient" mnemonicParsing="false" onAction="#selectClientReport" text="Seleccionar Cliente">
+        <Button fx:id="btnSelectClientReport" mnemonicParsing="false" onAction="#selectClientReport" text="Seleccionar Cliente">
             <VBox.margin>
                 <Insets bottom="5.0" top="10.0" />
             </VBox.margin></Button>
