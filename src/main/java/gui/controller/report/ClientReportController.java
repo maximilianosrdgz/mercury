@@ -2,13 +2,12 @@ package gui.controller.report;
 
 import dao.ClientDAO;
 import dao.ProvinceDAO;
-import dao.PurchaseDAO;
 import domain.Client;
 import domain.Province;
-import domain.Purchase;
 import domain.PurchaseDetail;
 import gui.controller.MenuController;
 import gui.form.SpringFxmlLoader;
+import gui.util.DatePickerUtils;
 import gui.util.TextFieldUtils;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
@@ -25,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -114,10 +114,9 @@ public class ClientReportController implements Initializable {
     }
 
     private void initDatePickers() {
-        dtpFrom.setValue(LocalDate.now());
-        dtpTo.setValue(LocalDate.now());
-        dtpFrom.setEditable(false);
-        dtpTo.setEditable(false);
+        DatePickerUtils.initPickers(LocalDate.now().minusYears(15), dtpFrom);
+        DatePickerUtils.initPickers(LocalDate.now(), dtpTo);
+        DatePickerUtils.editable(false, dtpFrom, dtpTo);
     }
 
     private void initProvinceTable(List<Province> provinceList, LocalDate dateFrom, LocalDate dateTo) {
@@ -183,6 +182,7 @@ public class ClientReportController implements Initializable {
         Date dateFrom = java.sql.Date.valueOf(localDateFrom);
         Date dateTo = java.sql.Date.valueOf(localDateTo);
         Double quantity = client.getPurchases().stream()
+                .filter(p -> !p.getBooleanCanceled())
                 .filter(p -> p.getDate().compareTo(dateFrom) >= 0 && p.getDate().compareTo(dateTo) <= 0)
                 .mapToDouble(p -> p.getPurchaseDetails().stream()
                         .mapToDouble(PurchaseDetail::getQuantity)
@@ -195,6 +195,7 @@ public class ClientReportController implements Initializable {
         Date dateFrom = java.sql.Date.valueOf(localDateFrom);
         Date dateTo = java.sql.Date.valueOf(localDateTo);
         return (int) client.getPurchases().stream()
+                .filter(p -> !p.getBooleanCanceled())
                 .filter(p -> p.getDate().compareTo(dateFrom) >= 0 && p.getDate().compareTo(dateTo) <= 0)
                 .count();
     }
@@ -205,6 +206,7 @@ public class ClientReportController implements Initializable {
         return allClients.stream()
                 .filter(c -> c.getProvince().equals(province))
                 .mapToInt(c -> c.getPurchases().stream()
+                        .filter(p -> !p.getBooleanCanceled())
                         .filter(p -> p.getDate().compareTo(dateFrom) >= 0 && p.getDate().compareTo(dateTo) <= 0)
                         .collect(Collectors.toList())
                         .size())
@@ -218,6 +220,7 @@ public class ClientReportController implements Initializable {
         for(Client c : allClients) {
             if(c.getProvince().equals(province)) {
                 quantity += c.getPurchases().stream()
+                        .filter(p -> !p.getBooleanCanceled())
                         .filter(p -> p.getDate().compareTo(dateFrom) >= 0 && p.getDate().compareTo(dateTo) <= 0)
                         .mapToDouble(p -> p.getPurchaseDetails().stream()
                                 .mapToDouble(PurchaseDetail::getQuantity)
@@ -265,5 +268,9 @@ public class ClientReportController implements Initializable {
     public void loadSelectedClient(Client client) {
         this.client = client;
         txtClient.setText(client.getName());
+    }
+
+    public void setValueToNow(MouseEvent actionEvent) {
+        DatePickerUtils.initPickers(LocalDate.now(), dtpFrom);
     }
 }

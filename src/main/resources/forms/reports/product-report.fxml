@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="productReportForm" alignment="CENTER" prefHeight="522.0" prefWidth="1047.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.report.ProductReportController">
+    <children>
+        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
+            <children>
+                <Label text="Estadísticas de Productos">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+        <HBox prefHeight="231.0" prefWidth="728.0">
+            <children>
+                <GridPane prefHeight="231.0" prefWidth="513.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="251.0" minWidth="10.0" prefWidth="187.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="338.0" minWidth="10.0" prefWidth="326.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Button fx:id="btnSearchProduct" mnemonicParsing="false" onAction="#openFormPickProduct" text="Buscar Producto" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin></Button>
+                        <TextField fx:id="txtProduct" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin></TextField>
+                        <Label text="Fecha Desde:" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin></Label>
+                        <Label text="Fecha Hasta:" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin></Label>
+                        <Button fx:id="btnApplyFilter" mnemonicParsing="false" onAction="#applyFilter" text="Aplicar" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin>
+                        </Button>
+                        <Button fx:id="btnResetFilter" mnemonicParsing="false" onAction="#resetFilter" text="Reestablecer" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin>
+                        </Button>
+                        <DatePicker fx:id="dtpFrom" onMouseClicked="#setValueToNow" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin>
+                        </DatePicker>
+                        <DatePicker fx:id="dtpTo" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin>
+                        </DatePicker>
+                    </children>
+                </GridPane>
+                <GridPane prefHeight="263.0" prefWidth="513.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="215.0" minHeight="10.0" prefHeight="199.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <TableView fx:id="tblProductsByClient" prefHeight="221.0" prefWidth="440.0" GridPane.rowIndex="1">
+                            <columns>
+                                <TableColumn fx:id="colIdByClient" minWidth="60.99999237060547" prefWidth="87.0" text="Cod." />
+                                <TableColumn fx:id="colDescriptionByClient" minWidth="84.0" prefWidth="280.0" text="Producto" />
+                                <TableColumn fx:id="colQuantityByClient" minWidth="87.99998474121094" prefWidth="134.0" text="Cantidad" />
+                            </columns>
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin>
+                        </TableView>
+                        <Label text="Productos Comprados por Cliente">
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin>
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                  <Button fx:id="btnSearchClient" mnemonicParsing="false" onAction="#openFormPickClient" prefHeight="25.0" prefWidth="186.0" text="Buscar Cliente" GridPane.halignment="RIGHT">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Button>
+                    </children>
+                </GridPane>
+            </children>
+        </HBox>
+        <HBox layoutX="10.0" layoutY="60.0" prefHeight="274.0" prefWidth="911.0">
+            <children>
+                <GridPane prefHeight="263.0" prefWidth="513.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <TableView fx:id="tblQuantity" prefHeight="221.0" prefWidth="440.0" GridPane.rowIndex="1">
+                            <columns>
+                                <TableColumn fx:id="colIdQuantity" minWidth="0.0" prefWidth="81.0" text="Cod." />
+                                <TableColumn fx:id="colDescriptionQuantity" minWidth="0.0" prefWidth="305.0" text="Producto" />
+                                <TableColumn fx:id="colQuantity" minWidth="0.0" prefWidth="116.0" text="Cantidad" />
+                            </columns>
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin>
+                        </TableView>
+                        <Label text="Cantidad de Artículos Vendidos">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin>
+                        </Label>
+                    </children>
+                </GridPane>
+                <GridPane layoutX="10.0" layoutY="10.0" prefHeight="263.0" prefWidth="513.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <TableView fx:id="tblPercentage" prefHeight="221.0" prefWidth="440.0" GridPane.rowIndex="1">
+                            <columns>
+                                <TableColumn fx:id="colIdPercentage" minWidth="60.99999237060547" prefWidth="87.0" text="Cod." />
+                                <TableColumn fx:id="colDescriptionPercentage" minWidth="60.99999237060547" prefWidth="278.0" text="Producto" />
+                                <TableColumn fx:id="colPercentage" minWidth="84.0" prefWidth="137.0" text="Porcentaje" />
+                            </columns>
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin>
+                        </TableView>
+                        <Label text="Porcentaje de Artículos Vendidos">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                            <GridPane.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </GridPane.margin>
+                        </Label>
+                    </children>
+                </GridPane>
+            </children>
+        </HBox>
+    </children>
+</VBox>

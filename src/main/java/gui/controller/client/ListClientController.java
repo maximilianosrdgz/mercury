@@ -7,6 +7,7 @@ import gui.controller.report.ClientReportController;
 import gui.controller.MenuController;
 import gui.controller.purchase.NewPurchaseController;
 import gui.controller.email.SendEmailController;
+import gui.controller.report.ProductReportController;
 import gui.form.SpringFxmlLoader;
 import gui.util.ComboBoxLoader;
 import gui.util.TextFieldUtils;
@@ -103,11 +104,13 @@ public class ListClientController implements Initializable {
     private ComboBoxLoader comboBoxLoader;
     private SendEmailController sendEmailController;
     private ClientReportController clientReportController;
+    private ProductReportController productReportController;
 
     @Autowired
     public ListClientController(MenuController menuController, ClientDAO clientDAO,
                                 NewPurchaseController newPurchaseController, ComboBoxLoader comboBoxLoader,
-                                SendEmailController sendEmailController, ClientReportController clientReportController) {
+                                SendEmailController sendEmailController, ClientReportController clientReportController,
+                                ProductReportController productReportController) {
 
         this.menuController = menuController;
         this.clientDAO = clientDAO;
@@ -115,6 +118,7 @@ public class ListClientController implements Initializable {
         this.comboBoxLoader = comboBoxLoader;
         this.sendEmailController = sendEmailController;
         this.clientReportController = clientReportController;
+        this.productReportController = productReportController;
     }
 
     @Override
@@ -288,6 +292,12 @@ public class ListClientController implements Initializable {
 
     public void selectClientReport(ActionEvent actionEvent) {
         clientReportController.loadSelectedClient(getSelectedClient());
+        Stage stage = (Stage) btnSelectClientReport.getScene().getWindow();
+        stage.close();
+    }
+
+    public void selectClientProductReport(ActionEvent actionEvent) {
+        productReportController.loadSelectedClient(getSelectedClient());
         Stage stage = (Stage) btnSelectClientReport.getScene().getWindow();
         stage.close();
     }

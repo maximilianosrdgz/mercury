@@ -3,6 +3,7 @@ package gui.controller.product;
 import dao.ProductDAO;
 import domain.Product;
 import gui.controller.email.SendEmailController;
+import gui.controller.report.ProductReportController;
 import gui.util.AlertBuilder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,14 +58,16 @@ public class PickProductsController implements Initializable {
     private SendEmailController sendEmailController;
     private ProductDAO productDAO;
     private AlertBuilder alertBuilder;
+    private ProductReportController productReportController;
 
     @Autowired
     public PickProductsController(SendEmailController sendEmailController, ProductDAO productDAO,
-                                  AlertBuilder alertBuilder) {
+                                  AlertBuilder alertBuilder, ProductReportController productReportController) {
 
         this.sendEmailController = sendEmailController;
         this.productDAO = productDAO;
         this.alertBuilder = alertBuilder;
+        this.productReportController = productReportController;
     }
 
     @Override
