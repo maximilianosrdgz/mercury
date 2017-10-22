@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="388.0" prefWidth="372.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.product.PickProductController">
+<VBox alignment="CENTER" prefHeight="388.0" prefWidth="372.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.category.PickCategoryController">
     <children>
         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
             <children>
-                <Label text="Seleccionar Producto">
+                <Label text="Seleccionar Categoría">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -25,10 +25,10 @@
         </HBox>
         <HBox prefHeight="298.0" prefWidth="544.0">
             <children>
-                <TableView fx:id="tblAllProducts" prefHeight="298.0" prefWidth="309.0">
+                <TableView fx:id="tblAllCategories" prefHeight="298.0" prefWidth="309.0">
                     <columns>
                         <TableColumn fx:id="colIdAll" prefWidth="90.0" text="Nro." />
-                        <TableColumn fx:id="colDescriptionAll" prefWidth="216.0" text="Producto" />
+                        <TableColumn fx:id="colDescriptionAll" prefWidth="216.0" text="Categoría" />
                     </columns>
                 </TableView>
             </children>
@@ -46,7 +46,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Button fx:id="btnSelectProducts" mnemonicParsing="false" onAction="#selectProductReport" prefHeight="26.0" prefWidth="90.0" text="Seleccionar" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+                <Button fx:id="btnSelectCategory" mnemonicParsing="false" onAction="#selectCategoryReport" prefHeight="26.0" prefWidth="90.0" text="Seleccionar" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER">
                     <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin></Button>
