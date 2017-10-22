@@ -3,6 +3,7 @@ package gui.controller.client;
 import dao.ClientDAO;
 import domain.Client;
 import domain.Province;
+import gui.controller.report.CategoryReportController;
 import gui.controller.report.ClientReportController;
 import gui.controller.MenuController;
 import gui.controller.purchase.NewPurchaseController;
@@ -105,12 +106,13 @@ public class ListClientController implements Initializable {
     private SendEmailController sendEmailController;
     private ClientReportController clientReportController;
     private ProductReportController productReportController;
+    private CategoryReportController categoryReportController;
 
     @Autowired
     public ListClientController(MenuController menuController, ClientDAO clientDAO,
                                 NewPurchaseController newPurchaseController, ComboBoxLoader comboBoxLoader,
                                 SendEmailController sendEmailController, ClientReportController clientReportController,
-                                ProductReportController productReportController) {
+                                ProductReportController productReportController, CategoryReportController categoryReportController) {
 
         this.menuController = menuController;
         this.clientDAO = clientDAO;
@@ -119,6 +121,7 @@ public class ListClientController implements Initializable {
         this.sendEmailController = sendEmailController;
         this.clientReportController = clientReportController;
         this.productReportController = productReportController;
+        this.categoryReportController = categoryReportController;
     }
 
     @Override
@@ -298,6 +301,12 @@ public class ListClientController implements Initializable {
 
     public void selectClientProductReport(ActionEvent actionEvent) {
         productReportController.loadSelectedClient(getSelectedClient());
+        Stage stage = (Stage) btnSelectClientReport.getScene().getWindow();
+        stage.close();
+    }
+
+    public void selectClientCategoryReport(ActionEvent actionEvent) {
+        categoryReportController.loadSelectedClient(getSelectedClient());
         Stage stage = (Stage) btnSelectClientReport.getScene().getWindow();
         stage.close();
     }

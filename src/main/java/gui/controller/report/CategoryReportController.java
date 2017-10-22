@@ -1,8 +1,10 @@
 package gui.controller.report;
 
 import dao.CategoryDAO;
+import dao.ClientDAO;
 import dao.PurchaseDAO;
 import domain.Category;
+import domain.Client;
 import domain.Purchase;
 import domain.PurchaseDetail;
 import gui.controller.MenuController;
@@ -35,9 +37,13 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 @NoArgsConstructor
 @Controller
@@ -87,18 +93,23 @@ public class CategoryReportController implements Initializable {
     private Category category;
     private List<Category> allCategories;
     private List<Purchase> allPurchases;
+    private List<Purchase> purchasesByClient;
+    private Set<Category> categoriesByClient;
+    private List<Client> allClients;
 
     private CategoryDAO categoryDAO;
     private PurchaseDAO purchaseDAO;
     private MenuController menuController;
+    private ClientDAO clientDAO;
 
     @Autowired
     public CategoryReportController(CategoryDAO categoryDAO, PurchaseDAO purchaseDAO,
-                                    MenuController menuController) {
+                                    MenuController menuController, ClientDAO clientDAO) {
 
         this.categoryDAO = categoryDAO;
         this.purchaseDAO = purchaseDAO;
         this.menuController = menuController;
+        this.clientDAO = clientDAO;
     }
 
     @Override
@@ -106,9 +117,13 @@ public class CategoryReportController implements Initializable {
         category = null;
         allCategories = categoryDAO.findAll();
         allPurchases = purchaseDAO.findAll();
+        allClients = clientDAO.findAll();
+        purchasesByClient = new ArrayList<>();
+        categoriesByClient = new HashSet<>();
         initDatePickers();
         initQuantityTable(allCategories, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
         initPercentageTable(allCategories, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
+        initCategoriesByClientTable(new ArrayList<>(categoriesByClient), LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
     }
 
     private void initDatePickers() {
@@ -153,6 +168,24 @@ public class CategoryReportController implements Initializable {
         tblPercentage.getSelectionModel().selectFirst();
     }
 
+    private void initCategoriesByClientTable(List<Category> categoryList, LocalDate dateFrom, LocalDate dateTo) {
+        tblCategoriesByClient.getItems().clear();
+        colIdByClient.setCellValueFactory(new PropertyValueFactory<Category, String>("id"));
+        colDescriptionByClient.setCellValueFactory(new PropertyValueFactory<Category, String>("description"));
+        colPercentageByClient.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Category,Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Category, Integer> data) {
+                return new SimpleIntegerProperty(calculatePercentageByClient(data.getValue(), dateFrom, dateTo)).asObject();
+            }
+        });
+        ObservableList<Category> categories = FXCollections.observableArrayList();
+        categories.addAll(categoryList);
+        colPercentageByClient.setSortType(TableColumn.SortType.DESCENDING);
+        tblCategoriesByClient.setItems(categories);
+        tblCategoriesByClient.getSortOrder().add(colPercentageByClient);
+        tblCategoriesByClient.getSelectionModel().selectFirst();
+    }
+
     private int calculateCategoryQuantity(Category category, LocalDate localDateFrom, LocalDate localDateTo) {
         Date dateFrom = java.sql.Date.valueOf(localDateFrom);
         Date dateTo = java.sql.Date.valueOf(localDateTo);
@@ -168,11 +201,44 @@ public class CategoryReportController implements Initializable {
     }
 
     private int calculateCategoryPercentage(Category category, LocalDate localDateFrom, LocalDate localDateTo) {
-        double categoryQuantity = calculateCategoryQuantity(category, localDateFrom, localDateTo);
-        double totalQuantity = 0;
-        for(Category c : allCategories) {
-            totalQuantity += calculateCategoryQuantity(c, localDateFrom, localDateTo);
-        }
+        Date dateFrom = java.sql.Date.valueOf(localDateFrom);
+        Date dateTo = java.sql.Date.valueOf(localDateTo);
+        double categoryQuantity = allPurchases.stream()
+                .filter(p -> !p.getBooleanCanceled())
+                .filter(p -> p.getDate().compareTo(dateFrom) >= 0 && p.getDate().compareTo(dateTo) <= 0)
+                .mapToDouble(p -> p.getPurchaseDetails().stream()
+                        .filter(d -> d.getProduct().getCategories().contains(category))
+                        .mapToDouble(PurchaseDetail::getQuantity)
+                        .sum())
+                .sum();
+        double totalQuantity = allPurchases.stream()
+                .filter(p -> !p.getBooleanCanceled())
+                .filter(p -> p.getDate().compareTo(dateFrom) >= 0 && p.getDate().compareTo(dateTo) <= 0)
+                .mapToDouble(p -> p.getPurchaseDetails().stream()
+                        .mapToDouble(PurchaseDetail::getQuantity)
+                        .sum())
+                .sum();
+        return (int) Math.round(categoryQuantity * 100 / totalQuantity);
+    }
+
+    private int calculatePercentageByClient(Category category, LocalDate localDateFrom, LocalDate localDateTo) {
+        Date dateFrom = java.sql.Date.valueOf(localDateFrom);
+        Date dateTo = java.sql.Date.valueOf(localDateTo);
+        double categoryQuantity = purchasesByClient.stream()
+                .filter(p -> !p.getBooleanCanceled())
+                .filter(p -> p.getDate().compareTo(dateFrom) >= 0 && p.getDate().compareTo(dateTo) <= 0)
+                .mapToDouble(p -> p.getPurchaseDetails().stream()
+                        .filter(d -> d.getProduct().getCategories().contains(category))
+                        .mapToDouble(PurchaseDetail::getQuantity)
+                        .sum())
+                .sum();
+        double totalQuantity = purchasesByClient.stream()
+                .filter(p -> !p.getBooleanCanceled())
+                .filter(p -> p.getDate().compareTo(dateFrom) >= 0 && p.getDate().compareTo(dateTo) <= 0)
+                .mapToDouble(p -> p.getPurchaseDetails().stream()
+                        .mapToDouble(PurchaseDetail::getQuantity)
+                        .sum())
+                .sum();
         return (int) Math.round(categoryQuantity * 100 / totalQuantity);
     }
 
@@ -186,7 +252,14 @@ public class CategoryReportController implements Initializable {
         stage.show();
     }
 
-    public void openFormPickClientCategory(ActionEvent actionEvent) {
+    public void openFormPickClient(ActionEvent actionEvent) {
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/clients/pick-client-category-report.fxml"), 1130, 600);
+        Stage stage = new Stage();
+        stage.setTitle("Seleccionar Cliente");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(categoryReportForm.getScene().getWindow());
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void loadSelectedCategory(Category category) {
@@ -206,12 +279,30 @@ public class CategoryReportController implements Initializable {
     public void applyFilter(ActionEvent actionEvent) {
         initQuantityTable(allCategories, dtpFrom.getValue(), dtpTo.getValue());
         initPercentageTable(allCategories, dtpFrom.getValue(), dtpTo.getValue());
+        initCategoriesByClientTable(new ArrayList<>(categoriesByClient), dtpFrom.getValue(), dtpTo.getValue());
         filterByCategory();
     }
 
     public void resetFilter(ActionEvent actionEvent) throws IOException {
         reloadForm();
     }
+
+    public void loadSelectedClient(Client client) {
+        purchasesByClient.clear();
+        categoriesByClient.clear();
+        tblCategoriesByClient.getItems().clear();
+        allClients.stream()
+                .filter(c -> c.getId() == client.getId())
+                .forEach(c -> c.getPurchases().forEach(p -> {
+                    if(!p.getBooleanCanceled()) {
+                        purchasesByClient.add(p);
+                        p.getPurchaseDetails()
+                                .forEach(d -> categoriesByClient.addAll(d.getProduct().getCategories()));
+                    }
+                }));
+        initCategoriesByClientTable(new ArrayList<>(categoriesByClient), dtpFrom.getValue(), dtpTo.getValue());
+    }
+
     private void reloadForm() throws IOException {
         menuController.loadCategoryReportPane(null);
     }
