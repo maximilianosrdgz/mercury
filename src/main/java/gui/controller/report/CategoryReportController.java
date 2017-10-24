@@ -19,6 +19,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -38,7 +42,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -49,6 +52,12 @@ import java.util.Set;
 @Controller
 public class CategoryReportController implements Initializable {
 
+    @FXML
+    private NumberAxis yAxis;
+    @FXML
+    private CategoryAxis xAxis;
+    @FXML
+    private BarChart<String, Number> barChartQuantity;
     @FXML
     private VBox categoryReportForm;
     @FXML
@@ -121,7 +130,8 @@ public class CategoryReportController implements Initializable {
         purchasesByClient = new ArrayList<>();
         categoriesByClient = new HashSet<>();
         initDatePickers();
-        initQuantityTable(allCategories, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
+        initQuantityChart(allCategories, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
+        //initQuantityTable(allCategories, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
         initPercentageTable(allCategories, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
         initCategoriesByClientTable(new ArrayList<>(categoriesByClient), LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
     }
@@ -132,6 +142,15 @@ public class CategoryReportController implements Initializable {
         DatePickerUtils.editable(false, dtpFrom, dtpTo);
     }
 
+    private void initQuantityChart(List<Category> categoryList, LocalDate dateFrom, LocalDate dateTo) {
+        barChartQuantity.getData().clear();
+        XYChart.Series<String, Number> dataSeries = new XYChart.Series<>();
+        categoryList.forEach(c -> dataSeries.getData().add(
+                new XYChart.Data<>(c.getDescription(), calculateCategoryQuantity(c, dateFrom, dateTo))));
+        barChartQuantity.getData().add(dataSeries);
+        barChartQuantity.setLegendVisible(false);
+    }
+    /*
     private void initQuantityTable(List<Category> categoryList, LocalDate dateFrom, LocalDate dateTo) {
         tblQuantity.getItems().clear();
         colIdQuantity.setCellValueFactory(new PropertyValueFactory<Category, String>("id"));
@@ -148,7 +167,7 @@ public class CategoryReportController implements Initializable {
         tblQuantity.setItems(categories);
         tblQuantity.getSortOrder().add(colQuantity);
         tblQuantity.getSelectionModel().selectFirst();
-    }
+    }*/
 
     private void initPercentageTable(List<Category> categoryList, LocalDate dateFrom, LocalDate dateTo) {
         tblPercentage.getItems().clear();
@@ -277,7 +296,8 @@ public class CategoryReportController implements Initializable {
     }
 
     public void applyFilter(ActionEvent actionEvent) {
-        initQuantityTable(allCategories, dtpFrom.getValue(), dtpTo.getValue());
+        initQuantityChart(allCategories, dtpFrom.getValue(), dtpTo.getValue());
+        //initQuantityTable(allCategories, dtpFrom.getValue(), dtpTo.getValue());
         initPercentageTable(allCategories, dtpFrom.getValue(), dtpTo.getValue());
         initCategoriesByClientTable(new ArrayList<>(categoriesByClient), dtpFrom.getValue(), dtpTo.getValue());
         filterByCategory();
