@@ -5,13 +5,11 @@ import dao.ProductDAO;
 import dao.PurchaseDAO;
 import domain.Client;
 import domain.Product;
-import domain.Province;
 import domain.Purchase;
 import domain.PurchaseDetail;
 import gui.controller.MenuController;
 import gui.form.SpringFxmlLoader;
 import gui.util.DatePickerUtils;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
@@ -48,6 +47,8 @@ import java.util.ResourceBundle;
 @Controller
 public class ProductReportController implements Initializable {
 
+    @FXML
+    private PieChart pieChartPercentage;
     @FXML
     private VBox productReportForm;
     @FXML
@@ -95,6 +96,7 @@ public class ProductReportController implements Initializable {
     private List<Client> allClients;
     private List<Purchase> purchasesByClient;
     private Product product;
+    private ObservableList<PieChart.Data> chartData;
 
     private PurchaseDAO purchaseDAO;
     private ProductDAO productDAO;
@@ -114,6 +116,9 @@ public class ProductReportController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         product = null;
+        chartData = FXCollections.observableArrayList();
+        pieChartPercentage.setTitle("Porcentaje de Artículos Vendidos");
+        pieChartPercentage.setData(chartData);
         initDatePickers();
         allPurchases = purchaseDAO.findAll();
         allProducts = productDAO.findAll();
@@ -121,8 +126,9 @@ public class ProductReportController implements Initializable {
         productsByClient = new ArrayList<>();
         purchasesByClient = new ArrayList<>();
         initQuantityTable(allProducts, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
-        initPercentageTable(allProducts, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
+        //initPercentageTable(allProducts, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
         initProductsByClientTable(productsByClient, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
+        initPercentageChart(allProducts, LocalDate.now().minusYears(100), LocalDate.now().plusYears(100));
     }
 
     private void initDatePickers() {
@@ -148,7 +154,7 @@ public class ProductReportController implements Initializable {
         tblQuantity.getSortOrder().add(colQuantity);
         tblQuantity.getSelectionModel().selectFirst();
     }
-
+    /*
     private void initPercentageTable(List<Product> productList, LocalDate dateFrom, LocalDate dateTo) {
         tblPercentage.getItems().clear();
         colIdPercentage.setCellValueFactory(new PropertyValueFactory<Product, String>("id"));
@@ -165,6 +171,17 @@ public class ProductReportController implements Initializable {
         tblPercentage.setItems(products);
         tblPercentage.getSortOrder().add(colPercentage);
         tblPercentage.getSelectionModel().selectFirst();
+    }*/
+
+    private void initPercentageChart(List<Product> productList, LocalDate dateFrom, LocalDate dateTo) {
+        pieChartPercentage.getData().clear();
+        productList.forEach(p -> {
+            if(calculateProductPercentage(p, dateFrom, dateTo) >= 1) {
+                pieChartPercentage.getData().add(
+                        new PieChart.Data(p.getDescription(), calculateProductPercentage(p, dateFrom, dateTo))
+                );
+            }
+        });
     }
 
     private void initProductsByClientTable(List<Product> productList, LocalDate dateFrom, LocalDate dateTo) {
@@ -266,7 +283,8 @@ public class ProductReportController implements Initializable {
 
     public void applyFilter(ActionEvent actionEvent) {
         initQuantityTable(allProducts, dtpFrom.getValue(), dtpTo.getValue());
-        initPercentageTable(allProducts, dtpFrom.getValue(), dtpTo.getValue());
+        //initPercentageTable(allProducts, dtpFrom.getValue(), dtpTo.getValue());
+        initPercentageChart(allProducts, dtpFrom.getValue(), dtpTo.getValue());
         initProductsByClientTable(productsByClient, dtpFrom.getValue(), dtpTo.getValue());
         filterByProduct();
     }

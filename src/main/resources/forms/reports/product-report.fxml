@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -150,28 +151,10 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <TableView fx:id="tblPercentage" prefHeight="221.0" prefWidth="440.0" GridPane.rowIndex="1">
-                            <columns>
-                                <TableColumn fx:id="colIdPercentage" minWidth="60.99999237060547" prefWidth="87.0" text="Cod." />
-                                <TableColumn fx:id="colDescriptionPercentage" minWidth="60.99999237060547" prefWidth="278.0" text="Producto" />
-                                <TableColumn fx:id="colPercentage" minWidth="84.0" prefWidth="137.0" text="Porcentaje" />
-                            </columns>
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </TableView>
-                        <Label text="Porcentaje de Artículos Vendidos">
-                            <font>
-                                <Font size="14.0" />
-                            </font>
-                            <GridPane.margin>
-                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                            </GridPane.margin>
-                        </Label>
+                  <PieChart fx:id="pieChartPercentage" />
                     </children>
                 </GridPane>
             </children>
