@@ -118,6 +118,7 @@ public class ProductReportController implements Initializable {
         product = null;
         chartData = FXCollections.observableArrayList();
         pieChartPercentage.setTitle("Porcentaje de Artículos Vendidos");
+        pieChartPercentage.setLegendVisible(false);
         pieChartPercentage.setData(chartData);
         initDatePickers();
         allPurchases = purchaseDAO.findAll();
