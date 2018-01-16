@@ -4,17 +4,23 @@ import gui.form.SpringFxmlLoader;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 @Controller
-public class MenuController {
+public class MenuController implements Initializable {
 
     @FXML
     private Button btnOpenFormCategoryReport;
@@ -65,8 +71,15 @@ public class MenuController {
     }
 
     public void closeForm(ActionEvent event) {
-        Stage stage = (Stage) btnClose.getScene().getWindow();
-        stage.close();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Salir");
+        alert.setHeaderText("¿Seguro que desea salir de Mercury?");
+        alert.setContentText("Si confirma, la aplicación se cerrará");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Stage stage = (Stage) btnClose.getScene().getWindow();
+            stage.close();
+        }
     }
 
     public void loadPane(ActionEvent event) throws IOException {
@@ -119,5 +132,14 @@ public class MenuController {
 
     public void loadCategoryReportPane(ActionEvent actionEvent) throws IOException {
         setDataPane(fadeAnimate("/forms/reports/category-report.fxml"));
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            setDataPane(fadeAnimate("/forms/menu/splash.fxml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

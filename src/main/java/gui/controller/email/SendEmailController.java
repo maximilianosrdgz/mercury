@@ -30,6 +30,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -517,7 +518,7 @@ public class SendEmailController implements Initializable {
                 new FileChooser.ExtensionFilter("HTML", "*.html")
         );
         fileChooser.setTitle("Enviar e-mail");
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir") + "\\src\\main\\resources\\utils"));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
     }
 
     private String getClientNames() {

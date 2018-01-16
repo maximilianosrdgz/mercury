@@ -289,7 +289,7 @@ public class CategoryReportController implements Initializable {
     private void filterByCategory() {
         if(this.category != null) {
             allCategories.remove(category);
-            tblQuantity.getItems().removeAll(allCategories);
+            //tblQuantity.getItems().removeAll(allCategories);
             tblPercentage.getItems().removeAll(allCategories);
             allCategories.add(category);
         }

@@ -104,25 +104,49 @@ public class UpdateClientController implements Initializable {
     public void updateClient(ActionEvent actionEvent) throws IOException {
         if(TextFieldUtils.fieldsFilled(txtName, txtEmail)) {
             Client client = buildClient();
-            Alert alert = alertBuilder.builder()
-                    .type(Alert.AlertType.CONFIRMATION)
-                    .title("Modificar Cliente")
-                    .headerText("Está por modificar el cliente: \n" + client.getName())
-                    .contentText("¿Confirmar operación?")
-                    .build();
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                clientDAO.update(client);
-                alertBuilder.builder()
-                        .type(Alert.AlertType.INFORMATION)
+            if(!emailExists(client)) {
+                Alert alert = alertBuilder.builder()
+                        .type(Alert.AlertType.CONFIRMATION)
                         .title("Modificar Cliente")
-                        .headerText("Cliente modificado exitosamente")
-                        .contentText("Cliente modificado: " + client.getName())
-                        .build()
-                        .showAndWait();
-                menuController.loadListClientPane(actionEvent);
-                Stage stage = (Stage) btnUpdateClient.getScene().getWindow();
-                stage.close();
+                        .headerText("Está por modificar el cliente: \n" + client.getName())
+                        .contentText("¿Confirmar operación?")
+                        .build();
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    clientDAO.update(client);
+                    alertBuilder.builder()
+                            .type(Alert.AlertType.INFORMATION)
+                            .title("Modificar Cliente")
+                            .headerText("Cliente modificado exitosamente")
+                            .contentText("Cliente modificado: " + client.getName())
+                            .build()
+                            .showAndWait();
+                    menuController.loadListClientPane(actionEvent);
+                    Stage stage = (Stage) btnUpdateClient.getScene().getWindow();
+                    stage.close();
+                }
+            }
+            else {
+                Alert alert = alertBuilder.builder()
+                        .type(Alert.AlertType.CONFIRMATION)
+                        .title("Modificar Cliente")
+                        .headerText("Ya existe un cliente registrado con e-mail: \n" + client.getEmail())
+                        .contentText("¿Desea continuar de todas formas?")
+                        .build();
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    clientDAO.update(client);
+                    alertBuilder.builder()
+                            .type(Alert.AlertType.INFORMATION)
+                            .title("Modificar Cliente")
+                            .headerText("Cliente modificado exitosamente")
+                            .contentText("Cliente modificado: " + client.getName())
+                            .build()
+                            .showAndWait();
+                    menuController.loadListClientPane(actionEvent);
+                    Stage stage = (Stage) btnUpdateClient.getScene().getWindow();
+                    stage.close();
+                }
             }
         }
         else {
@@ -163,5 +187,13 @@ public class UpdateClientController implements Initializable {
             Stage stage = (Stage) btnCancel.getScene().getWindow();
             stage.close();
         }
+    }
+
+    private boolean emailExists(Client client) {
+        boolean exists = true;
+        if(clientDAO.findByEmail(client.getEmail()).isEmpty()) {
+            exists = false;
+        }
+        return exists;
     }
 }

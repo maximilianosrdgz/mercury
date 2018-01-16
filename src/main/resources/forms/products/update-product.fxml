@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -185,6 +186,7 @@
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin></Button>
+            <CheckBox fx:id="chkUpdateMaterialStock" mnemonicParsing="false" text="Actualizar Stock de Materiales" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
             </children>
             <VBox.margin>
                 <Insets bottom="10.0" top="20.0" />

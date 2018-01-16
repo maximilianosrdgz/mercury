@@ -75,23 +75,45 @@ public class NewClientController implements Initializable {
     public void saveClient(ActionEvent actionEvent) {
         if(TextFieldUtils.fieldsFilled(txtName, txtEmail)) {
             Client client = buildClient();
-            Alert alert = alertBuilder.builder()
-                    .type(Alert.AlertType.CONFIRMATION)
-                    .title("Nuevo Cliente")
-                    .headerText("Guardando nuevo cliente: \n" + client.getName())
-                    .contentText("¿Confirmar operación?")
-                    .build();
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                clientDAO.create(client);
-                alertBuilder.builder()
-                        .type(Alert.AlertType.INFORMATION)
-                        .title("Guardar Cliente")
-                        .headerText("Cliente guardado exitosamente")
-                        .contentText("Nuevo Cliente: " + clientDAO.find(client.getId()).getName())
-                        .build()
-                        .showAndWait();
-                clearForm();
+            if(!emailExists(client)) {
+                Alert alert = alertBuilder.builder()
+                        .type(Alert.AlertType.CONFIRMATION)
+                        .title("Nuevo Cliente")
+                        .headerText("Guardando nuevo cliente: \n" + client.getName())
+                        .contentText("¿Confirmar operación?")
+                        .build();
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    clientDAO.create(client);
+                    alertBuilder.builder()
+                            .type(Alert.AlertType.INFORMATION)
+                            .title("Guardar Cliente")
+                            .headerText("Cliente guardado exitosamente")
+                            .contentText("Nuevo Cliente: " + clientDAO.find(client.getId()).getName())
+                            .build()
+                            .showAndWait();
+                    clearForm();
+                }
+            }
+            else {
+                Alert alert = alertBuilder.builder()
+                        .type(Alert.AlertType.CONFIRMATION)
+                        .title("Nuevo Cliente")
+                        .headerText("Ya existe un cliente registrado con e-mail: \n" + client.getEmail())
+                        .contentText("¿Desea continuar de todas formas?")
+                        .build();
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    clientDAO.create(client);
+                    alertBuilder.builder()
+                            .type(Alert.AlertType.INFORMATION)
+                            .title("Guardar Cliente")
+                            .headerText("Cliente guardado exitosamente")
+                            .contentText("Nuevo Cliente: " + clientDAO.find(client.getId()).getName())
+                            .build()
+                            .showAndWait();
+                    clearForm();
+                }
             }
         }
         else {
@@ -138,5 +160,13 @@ public class NewClientController implements Initializable {
 
     public void checkConsultant(ActionEvent actionEvent) {
         chkConsultant.setSelected(true);
+    }
+
+    private boolean emailExists(Client client) {
+        boolean exists = true;
+        if(clientDAO.findByEmail(client.getEmail()).isEmpty()) {
+            exists = false;
+        }
+        return exists;
     }
 }

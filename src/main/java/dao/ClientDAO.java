@@ -29,8 +29,12 @@ public class ClientDAO extends AbstractDAO<Client> {
     }
 
     public List<Client> findByName(String name) {
-        List<Client> results = null;
         String statement = String.format("SELECT client FROM Client client WHERE client.name = '%s'", name);
+        return super.findByQuery(statement);
+    }
+
+    public List<Client> findByEmail(String email) {
+        String statement = String.format("SELECT client FROM Client client WHERE client.email = '%s'", email);
         return super.findByQuery(statement);
     }
 }

@@ -25,6 +25,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -51,6 +52,8 @@ import java.util.Set;
 @Controller
 public class UpdateProductController implements Initializable {
 
+    @FXML
+    private CheckBox chkUpdateMaterialStock;
     @FXML
     private Label lblStoreUnit;
     @FXML
@@ -131,6 +134,7 @@ public class UpdateProductController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         TextFieldUtils.setDecimalOnly(txtPrice, txtMaterialQuantity, txtQuantity);
         TextFieldUtils.activated(false, txtId);
+        chkUpdateMaterialStock.setSelected(true);
         txtMaterialQuantity.setText("0");
         initCategoryTable(categoryDAO.findAll());
         comboBoxLoader.initMaterialsCombo(cmbMaterials, -1);
@@ -268,7 +272,7 @@ public class UpdateProductController implements Initializable {
             materialQuantities.forEach(quant -> quant.setProduct(productStock.getProduct()));
             double oldQuantity = selectedProductStock.getQuantity();
             double quantityAdded = productStock.getQuantity() - selectedProductStock.getQuantity();
-            if(enoughMaterialsInStock(productStock, quantityAdded)) {
+            if(enoughMaterialsInStock(productStock, quantityAdded) || !chkUpdateMaterialStock.isSelected()) {
                 Alert alert = alertBuilder.builder()
                         .type(Alert.AlertType.CONFIRMATION)
                         .title("Modificar Producto")
@@ -295,13 +299,15 @@ public class UpdateProductController implements Initializable {
                             materialQuantityDAO.delete(mq);
                         }
                     }
-                    if(productStock.getQuantity() > oldQuantity) {
-                        List<MaterialQuantity> materialQuantityList = materialQuantityDAO
-                                .findByProductId(productStock.getProduct().getId());
-                        for(MaterialQuantity quantity : materialQuantityList) {
-                            MaterialStock stock = materialStockDAO.findByMaterialId(quantity.getMaterial().getId());
-                            stock.setQuantity(stock.getQuantity() - (quantity.getQuantity() * quantityAdded));
-                            materialStockDAO.update(stock);
+                    if(chkUpdateMaterialStock.isSelected()) {
+                        if(productStock.getQuantity() > oldQuantity) {
+                            List<MaterialQuantity> materialQuantityList = materialQuantityDAO
+                                    .findByProductId(productStock.getProduct().getId());
+                            for(MaterialQuantity quantity : materialQuantityList) {
+                                MaterialStock stock = materialStockDAO.findByMaterialId(quantity.getMaterial().getId());
+                                stock.setQuantity(stock.getQuantity() - (quantity.getQuantity() * quantityAdded));
+                                materialStockDAO.update(stock);
+                            }
                         }
                     }
                     listProductController.reloadForm(actionEvent);
