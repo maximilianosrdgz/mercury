@@ -150,6 +150,7 @@ public class ListProductController implements Initializable {
                 return new ReadOnlyStringWrapper(String.valueOf(data.getValue().getProduct().getDescription()));
             }
         });
+        /*
         colCost.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ProductStock,String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ProductStock, String> data) {
@@ -166,6 +167,13 @@ public class ListProductController implements Initializable {
                     }
                 }
                 return new ReadOnlyStringWrapper(String.valueOf(cost));
+            }
+        });
+        */
+        colCost.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ProductStock,String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ProductStock, String> data) {
+                return new ReadOnlyStringWrapper(String.valueOf(data.getValue().getProduct().getCost()));
             }
         });
         colPrice.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ProductStock,String>, ObservableValue<String>>() {
@@ -319,6 +327,7 @@ public class ListProductController implements Initializable {
         Product product = Product.builder()
                 .description(txtDescription.getText())
                 .price(Double.parseDouble(txtPrice.getText()))
+                .cost(0)
                 .categories(new HashSet<>())
                 .materials(new HashSet<>())
                 .build();

@@ -39,6 +39,9 @@ public class Product {
     @Column
     private double price;
 
+    @Column
+    private double cost;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "product_category")
     private Set<Category> categories;

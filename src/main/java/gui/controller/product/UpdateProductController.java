@@ -47,11 +47,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Controller
 public class UpdateProductController implements Initializable {
 
+    @FXML
+    private CheckBox chkOverrideCost;
+    @FXML
+    private TextField txtCost;
     @FXML
     private CheckBox chkUpdateMaterialStock;
     @FXML
@@ -133,7 +138,7 @@ public class UpdateProductController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         TextFieldUtils.setDecimalOnly(txtPrice, txtMaterialQuantity, txtQuantity);
-        TextFieldUtils.activated(false, txtId);
+        TextFieldUtils.activated(false, txtId, txtCost);
         chkUpdateMaterialStock.setSelected(true);
         txtMaterialQuantity.setText("0");
         initCategoryTable(categoryDAO.findAll());
@@ -161,6 +166,7 @@ public class UpdateProductController implements Initializable {
         txtDescription.setText(productStock.getProduct().getDescription());
         txtPrice.setText(String.valueOf(productStock.getProduct().getPrice()));
         txtQuantity.setText(String.valueOf(productStock.getQuantity()));
+        txtCost.setText(String.valueOf(productStock.getProduct().getCost()));
     }
 
     private void initCategoryTable(List<Category> categoryList) {
@@ -269,6 +275,9 @@ public class UpdateProductController implements Initializable {
         if(TextFieldUtils.fieldsFilled(txtDescription, txtPrice, txtQuantity)) {
             ProductStock productStock = buildProductStock();
             List<MaterialQuantity> materialQuantities = buildMaterialQuantityList();
+            if(!materialQuantities.isEmpty() && !chkOverrideCost.isSelected()) {
+                productStock.getProduct().setCost(getProductCost(productStock.getProduct(), materialQuantities));
+            }
             materialQuantities.forEach(quant -> quant.setProduct(productStock.getProduct()));
             double oldQuantity = selectedProductStock.getQuantity();
             double quantityAdded = productStock.getQuantity() - selectedProductStock.getQuantity();
@@ -336,6 +345,18 @@ public class UpdateProductController implements Initializable {
         }
     }
 
+    private double getProductCost(Product product, List<MaterialQuantity> quantities) {
+        double cost = 0;
+        for(Material material : product.getMaterials()) {
+            cost += quantities.stream()
+                    .filter(q -> q.getMaterial().getId() == material.getId())
+                    .collect(Collectors.toList())
+                    .get(0)
+                    .getQuantity() * material.getCost();
+        }
+        return cost;
+    }
+
     private boolean enoughMaterialsInStock(ProductStock productStock, double quantityAdded) {
         boolean result = true;
         if(productStock.getQuantity() > selectedProductStock.getQuantity()) {
@@ -352,6 +373,10 @@ public class UpdateProductController implements Initializable {
     }
 
     private ProductStock buildProductStock() {
+        double cost = 0;
+        if(chkOverrideCost.isSelected() || tblSelectedMaterials.getItems().isEmpty()) {
+            cost = Double.parseDouble(txtCost.getText());
+        }
         Set<Material> materials = new HashSet<>();
         tblSelectedMaterials.getItems().forEach(item -> materials.add(item.getMaterial()));
         Set<Category> categories = new HashSet<>(tblSelectedCategories.getItems());
@@ -359,6 +384,7 @@ public class UpdateProductController implements Initializable {
                 .id(Integer.parseInt(txtId.getText()))
                 .description(txtDescription.getText())
                 .price(Double.parseDouble(txtPrice.getText()))
+                .cost(cost)
                 .materials(materials)
                 .categories(categories)
                 .build();
@@ -398,5 +424,9 @@ public class UpdateProductController implements Initializable {
         if(mouseEvent.getClickCount() == 2) {
             removeMaterialQuantity(null);
         }
+    }
+
+    public void toggleCost(ActionEvent actionEvent) {
+        TextFieldUtils.activated(chkOverrideCost.isSelected() ,txtCost);
     }
 }

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.product.UpdateProductController">
+<VBox alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.product.UpdateProductController">
     <children>
         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
             <children>
@@ -182,11 +182,31 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </GridPane.margin>
                 </TextField>
-                <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancelLoad" text="Cancelar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+                <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#cancelLoad" text="Cancelar" GridPane.columnIndex="3" GridPane.halignment="LEFT" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin></Button>
             <CheckBox fx:id="chkUpdateMaterialStock" mnemonicParsing="false" text="Actualizar Stock de Materiales" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <Label layoutX="47.0" layoutY="47.0" text="Costo" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="txtCost" layoutX="119.0" layoutY="43.0" maxWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TextField>
+            <Label layoutX="47.0" layoutY="47.0" text="Forzar Costo" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <CheckBox fx:id="chkOverrideCost" mnemonicParsing="false" onAction="#toggleCost" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </CheckBox>
             </children>
             <VBox.margin>
                 <Insets bottom="10.0" top="20.0" />
