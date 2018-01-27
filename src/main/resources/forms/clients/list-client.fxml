@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="clientListForm" alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.client.ListClientController">
+<VBox fx:id="clientListForm" alignment="CENTER" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.client.ListClientController">
     <children>
         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" stylesheets="@../../style.css" VBox.vgrow="NEVER">
             <children>
@@ -96,9 +96,29 @@
             <TableColumn fx:id="colReceiver" minWidth="100.0" prefWidth="-1.0" text="Suscrito" />
         </columns>
       </TableView>
-      <Button fx:id="btnUpdateClient" mnemonicParsing="false" onAction="#updateClient" text="Modificar">
+      <GridPane>
          <VBox.margin>
             <Insets top="10.0" />
-         </VBox.margin></Button>
+         </VBox.margin>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Button fx:id="btnUpdateClient" mnemonicParsing="false" onAction="#updateClient" text="Modificar" GridPane.halignment="CENTER">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="btnObservations" layoutX="259.0" layoutY="15.0" mnemonicParsing="false" onAction="#updateObservations" text="Observaciones" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Button>
+         </children>
+      </GridPane>
     </children>
 </VBox>

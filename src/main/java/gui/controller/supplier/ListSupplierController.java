@@ -54,6 +54,8 @@ import java.util.stream.Collectors;
 public class ListSupplierController implements Initializable {
 
     @FXML
+    private Button btnObservations;
+    @FXML
     private TextField txtFilterId;
     @FXML
     private TextField txtFilterName;
@@ -284,6 +286,7 @@ public class ListSupplierController implements Initializable {
                 .name(txtName.getText())
                 .province(cmbProvinces.getSelectionModel().getSelectedItem())
                 .categories(new HashSet<>())
+                .observations("")
                 .build();
     }
 
@@ -302,5 +305,15 @@ public class ListSupplierController implements Initializable {
 
     public Supplier getSelectedSupplier() {
         return tblSuppliers.getSelectionModel().getSelectedItem();
+    }
+
+    public void openFormObservations(ActionEvent actionEvent) {
+        Scene scene = new Scene((Parent) SpringFxmlLoader.load("/forms/suppliers/observations-supplier.fxml"), 600, 500);
+        Stage stage = new Stage();
+        stage.setTitle("Modificar Proveedor");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(supplierListForm.getScene().getWindow());
+        stage.setScene(scene);
+        stage.show();
     }
 }

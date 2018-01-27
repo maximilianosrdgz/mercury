@@ -51,6 +51,8 @@ import java.util.stream.Collectors;
 public class ListClientController implements Initializable {
 
     @FXML
+    private Button btnObservations;
+    @FXML
     private Button btnSelectClientReport;
     @FXML
     private Button btnSelectClient;
@@ -309,5 +311,15 @@ public class ListClientController implements Initializable {
         categoryReportController.loadSelectedClient(getSelectedClient());
         Stage stage = (Stage) btnSelectClientReport.getScene().getWindow();
         stage.close();
+    }
+
+    public void updateObservations(ActionEvent actionEvent) {
+        Scene scene = new Scene((Parent)SpringFxmlLoader.load("/forms/clients/observations-client.fxml"), 600, 400);
+        Stage stage = new Stage();
+        stage.setTitle("Actualizar Observaciones");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(clientListForm.getScene().getWindow());
+        stage.setScene(scene);
+        stage.show();
     }
 }

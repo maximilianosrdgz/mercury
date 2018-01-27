@@ -59,6 +59,9 @@ public class Client {
     @Column
     private boolean receiver;
 
+    @Column(columnDefinition = "TEXT")
+    private String observations;
+
     public int getAge() {
         return Calendar.getInstance().get(Calendar.YEAR) - birthYear;
     }

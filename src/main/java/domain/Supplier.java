@@ -44,6 +44,9 @@ public class Supplier {
     @JoinTable(name = "supplier_category")
     private Set<Category> categories;
 
+    @Column(columnDefinition = "TEXT")
+    private String observations;
+
     @Override
     public String toString() {
         return name;

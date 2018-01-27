@@ -148,6 +148,7 @@ public class NewClientController implements Initializable {
                 .consultant(chkConsultant.isSelected())
                 .blackListed(chkBlacklisted.isSelected())
                 .receiver(chkReceiver.isSelected())
+                .observations("")
                 .build();
     }
 

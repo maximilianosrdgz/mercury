@@ -184,6 +184,7 @@ public class UpdateSupplierController implements Initializable {
                 .name(txtName.getText())
                 .province(cmbProvinces.getSelectionModel().getSelectedItem())
                 .categories(selectedCategories)
+                .observations("")
                 .build();
     }
 
